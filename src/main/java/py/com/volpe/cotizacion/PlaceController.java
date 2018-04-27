@@ -22,15 +22,11 @@ public class PlaceController {
 
 	@GetMapping(value = "/api/places/init", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String init(@RequestParam(value = "code", required = false) String code) {
-		System.out.println("PlaceController.init");
-		System.out.println("code = [" + code + "]");
 		return doAction(code, Gatherer::addOrUpdatePlace);
 	}
 
 	@GetMapping(value = "/api/places/doQuery", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String doQuery(@RequestParam(value = "code", required = false) String code) {
-		System.out.println("PlaceController.doQuery");
-		System.out.println("code = [" + code + "]");
 		return doAction(code, Gatherer::doQuery);
 	}
 
