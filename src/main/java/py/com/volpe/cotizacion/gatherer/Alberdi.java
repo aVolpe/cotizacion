@@ -63,7 +63,7 @@ public class Alberdi implements Gatherer {
 					qrd.setQueryResponse(qr);
 					qrd.setIsoCode(iso);
 					qrd.setSalePrice(Long.parseLong(detail.getVenta().replace(".", "")));
-					qrd.setSalePrice(Long.parseLong(detail.getVenta().replace(".", "")));
+					qrd.setPurchasePrice(Long.parseLong(detail.getCompra().replace(".", "")));
 
 					return qrd;
 				}).filter(Objects::nonNull).collect(Collectors.toList()));
@@ -132,6 +132,21 @@ public class Alberdi implements Gatherer {
 		return new ObjectMapper();
 	}
 
+	/**
+	 * This method is overly complicated
+	 * <p>
+	 * First we create a {@link StandardWebSocketClient}, and attach it to a manager along with a
+	 * manager, in this case an {@link AbstractWebSocketHandler} and we wait for the handleTextMessage for the
+	 * real message.
+	 * <p>
+	 * Obviously this API is created to be used in more complex scenarios, in this case we only need one message,
+	 * the message is automatically send (we don't need to ask for it).
+	 * <p>
+	 * The API is prepared to be used in an async environment, we make it 'sync' here using the wait/notify java
+	 * API.
+	 *
+	 * @return the json that the web service return
+	 */
 	private static String getData() {
 
 		Object monitor = new Object();
@@ -165,6 +180,8 @@ public class Alberdi implements Gatherer {
 	}
 
 	private static String mapToISO(ExchangeData data) {
+		// We don't care for the check exchange
+		if (data.moneda.contains("Cheque")) return null;
 		switch (data.img) {
 			case "dolar.png":
 				return "USD";
