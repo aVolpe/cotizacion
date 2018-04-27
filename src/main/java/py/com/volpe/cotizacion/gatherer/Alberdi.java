@@ -136,7 +136,7 @@ public class Alberdi implements Gatherer {
 	 * This method is overly complicated
 	 * <p>
 	 * First we create a {@link StandardWebSocketClient}, and attach it to a manager along with a
-	 * manager, in this case an {@link AbstractWebSocketHandler} and we wait for the handleTextMessage for the
+	 * handler, in this case an {@link AbstractWebSocketHandler} and we wait for the handleTextMessage for the
 	 * real message.
 	 * <p>
 	 * Obviously this API is created to be used in more complex scenarios, in this case we only need one message,
