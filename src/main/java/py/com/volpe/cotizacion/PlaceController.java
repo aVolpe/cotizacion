@@ -3,8 +3,12 @@ package py.com.volpe.cotizacion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import py.com.volpe.cotizacion.gatherer.CambiosChaco;
+import py.com.volpe.cotizacion.gatherer.Gatherer;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Arturo Volpe
@@ -14,20 +18,31 @@ import py.com.volpe.cotizacion.gatherer.CambiosChaco;
 @RequiredArgsConstructor
 public class PlaceController {
 
-	private final CambiosChaco cambiosChaco;
+	private final List<Gatherer> gathererList;
 
 	@GetMapping(value = "/api/places/init", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String init() {
-
-		cambiosChaco.addOrUpdatePlace();
-		return "ok";
+	public String init(@RequestParam(value = "code", required = false) String code) {
+		System.out.println("PlaceController.init");
+		System.out.println("code = [" + code + "]");
+		return doAction(code, Gatherer::addOrUpdatePlace);
 	}
 
 	@GetMapping(value = "/api/places/doQuery", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String doQuery() {
+	public String doQuery(@RequestParam(value = "code", required = false) String code) {
+		System.out.println("PlaceController.doQuery");
+		System.out.println("code = [" + code + "]");
+		return doAction(code, Gatherer::doQuery);
+	}
 
-		cambiosChaco.doQuery();
-		return "ok";
+	private String doAction(String code, Consumer<Gatherer> action) {
+
+		if (code != null) {
+			gathererList.stream().filter(g -> g.getCode().equals(code)).forEach(action);
+			return code;
+		} else {
+			gathererList.forEach(action);
+			return "all";
+		}
 	}
 
 	@GetMapping("/hellow")

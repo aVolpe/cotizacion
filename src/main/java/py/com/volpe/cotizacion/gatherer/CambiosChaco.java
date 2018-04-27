@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
@@ -27,7 +28,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class CambiosChaco {
+@Log4j2
+public class CambiosChaco implements Gatherer {
 
 	public static final String URL_CHANGE = "http://www.cambioschaco.com.py/api/branch_office/%s/exchange";
 	public static final String URL_BRANCH = "http://www.cambioschaco.com.py/api/branch_office/";
@@ -37,9 +39,11 @@ public class CambiosChaco {
 	private final QueryResponseRepository queryResponseRepository;
 	private final HTTPHelper httpHelper;
 
+	@Override
 	public List<QueryResponse> doQuery() {
 
 
+		log.info("Starting doing query in {}", CODE);
 		Place p = addOrUpdatePlace();
 		return p.getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
 	}
@@ -67,13 +71,20 @@ public class CambiosChaco {
 		}
 	}
 
+	@Override
 	public Optional<Place> get() {
 		return placeRepository.findPlaceByCode(CODE);
 	}
 
+	@Override
 	public Place addOrUpdatePlace() {
 
 		return get().orElseGet(this::create);
+	}
+
+	@Override
+	public String getCode() {
+		return CODE;
 	}
 
 	private Place create() {

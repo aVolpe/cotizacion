@@ -1,7 +1,5 @@
 package py.com.volpe.cotizacion;
 
-import java.io.IOException;
-
 /**
  * @author Arturo Volpe
  * @since 4/26/18
@@ -15,7 +13,7 @@ public class AppException extends RuntimeException {
 		this.number = number;
 	}
 
-	public AppException(int number, String message, IOException e) {
+	public AppException(int number, String message, Exception e) {
 		super(message, e);
 		this.number = number;
 	}
