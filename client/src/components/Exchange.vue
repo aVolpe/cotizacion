@@ -1,0 +1,47 @@
+<template>
+    <div>
+        <v-tabs
+                v-model="active"
+                color="cyan"
+                dark
+                slider-color="yellow"
+        >
+            <v-tab
+                    v-for="n in 3"
+                    :key="n"
+                    ripple
+            >
+                Item {{ n }}
+            </v-tab>
+            <v-tab-item
+                    v-for="n in 3"
+                    :key="n"
+            >
+                <v-card flat>
+                    <v-card-text>{{ text }}</v-card-text>
+                </v-card>
+            </v-tab-item>
+        </v-tabs>
+
+        <div class="text-xs-center mt-3">
+            <v-btn @click.native="next">next tab</v-btn>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+
+    @Component
+    export default class HelloWorld extends Vue {
+
+        @Prop() private msg!: string;
+
+        active = 0;
+        text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+
+        next() {
+            this.active = this.active < 2 ? this.active + 1 : 0
+        }
+    }
+</script>
