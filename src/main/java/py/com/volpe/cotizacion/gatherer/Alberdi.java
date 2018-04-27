@@ -190,7 +190,7 @@ public class Alberdi implements Gatherer {
 			case "euro.png":
 				return "EUR";
 			case "peso.png":
-				return "EUR";
+				return "ARS";
 			default:
 				return null;
 		}

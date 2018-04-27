@@ -88,6 +88,7 @@ public class CambiosChaco implements Gatherer {
 	}
 
 	private Place create() {
+		log.info("Creating 'Cambios Chaco'");
 		Place p = new Place();
 		p.setName("Cambios Chaco");
 		p.setCode(CODE);
