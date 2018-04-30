@@ -41,6 +41,12 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
 			"   br.name")
 	List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);
 
+	@Query("SELECT qrd.isoCode " +
+			"FROM QueryResponseDetail qrd " +
+			"GROUP BY qrd.isoCode " +
+			"ORDER BY count(qrd.isoCode) DESC, qrd.isoCode")
+	List<String> getAvailableISO();
+
 	@Value
 	class ByIsoCodeResult {
 		long placeId;

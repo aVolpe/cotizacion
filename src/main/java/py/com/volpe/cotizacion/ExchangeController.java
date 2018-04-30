@@ -22,8 +22,13 @@ public class ExchangeController {
 
 
 	@GetMapping(value = "/api/exchange/{iso}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ByIsoCodeResult> init(@PathVariable(value = "iso") String code) {
+	public List<ByIsoCodeResult> byIso(@PathVariable(value = "iso") String code) {
 		return detailRepository.getMaxByPlaceInISO(code);
+	}
+
+	@GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAvailableCurrencies() {
+		return detailRepository.getAvailableISO();
 	}
 
 }
