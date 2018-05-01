@@ -53,12 +53,10 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import Exchange from '../components/Exchange';
     import {ExchangeAPI} from "../api/ExchangeAPI"; // @ is an alias to /src
 
     @Component({
         components: {
-            Exchange,
         },
     })
     export default class LatestExchange extends Vue {
