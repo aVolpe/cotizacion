@@ -1,4 +1,4 @@
-package com.example.cotizaciones;
+package py.com.volpe.cotizacion;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

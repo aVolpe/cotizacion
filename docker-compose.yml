@@ -1,6 +1,6 @@
 version: "2"
 services:
   app:
-    build: "."
+    image: avolpe/cotizacion:latest
     ports:
       - "8080:8080"
