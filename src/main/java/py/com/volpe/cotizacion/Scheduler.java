@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @author Arturo Volpe
  * @since 5/2/18
@@ -19,12 +17,6 @@ import javax.annotation.PostConstruct;
 public class Scheduler {
 
 	private final GathererManager manager;
-
-	@PostConstruct
-	public void init() {
-		manager.init(null);
-	}
-
 
 	@Scheduled(fixedDelay = 1000 * 60 * 10)
 	public void reportCurrentTime() {
