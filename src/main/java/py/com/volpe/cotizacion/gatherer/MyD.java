@@ -137,8 +137,8 @@ public class MyD implements Gatherer {
 				Elements columns = e.select("td");
 				data.add(new ExchangeData(
 						columns.get(0).text().trim(),
-						columns.get(1).text().trim(),
-						columns.get(2).text().trim()));
+						columns.get(2).text().trim(),
+						columns.get(1).text().trim()));
 			}
 
 			return data;
