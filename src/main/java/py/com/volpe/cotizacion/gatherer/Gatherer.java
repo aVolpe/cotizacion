@@ -12,6 +12,15 @@ import java.util.Optional;
  */
 public interface Gatherer {
 
+	/**
+	 * Query the data from this place.
+	 * <p>
+	 * This method should store the data in the DB
+	 * <p>
+	 * This method can trow exceptions.
+	 *
+	 * @return the persisted list of data
+	 */
 	List<QueryResponse> doQuery();
 
 	Optional<Place> get();
