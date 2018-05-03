@@ -1,4 +1,4 @@
-package py.com.volpe.cotizacion;
+package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import py.com.volpe.cotizacion.GathererManager;
 
 /**
  * @author Arturo Volpe

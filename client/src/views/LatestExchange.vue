@@ -39,9 +39,9 @@
                             <br/>
                             {{ props.item.branchName }}
                         </td>
-                        <td class="text-lg-right">{{ props.item.purchasePrice | fn}}</td>
-                        <td class="text-lg-right">{{ props.item.salePrice | fn}}</td>
-                        <td class="text-lg-right">
+                        <td class="text-xs-right">{{ props.item.purchasePrice | fn}}</td>
+                        <td class="text-xs-right">{{ props.item.salePrice | fn}}</td>
+                        <td class="text-xs-right">
                             <v-tooltip bottom>
                                 <v-icon dark color="primary" slot="activator">info</v-icon>
                                 <span>Consultado el {{ props.item.queryDate | fd("YYYY/MM/DD [a las] HH:mm") }}</span>

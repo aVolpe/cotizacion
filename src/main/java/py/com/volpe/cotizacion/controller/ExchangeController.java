@@ -1,4 +1,4 @@
-package py.com.volpe.cotizacion;
+package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

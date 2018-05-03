@@ -12,7 +12,7 @@ WORKDIR /app
 COPY pom.xml /app
 COPY src /app/src
 COPY --from=client-builder /client/dist /app/src/main/resources/public
-RUN ls -l 
+RUN sh ./utils/gen_licenses.sh
 RUN mvn package -DskipTests
 
 FROM openjdk:8-jdk-alpine

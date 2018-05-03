@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "npm run gen-licenses",
+    "preserve": "npm run gen-licenses",
     "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "gen-licenses": "license-report --only=prod > ./src/licenses.json"
   },
   "dependencies": {
     "moment": "^2.22.1",
@@ -15,6 +18,7 @@
     "vuetify": "^1.0.17"
   },
   "devDependencies": {
+    "license-report": "^2.1.1",
     "@vue/cli-plugin-babel": "^3.0.0-beta.7",
     "@vue/cli-plugin-typescript": "^3.0.0-beta.7",
     "@vue/cli-service": "^3.0.0-beta.7",

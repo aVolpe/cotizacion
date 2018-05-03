@@ -27,3 +27,5 @@
 /data/
 
 /src/main/resources/public/
+
+/**/*licenses.json

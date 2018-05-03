@@ -1,21 +1,23 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer right floating dark v-model="drawer" app>
+        <v-navigation-drawer right floating v-model="drawer" app>
             <v-list dense>
-                <v-list-tile>
+                <v-list-tile to="/">
                     <v-list-tile-action>
                         <v-icon>home</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>Home</v-list-tile-title>
+                        <v-list-tile-title>Inicio</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile>
+                <v-list-tile to="licenses">
                     <v-list-tile-action>
-                        <v-icon>contact_mail</v-icon>
+                        <v-icon>gavel</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>Contact</v-list-tile-title>
+                        <v-list-tile-title>
+                            Licencias
+                        </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
