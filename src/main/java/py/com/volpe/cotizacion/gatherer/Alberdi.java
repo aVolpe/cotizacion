@@ -19,6 +19,7 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class Alberdi implements Gatherer {
 

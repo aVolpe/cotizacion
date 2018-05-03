@@ -1,14 +1,11 @@
 package py.com.volpe.cotizacion;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import py.com.volpe.cotizacion.gatherer.Gatherer;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author Arturo Volpe
@@ -16,34 +13,19 @@ import java.util.function.Consumer;
  */
 @RestController
 @RequiredArgsConstructor
+@Profile("develop")
 public class PlaceController {
 
-	private final List<Gatherer> gathererList;
+	private final GathererManager manager;
 
 	@GetMapping(value = "/api/places/init", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String init(@RequestParam(value = "code", required = false) String code) {
-		return doAction(code, Gatherer::addOrUpdatePlace);
+		return manager.init(code);
 	}
 
 	@GetMapping(value = "/api/places/doQuery", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String doQuery(@RequestParam(value = "code", required = false) String code) {
-		return doAction(code, Gatherer::doQuery);
+		return manager.doQuery(code);
 	}
 
-	private String doAction(String code, Consumer<Gatherer> action) {
-
-		if (code != null) {
-			gathererList.stream().filter(g -> g.getCode().equals(code)).forEach(action);
-			return code;
-		} else {
-			gathererList.forEach(action);
-			return "all";
-		}
-	}
-
-	@GetMapping("/hellow")
-	public String test() {
-
-		return "hellow world";
-	}
 }
