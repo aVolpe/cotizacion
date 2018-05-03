@@ -20,24 +20,28 @@
                 </v-list-tile>
             </v-list>
         </v-navigation-drawer>
-        <v-toolbar color="indigo" dark fixed app>
+        <v-toolbar color="primary" dark fixed app>
             <v-spacer></v-spacer>
             <v-toolbar-title>Cotizaciones</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         </v-toolbar>
         <v-content>
-            <v-container fluid fill-height>
+            <v-container fluid>
                 <v-layout justify-center align-center>
-                    <v-flex text-xs-center xs12 md7>
+                    <v-flex text-xs-center xs12 md7 mt-1>
                         <router-view/>
                     </v-flex>
                 </v-layout>
             </v-container>
         </v-content>
-        <v-footer color="primary" app>
+        <v-footer light app inline>
             <v-spacer></v-spacer>
-            <span class="white--text">&copy; 2018</span>
+            <span>
+                <a href="https://www.github.com/avolpe/cotizacion" target="_blank">
+                    &copy; 2018
+                </a>
+            </span>
             <v-spacer></v-spacer>
         </v-footer>
     </v-app>

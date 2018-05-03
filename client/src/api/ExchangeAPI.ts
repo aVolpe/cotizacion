@@ -1,10 +1,12 @@
+import {APICaller} from '@/api/APICaller';
+
 export class ExchangeAPI {
 
     public static getTodayExchange(isoCode: string) {
-        return fetch(`http://localhost:8080/api/exchange/${isoCode}`).then(d => d.json());
+        return APICaller.doGet(`exchange/${isoCode}`);
     }
 
     static getCurrencies() {
-        return fetch('http://localhost:8080/api/exchange/').then(d => d.json());
+        return APICaller.doGet(`exchange/`);
     }
 }
