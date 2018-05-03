@@ -26,7 +26,7 @@ public class Scheduler {
 	}
 
 
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 1000 * 60 * 10)
 	public void reportCurrentTime() {
 		log.info("Querying the services");
 		manager.doQuery(null);
