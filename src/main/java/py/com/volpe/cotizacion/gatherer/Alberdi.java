@@ -175,6 +175,7 @@ public class Alberdi implements Gatherer {
 					result = val.get();
 				}
 			}
+			manager.stop();
 			return result;
 		} catch (Exception e) {
 			throw new AppException(500, "can't connect to socket alberdi", e);
