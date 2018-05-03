@@ -20,6 +20,6 @@ public class Place {
 	private String code;
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "place")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
 	private List<PlaceBranch> branches;
 }
