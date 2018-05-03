@@ -1,4 +1,4 @@
-./mvnw \
+mvn \
     org.codehaus.mojo:license-maven-plugin:1.16:add-third-party \
     -Dlicense.includeTransitiveDependencies=false \
     -Dlicense.verbose \

@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -30,8 +29,6 @@ public class LicenseController {
 		if (!data.exists())
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-		FileInputStream is = new FileInputStream(data.getFile());
-
-		return new ResponseEntity<>(IOUtils.toByteArray(is), HttpStatus.OK);
+		return new ResponseEntity<>(IOUtils.toByteArray(data.getInputStream()), HttpStatus.OK);
 	}
 }

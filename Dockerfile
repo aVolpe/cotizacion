@@ -11,6 +11,8 @@ FROM maven:3.5.3-alpine as builder
 WORKDIR /app
 COPY pom.xml /app
 COPY src /app/src
+COPY utils /app/utils
+
 COPY --from=client-builder /client/dist /app/src/main/resources/public
 RUN sh ./utils/gen_licenses.sh
 RUN mvn package -DskipTests
