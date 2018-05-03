@@ -11,9 +11,9 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
 
-    @Component()
+    @Component({})
     export default class BackendDown extends Vue {
-        baseUrl: string;
+        baseUrl: string | undefined;
 
 
         constructor() {

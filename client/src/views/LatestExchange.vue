@@ -4,6 +4,9 @@
             <v-card-title>
                 <v-layout justify-center align-center>
                     <v-flex text-xs-center xs12 md3 mt-1>
+                        Cotizaciones de
+                    </v-flex>
+                    <v-flex text-xs-center xs12 md3 mt-1>
                         <v-select :items="currencies"
                                   v-model="currentCurrency"
                                   v-on:change="changeCurrency"
@@ -31,12 +34,19 @@
                     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
                     <template slot="items" slot-scope="props">
-                        <td>{{ props.item.placeName }}</td>
-                        <td>{{ props.item.branchName }}</td>
-                        <td class="text-lg-right">{{ props.item.purchasePrice }}</td>
-                        <td class="text-lg-right">{{ props.item.salePrice }}</td>
-                        <td class="text-lg-right" v-if="props.item.gmapsLink">
-                            <a :href="props.item.gmapsLink">
+                        <td class="text-xs-left">
+                            <b>{{ props.item.placeName }}</b>
+                            <br/>
+                            {{ props.item.branchName }}
+                        </td>
+                        <td class="text-lg-right">{{ props.item.purchasePrice | fn}}</td>
+                        <td class="text-lg-right">{{ props.item.salePrice | fn}}</td>
+                        <td class="text-lg-right">
+                            <v-tooltip bottom>
+                                <v-icon dark color="primary" slot="activator">info</v-icon>
+                                <span>Consultado el {{ props.item.queryDate | fd("YYYY/MM/DD [a las] HH:mm") }}</span>
+                            </v-tooltip>
+                            <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
                                 <v-icon>map</v-icon>
                             </a>
                         </td>
@@ -72,10 +82,9 @@
             this.data = [];
             this.headers = [
                 {text: 'Casa de cambios', align: 'left', sortable: true, value: 'placeName'},
-                {text: 'Sucursal', align: 'left', sortable: true, value: 'branchName'},
                 {text: 'Compra', value: 'purchasePrice', sortable: true},
                 {text: 'Venta', value: 'salePrice', sortable: true},
-                {text: 'Ver en el mapa'}
+                {text: ''}
             ];
             this.pagination = {'sortBy': 'purchasePrice', 'descending': false, 'rowsPerPage': -1};
         }
@@ -90,12 +99,13 @@
             ExchangeAPI.getTodayExchange(this.currentCurrency).then(data => {
                 for (let row of data) {
                     if (row.branchLatitude)
-                        row['gmapsLink'] = `https://www.google.com/maps/@${row.branchLatitude},${row.branchLongitude}`
+                        row['gmapsLink'] = `https://www.google.com/maps/search/?api=1&query=${row.branchLatitude},${row.branchLongitude}`;
                     else
                         row['gmapsLink'] = null;
                 }
                 this.data = data;
                 this.loading = false;
+                console.log(this.data);
             });
         }
 
@@ -103,12 +113,10 @@
             this.loading = true;
             this.data = [];
             ExchangeAPI.getCurrencies().then((currencies: Array<string>) => {
-                console.log('UPS');
-                return;
-                // this.currencies = currencies;
-                // if (currencies.includes('USD')) this.currentCurrency = 'USD';
-                // else this.currentCurrency = this.currencies[0];
-                // this.load();
+                this.currencies = currencies;
+                if (currencies.includes('USD')) this.currentCurrency = 'USD';
+                else this.currentCurrency = this.currencies[0];
+                this.load();
             });
         }
     }
