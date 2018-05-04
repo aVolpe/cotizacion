@@ -17,17 +17,18 @@
                 </v-layout>
             </v-card-title>
 
-            <v-card-text>
+            <v-card-text class="main-table-wrapper">
                 <v-data-table
                         :headers="headers"
                         :loading="loading"
                         v-bind:pagination.sync="pagination"
                         hide-actions
+                        no-data-text="Cargando ..."
                         :must-sort="true"
                         :items="data"
-                        class="elevation-1">
+                        class="elevation-1 ">
                     <template slot="no-data">
-                        <v-alert :value="true" color="error" icon="warning">
+                        <v-alert :value="true" color="warning" icon="warning" v-if="!loading">
                             No hay datos de hoy
                         </v-alert>
                     </template>
@@ -81,10 +82,10 @@
             this.currentCurrency = this.currencies[0];
             this.data = [];
             this.headers = [
-                {text: 'Casa de cambios', align: 'left', sortable: true, value: 'placeName'},
-                {text: 'Compra', value: 'purchasePrice', sortable: true},
-                {text: 'Venta', value: 'salePrice', sortable: true},
-                {text: ''}
+                {text: '', align: 'left', sortable: true, value: 'placeName'},
+                {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
+                {text: 'Venta', value: 'salePrice', sortable: true, class: 'text-xs-right'},
+                {text: ' ', value: '', sortable: false}
             ];
             this.pagination = {'sortBy': 'purchasePrice', 'descending': false, 'rowsPerPage': -1};
         }
@@ -121,3 +122,11 @@
         }
     }
 </script>
+<style>
+
+    @media (max-width: 500px) {
+        .main-table-wrapper {
+            padding: 10px !important;
+        }
+    }
+</style>

@@ -5,12 +5,9 @@
             <div>
                 <v-tabs color="indigo" dark slider-color="white">
                     <v-spacer/>
-                    <v-tab ripple>
-                        Back-end
-                    </v-tab>
-                    <v-tab ripple>
-                        Front-end
-                    </v-tab>
+                    <v-tab ripple>Back-end</v-tab>
+                    <v-tab ripple>Front-end</v-tab>
+                    <v-tab ripple>Otras</v-tab>
                     <v-spacer/>
                     <v-tab-item class="text-xs-left">
 
@@ -104,11 +101,53 @@
                         </v-container>
                         <h5 class="text-xs-center">
                             Estas dependencias se encuentran en el
-                            <a href="https://github.com/aVolpe/cotizacion/blob/master/client/package.json" target="_blank">
+                            <a href="https://github.com/aVolpe/cotizacion/blob/master/client/package.json"
+                               target="_blank">
                                 package.json
                                 <v-icon>launch</v-icon>
                             </a>
                         </h5>
+                    </v-tab-item>
+                    <v-tab-item class="text-xs-left">
+
+                        <v-container fluid grid-list-md>
+                            <v-data-iterator content-tag="v-layout"
+                                             row
+                                             wrap
+                                             hide-actions
+                                             :items="other">
+                                <v-flex slot="item" slot-scope="props"
+                                        xs12 sm6 md5 lg4>
+                                    <v-card>
+                                        <v-card-title>
+                                            <h4>{{ props.item.name }}</h4>
+                                            <v-spacer></v-spacer>
+                                            <a :href="props.item.url " target="_blank">
+                                                <v-icon>launch</v-icon>
+                                            </a>
+                                        </v-card-title>
+                                        <v-divider></v-divider>
+                                        <v-list dense>
+
+                                            <v-list-tile>
+                                                <v-list-tile-content>Autor:</v-list-tile-content>
+                                                <v-list-tile-content class="align-end">{{ props.item.author }}
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+
+                                            <v-list-tile>
+                                                <v-list-tile-content>Licencia:</v-list-tile-content>
+                                                <v-list-tile-content class="align-end">{{ props.item.license}}
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+
+
+                                        </v-list>
+                                    </v-card>
+                                </v-flex>
+                            </v-data-iterator>
+
+                        </v-container>
                     </v-tab-item>
                 </v-tabs>
             </div>
@@ -128,6 +167,7 @@
 
         backend: any[];
         frontend: any[];
+        other: any[];
 
 
         constructor() {
@@ -135,6 +175,12 @@
             this.baseUrl = process.env.BASE_URL;
             this.backend = [];
             this.frontend = <any> data;
+            this.other = [{
+                name: 'lukaszadam Free Illustrations',
+                author: 'Lukasz Dzikowski',
+                url: 'https://lukaszadam.com/illustrations',
+                license: 'MIT License'
+            }]
         }
 
         mounted() {
