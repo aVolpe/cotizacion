@@ -23,6 +23,7 @@
                         :loading="loading"
                         v-bind:pagination.sync="pagination"
                         hide-actions
+                        no-data-text="Cargando ..."
                         :must-sort="true"
                         :items="data"
                         class="elevation-1 ">
@@ -84,7 +85,7 @@
                 {text: '', align: 'left', sortable: true, value: 'placeName'},
                 {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
                 {text: 'Venta', value: 'salePrice', sortable: true, class: 'text-xs-right'},
-                {text: '', value: '', sortable: false}
+                {text: ' ', value: '', sortable: false}
             ];
             this.pagination = {'sortBy': 'purchasePrice', 'descending': false, 'rowsPerPage': -1};
         }
