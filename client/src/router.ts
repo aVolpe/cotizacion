@@ -4,6 +4,7 @@ import About from './views/About.vue'
 import LatestExchange from './views/LatestExchange.vue'
 import BackendDown from './views/BackendDown.vue'
 import Licenses from './views/Licenses.vue'
+import Swagger from './views/Swagger.vue'
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
             path: '/licenses',
             name: 'licenses',
             component: Licenses
+        },
+        {
+            path: '/swagger',
+            name: '',
+            component: Swagger
         },
         {
             path: '/no-back',
