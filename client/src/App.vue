@@ -2,22 +2,12 @@
     <v-app id="inspire">
         <v-navigation-drawer right floating v-model="drawer" app>
             <v-list dense>
-                <v-list-tile to="/">
+                <v-list-tile :to="route.to" v-for="route in routes">
                     <v-list-tile-action>
-                        <v-icon>home</v-icon>
+                        <v-icon>{{ route.icon }}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>Inicio</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile to="licenses">
-                    <v-list-tile-action>
-                        <v-icon>gavel</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>
-                            Licencias
-                        </v-list-tile-title>
+                        <v-list-tile-title>{{ route.name }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -72,6 +62,33 @@
     export default class App extends Vue {
 
         drawer: boolean = false;
+
+        public routes: Array<{
+            name: string,
+            icon: string,
+            to: string
+        }>;
+
+        constructor() {
+            super();
+            // console.log(this.$router);
+
+            this.routes = [
+                {
+                    name: 'Inicio',
+                    to: '/',
+                    icon: 'home'
+                }, {
+                    name: 'Librerías OpenSource',
+                    to: '/licenses',
+                    icon: 'gavel'
+                }, {
+                    name: 'Explorar API',
+                    to: '/swagger',
+                    icon: 'gavel'
+                }
+            ]
+        }
     }
 </script>
 
