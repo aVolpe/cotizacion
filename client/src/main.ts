@@ -31,6 +31,13 @@ Vue.filter('fd', function (value: string, format: string) {
     }
 });
 
+Vue.filter('mfn', function (value: string) {
+
+    if (value) {
+        return moment(String(value)).locale('es').fromNow();
+    }
+});
+
 new Vue({
     router,
     render: h => h(App)

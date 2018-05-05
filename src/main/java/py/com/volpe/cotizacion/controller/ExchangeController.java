@@ -1,6 +1,7 @@
 package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,7 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository.ByIsoCodeResult;
 
+import java.util.Date;
 import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -22,8 +26,16 @@ public class ExchangeController {
 
 
 	@GetMapping(value = "/api/exchange/{iso}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ByIsoCodeResult> byIso(@PathVariable(value = "iso") String code) {
-		return detailRepository.getMaxByPlaceInISO(code);
+	public ResultData byIso(@PathVariable(value = "iso") String code) {
+
+		List<ByIsoCodeResult> data = detailRepository.getMaxByPlaceInISO(code);
+
+		LongSummaryStatistics lsm = data.stream().collect(Collectors.summarizingLong(bicd -> bicd.getQueryDate().getTime()));
+
+		return new ResultData(new Date(lsm.getMin()),
+				new Date(lsm.getMax()),
+				lsm.getCount(),
+				data);
 	}
 
 	@GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,4 +43,12 @@ public class ExchangeController {
 		return detailRepository.getAvailableISO();
 	}
 
+
+	@Value
+	public static class ResultData {
+		private Date firstQueryResult;
+		private Date lastQueryResult;
+		private long count;
+		private List<ByIsoCodeResult> data;
+	}
 }

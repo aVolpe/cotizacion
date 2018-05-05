@@ -25,7 +25,7 @@
                         hide-actions
                         no-data-text="Cargando ..."
                         :must-sort="true"
-                        :items="data"
+                        :items="data && data.data"
                         class="elevation-1 ">
                     <template slot="no-data">
                         <v-alert :value="true" color="warning" icon="warning" v-if="!loading">
@@ -35,7 +35,7 @@
                     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">
+                        <td class="text-xs-left name-column">
                             <b>{{ props.item.placeName }}</b>
                             <br/>
                             {{ props.item.branchName }}
@@ -45,7 +45,7 @@
                         <td class="text-xs-right">
                             <v-tooltip bottom>
                                 <v-icon dark color="primary" slot="activator">info</v-icon>
-                                <span>Consultado el {{ props.item.queryDate | fd("YYYY/MM/DD [a las] HH:mm") }}</span>
+                                <span>Consultado el {{ props.item.queryDate | fd("DD/MM/YYYY [a las] HH:mm") }}</span>
                             </v-tooltip>
                             <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
                                 <v-icon>map</v-icon>
@@ -53,6 +53,10 @@
                         </td>
                     </template>
                 </v-data-table>
+                <small v-if="data">
+                    <b>{{ data.count }}</b> cotizaciones consultadas
+                    <b> {{ data.firstQueryResult | mfn }}</b>.
+                </small>
 
             </v-card-text>
         </v-card>
@@ -70,7 +74,12 @@
 
         currencies: Array<string>;
         currentCurrency: string;
-        data: any;
+        data: {
+            firstQueryResult: number,
+            lastQueryResult: number,
+            count: number,
+            data: Array<any>
+        };
         headers: Array<any>;
         loading = false;
         pagination: any;
@@ -80,7 +89,7 @@
 
             this.currencies = ['USD', 'EUR'];
             this.currentCurrency = this.currencies[0];
-            this.data = [];
+            this.data = this.buildEmptyData();
             this.headers = [
                 {text: '', align: 'left', sortable: true, value: 'placeName'},
                 {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
@@ -90,6 +99,15 @@
             this.pagination = {'sortBy': 'purchasePrice', 'descending': false, 'rowsPerPage': -1};
         }
 
+        buildEmptyData() {
+            return {
+                data: [],
+                count: 0,
+                firstQueryResult: 0,
+                lastQueryResult: 0
+            };
+        }
+
         changeCurrency(newCur: string) {
             this.currentCurrency = newCur;
             this.load();
@@ -97,14 +115,18 @@
 
         private load() {
             this.loading = true;
-            ExchangeAPI.getTodayExchange(this.currentCurrency).then(data => {
-                for (let row of data) {
+            this.data = this.buildEmptyData();
+            ExchangeAPI.getTodayExchange(this.currentCurrency).then(result => {
+
+                this.data = result;
+                if (this.data === null) return;
+
+                for (let row of this.data.data) {
                     if (row.branchLatitude)
                         row['gmapsLink'] = `https://www.google.com/maps/search/?api=1&query=${row.branchLatitude},${row.branchLongitude}`;
                     else
                         row['gmapsLink'] = null;
                 }
-                this.data = data;
                 this.loading = false;
                 console.log(this.data);
             });
@@ -112,7 +134,6 @@
 
         mounted() {
             this.loading = true;
-            this.data = [];
             ExchangeAPI.getCurrencies().then((currencies: Array<string>) => {
                 this.currencies = currencies;
                 if (currencies.includes('USD')) this.currentCurrency = 'USD';
@@ -128,5 +149,10 @@
         .main-table-wrapper {
             padding: 10px !important;
         }
+
+        .name-column {
+            padding: 3px 10px !important;
+        }
     }
+
 </style>

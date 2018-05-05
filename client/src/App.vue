@@ -72,6 +72,32 @@
     export default class App extends Vue {
 
         drawer: boolean = false;
+        public routes: Array<{
+            name: string,
+            icon: string,
+            to: string
+        }>;
+
+        constructor() {
+            super();
+            // console.log(this.$router);
+
+            this.routes = [
+                {
+                    name: 'Inicio',
+                    to: '/',
+                    icon: 'home'
+                }, {
+                    name: 'Librerías OpenSource',
+                    to: '/licenses',
+                    icon: 'gavel'
+                }, {
+                    name: 'Explorar API',
+                    to: '/swagger',
+                    icon: 'scanner'
+                }
+            ]
+        }
     }
 </script>
 
