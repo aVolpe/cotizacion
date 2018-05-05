@@ -12,7 +12,7 @@
                                   v-on:change="changeCurrency"
                                   class="bx-5"
                                   label="Moneda"
-                                  single-line></v-select>
+                                  single-line/>
                     </v-flex>
                 </v-layout>
             </v-card-title>
@@ -32,7 +32,7 @@
                             No hay datos de hoy
                         </v-alert>
                     </template>
-                    <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                    <v-progress-linear slot="progress" color="blue" indeterminate/>
 
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left">
@@ -47,7 +47,7 @@
                                 <v-icon dark color="primary" slot="activator">info</v-icon>
                                 <span>Consultado el {{ props.item.queryDate | fd("YYYY/MM/DD [a las] HH:mm") }}</span>
                             </v-tooltip>
-                            <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
+                            <a :href="props.item.osmLink" v-if="props.item.osmLink" target="_blank">
                                 <v-icon>map</v-icon>
                             </a>
                         </td>
@@ -99,10 +99,14 @@
             this.loading = true;
             ExchangeAPI.getTodayExchange(this.currentCurrency).then(data => {
                 for (let row of data) {
-                    if (row.branchLatitude)
+                    if (row.branchLatitude) {
                         row['gmapsLink'] = `https://www.google.com/maps/search/?api=1&query=${row.branchLatitude},${row.branchLongitude}`;
-                    else
+                        row['osmLink'] = `https://www.openstreetmap.org/?mlat=${row.branchLatitude}&mlon=${row.branchLongitude}&zoom=17`;
+                    }
+                    else {
                         row['gmapsLink'] = null;
+                        row['osmLink'] = null;
+                    }
                 }
                 this.data = data;
                 this.loading = false;
