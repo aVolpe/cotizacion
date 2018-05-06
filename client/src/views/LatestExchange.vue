@@ -18,7 +18,6 @@
             </v-card-title>
 
             <v-card-text class="main-table-wrapper">
-                {{ isSmall }}
                 <v-data-table
                         :headers="headers"
                         :loading="loading"
