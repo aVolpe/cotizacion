@@ -1,4 +1,5 @@
 # Cotizaciones del Paraguay
+[![Build Status](https://travis-ci.org/aVolpe/cotizacion.svg?branch=master)](https://travis-ci.org/aVolpe/cotizacion)
 
 Simple webpage and API that provides exchange information of current exchange
 Rates of currencies in relation to the Paraguayan Guarani.
