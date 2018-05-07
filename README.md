@@ -1,5 +1,8 @@
 # Cotizaciones del Paraguay
 [![Build Status](https://travis-ci.org/aVolpe/cotizacion.svg?branch=master)](https://travis-ci.org/aVolpe/cotizacion)
+[![](https://images.microbadger.com/badges/image/avolpe/cotizacion.svg)](https://microbadger.com/images/avolpe/cotizacion "Get your own image badge on microbadger.com")
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=py.com.volpe%3Acotizaciones&metric=alert_status)](https://sonarcloud.io/dashboard?id=py.com.volpe%3Acotizaciones)
+
 
 Simple webpage and API that provides exchange information of current exchange
 Rates of currencies in relation to the Paraguayan Guarani.

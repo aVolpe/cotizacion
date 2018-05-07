@@ -6,6 +6,7 @@ services:
   - docker
 
 script:
+  - mvn sonar:sonar -Dsonar.organization=avolpe-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -DDsonar.branch.name=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH}
   - docker build -t avolpe/cotizacion .
 
 after_success:

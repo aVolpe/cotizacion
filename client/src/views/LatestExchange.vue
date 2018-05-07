@@ -181,7 +181,7 @@
 
     }
 
-    
+
     .input-group__selections__comma {
         margin-left: auto;
         margin-right: auto;
