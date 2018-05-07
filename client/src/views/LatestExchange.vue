@@ -56,13 +56,14 @@
                             </td>
                         </tr>
                     </template>
-                    <template slot="expand" slot-scope="props">
+                    <template slot="expand" slot-scope="props" v-if="isSmall">
                         <v-card flat>
                             <v-card-text>
                                 <span>Consultado el {{ props.item.queryDate | fd("DD/MM/YYYY [a las] HH:mm") }}</span>
-                                <br />
+                                <br/>
                                 <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
-                                    Ver ubicación <v-icon>map</v-icon>
+                                    Ver ubicación
+                                    <v-icon>map</v-icon>
                                 </a>
                             </v-card-text>
                         </v-card>
@@ -116,7 +117,7 @@
             if (!this.isSmall) {
                 this.headers.push({text: ' ', value: '', sortable: false});
             }
-            this.pagination = {'sortBy': 'purchasePrice', 'descending': false, 'rowsPerPage': -1};
+            this.pagination = {'sortBy': 'purchasePrice', 'descending': true, 'rowsPerPage': -1};
         }
 
         buildEmptyData() {
@@ -178,10 +179,12 @@
             padding-bottom: 1px !important;
         }
 
-        .input-group__selections__comma {
-            margin-left: auto;
-            margin-right: auto;
-        }
+    }
+
+    
+    .input-group__selections__comma {
+        margin-left: auto;
+        margin-right: auto;
     }
 
 </style>
