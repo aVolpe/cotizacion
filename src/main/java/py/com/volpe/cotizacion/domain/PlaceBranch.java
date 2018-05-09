@@ -1,5 +1,6 @@
 package py.com.volpe.cotizacion.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class PlaceBranch {
 	private String schedule;
 	private String remoteCode;
 
+	@JsonIgnore
 	@ManyToOne
 	private Place place;
 

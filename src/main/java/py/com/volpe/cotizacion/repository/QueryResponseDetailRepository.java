@@ -1,8 +1,11 @@
 package py.com.volpe.cotizacion.repository;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.util.Date;
@@ -16,12 +19,9 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
 
 	@Query("SELECT " +
 			" new py.com.volpe.cotizacion.repository.QueryResponseDetailRepository$ByIsoCodeResult(" +
-			"   p.id, " +
-			"   p.name, " +
-			"   br.id, " +
-			"   br.name, " +
-			"   br.latitude, " +
-			"   br.longitude," +
+			"   qrd.id, " +
+			"   p, " +
+			"   br," +
 			"   qr.id," +
 			"   qr.date," +
 			"   qrd.id," +
@@ -36,9 +36,7 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
 			"     qrd.isoCode = ?1 " +
 			" AND qr.date IN (SELECT MAX(qr2.date) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
 			"ORDER BY " +
-			"   qr.date DESC," +
-			"   p.name," +
-			"   br.name")
+			"   qr.date DESC")
 	List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);
 
 	@Query("SELECT qrd.isoCode " +
@@ -49,21 +47,20 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
 
 	@Value
 	class ByIsoCodeResult {
-		long placeId;
-		String placeName;
+		private long id;
 
-		long branchId;
-		String branchName;
+		@JsonIgnoreProperties("branches")
+		private Place place;
 
-		Double branchLatitude;
-		Double branchLongitude;
+		@JsonIgnoreProperties("place")
+		private PlaceBranch branch;
 
-		long queryId;
-		Date queryDate;
+		private long queryId;
+		private Date queryDate;
 
-		long queryDetailId;
-		long salePrice;
-		long purchasePrice;
+		private long queryDetailId;
+		private long salePrice;
+		private long purchasePrice;
 
 	}
 

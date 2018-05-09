@@ -1,5 +1,6 @@
 package py.com.volpe.cotizacion.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Place {
 	private String code;
 	private String name;
 
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
 	private List<PlaceBranch> branches;
 }

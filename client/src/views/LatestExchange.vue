@@ -25,7 +25,7 @@
                         hide-actions
                         no-data-text="Cargando ..."
                         :must-sort="true"
-                        item-key="branchId"
+                        item-key="id"
                         :items="data && data.data"
                         class="elevation-1 ">
                     <template slot="no-data">
@@ -39,34 +39,27 @@
                     <template slot="items" slot-scope="props">
                         <tr @click="props.expanded = !props.expanded">
                             <td class="text-xs-left name-column">
-                                <b>{{ props.item.placeName }}</b>
+                                <b>{{ props.item.place.name }}</b>
                                 <br/>
-                                {{ props.item.branchName }}
+                                {{ props.item.branch.name }}
                             </td>
                             <td class="text-xs-right">{{ props.item.purchasePrice | fn}}</td>
                             <td class="text-xs-right">{{ props.item.salePrice | fn}}</td>
                             <td class="text-xs-right" v-if="!isSmall">
-                                <v-tooltip bottom>
+                                <a v-on:click="showDialog(props.item)">
                                     <v-icon dark color="primary" slot="activator">info</v-icon>
-                                    <span>Consultado el {{ props.item.queryDate | fd("DD/MM/YYYY [a las] HH:mm") }}</span>
-                                </v-tooltip>
-                                <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
+                                </a>
+                                <a :href="props.item.branch.gmaps" v-if="props.item.branch.gmaps" target="_blank">
                                     <v-icon>map</v-icon>
                                 </a>
                             </td>
                         </tr>
                     </template>
                     <template slot="expand" slot-scope="props" v-if="isSmall">
-                        <v-card flat>
-                            <v-card-text>
-                                <span>Consultado el {{ props.item.queryDate | fd("DD/MM/YYYY [a las] HH:mm") }}</span>
-                                <br/>
-                                <a :href="props.item.gmapsLink" v-if="props.item.gmapsLink" target="_blank">
-                                    Ver ubicación
-                                    <v-icon>map</v-icon>
-                                </a>
-                            </v-card-text>
-                        </v-card>
+                        <v-btn v-on:click="showDialog(props.item)" flat>
+                            Ver detalles
+                            <v-icon>map</v-icon>
+                        </v-btn>
                     </template>
                 </v-data-table>
                 <small v-if="data">
@@ -76,15 +69,21 @@
 
             </v-card-text>
         </v-card>
+        <v-dialog v-model="branchDialog" max-width="500px">
+            <Branch v-on:ok="branchDialog = false" :branch="currentBranch"></Branch>
+        </v-dialog>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {ExchangeAPI} from "../api/ExchangeAPI"; // @ is an alias to /src
+    import Branch from "@/components/Branch.vue";
 
     @Component({
-        components: {},
+        components: {
+            Branch
+        },
     })
     export default class LatestExchange extends Vue {
 
@@ -100,6 +99,9 @@
         loading = false;
         pagination: any;
         isSmall: boolean;
+
+        branchDialog: boolean = false;
+        currentBranch: any = null;
 
         constructor() {
             super();
@@ -134,6 +136,11 @@
             this.load();
         }
 
+        private showDialog(query: any) {
+            this.branchDialog = true;
+            this.currentBranch = query.branch;
+        }
+
         private load() {
             this.loading = true;
             this.data = this.buildEmptyData();
@@ -143,10 +150,18 @@
                 if (this.data === null) return;
 
                 for (let row of this.data.data) {
-                    if (row.branchLatitude)
-                        row['gmapsLink'] = `https://www.google.com/maps/search/?api=1&query=${row.branchLatitude},${row.branchLongitude}`;
+                    if (row.branch.latitude)
+                        row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
                     else
-                        row['gmapsLink'] = null;
+                        row.branch.gmaps = null;
+
+                    row.branch.place = row.place;
+                    row.branch.exchange = {
+                        purchasePrice: row.purchasePrice,
+                        salePrice: row.salePrice,
+                        currency: this.currentCurrency,
+                        date: row.queryDate
+                    };
                 }
                 this.loading = false;
             });
@@ -181,10 +196,13 @@
 
     }
 
-
     .input-group__selections__comma {
         margin-left: auto;
         margin-right: auto;
+    }
+
+    a, u {
+        text-decoration: none;
     }
 
 </style>
