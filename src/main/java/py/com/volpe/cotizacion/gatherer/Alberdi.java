@@ -149,27 +149,28 @@ public class Alberdi implements Gatherer {
 	 *
 	 * @return the json that the web service return
 	 */
-	private static String getData() {
+	protected static String getData() {
 
-		Object monitor = new Object();
-		AtomicReference<String> val = new AtomicReference<>();
-
-		StandardWebSocketClient swsc = new StandardWebSocketClient();
-		WebSocketConnectionManager manager = new WebSocketConnectionManager(swsc, new AbstractWebSocketHandler() {
-			@Override
-			protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-				val.set(message.getPayload());
-				session.close();
-				synchronized (monitor) {
-					monitor.notifyAll();
-				}
-			}
-		}, WS_URL);
-		manager.setAutoStartup(true);
-		manager.start();
 		try {
+			Object monitor = new Object();
+			AtomicReference<String> val = new AtomicReference<>();
+
+			StandardWebSocketClient swsc = new StandardWebSocketClient();
+			WebSocketConnectionManager manager = new WebSocketConnectionManager(swsc, new AbstractWebSocketHandler() {
+				@Override
+				protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+					val.set(message.getPayload());
+					session.close();
+					synchronized (monitor) {
+						monitor.notifyAll();
+					}
+				}
+			}, WS_URL);
+			manager.setAutoStartup(true);
+			manager.start();
+			int retries = 4;
 			String result = null;
-			while (val.get() == null) {
+			while (val.get() == null && retries-- > 0) {
 				synchronized (monitor) {
 					monitor.wait(10000);
 					result = val.get();
@@ -207,8 +208,4 @@ public class Alberdi implements Gatherer {
 		String venta;
 	}
 
-	public static void main(String... args) throws Exception {
-
-		System.out.println(getData());
-	}
 }
