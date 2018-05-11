@@ -158,13 +158,13 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {LicenseAPI} from '../api/LicenseAPI';
-    import data from '../licenses.json';
+    import * as data from '../licenses.json';
+    import {Meta} from "../decorators";
 
 
-    @Component({
-        metaInfo: {
-            title: 'Licencias'
-        }
+    @Component
+    @Meta({
+        title: 'Licencias'
     })
     export default class Licenses extends Vue {
         baseUrl: string | undefined;

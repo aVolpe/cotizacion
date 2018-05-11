@@ -20,12 +20,13 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import {Meta} from "../decorators";
 
 
-    @Component({
-        metaInfo: {
-            title: 'API'
-        }
+    @Component
+    @Meta({
+        title: 'API'
+
     })
     export default class Swagger extends Vue {
 

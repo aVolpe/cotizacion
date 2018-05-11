@@ -15,7 +15,9 @@ Vue.use(Vuetify, {
         accent: colors.indigo.base // #3F51B5
     }
 });
-Vue.use(Meta);
+Vue.use(Meta, {
+    keyName: 'head'
+});
 
 Vue.filter('fn', function (value: number) {
     if (typeof value !== "number") {
@@ -43,5 +45,5 @@ Vue.filter('mfn', function (value: string) {
 new Vue({
     router,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
 
