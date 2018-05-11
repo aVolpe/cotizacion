@@ -66,7 +66,7 @@
         meta: [
             <any>{'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8'},
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-            {name: 'description', content: 'I have things here on my site.'},
+            {name: 'description', content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'},
 
             {property: 'og:title', content: 'Cotizaciones del paraguay'},
             {property: 'og:site_name', content: 'Cotizaciones del Paraguay'},
