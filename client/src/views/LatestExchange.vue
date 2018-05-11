@@ -77,13 +77,17 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI} from "../api/ExchangeAPI"; // @ is an alias to /src
+    import {ExchangeAPI} from "../api/ExchangeAPI";
     import Branch from "@/components/Branch.vue";
 
     @Component({
         components: {
             Branch
         },
+        metaInfo: {
+            title: 'Cotizaciones de hoy',
+            titleTemplate: null
+        }
     })
     export default class LatestExchange extends Vue {
 

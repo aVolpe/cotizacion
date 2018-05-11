@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import Vuetify from 'vuetify'
+import Meta from 'vue-meta';
 import moment from 'moment'
 import colors from 'vuetify/es5/util/colors'
 
@@ -14,6 +15,7 @@ Vue.use(Vuetify, {
         accent: colors.indigo.base // #3F51B5
     }
 });
+Vue.use(Meta);
 
 Vue.filter('fn', function (value: number) {
     if (typeof value !== "number") {
