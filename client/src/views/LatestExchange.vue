@@ -77,13 +77,18 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI} from "../api/ExchangeAPI"; // @ is an alias to /src
+    import {ExchangeAPI} from "../api/ExchangeAPI";
     import Branch from "@/components/Branch.vue";
+    import {Meta} from "../decorators";
 
     @Component({
         components: {
             Branch
-        },
+        }
+    })
+    @Meta({
+        title: 'Cotizaciones de hoy',
+        titleTemplate: undefined
     })
     export default class LatestExchange extends Vue {
 
@@ -108,7 +113,7 @@
 
             this.currencies = ['USD', 'EUR'];
             this.currentCurrency = this.currencies[0];
-            this.data = this.buildEmptyData();
+            this.data = LatestExchange.buildEmptyData();
 
             this.isSmall = window.innerWidth < 600;
             this.headers = [
@@ -122,7 +127,7 @@
             this.pagination = {'sortBy': 'purchasePrice', 'descending': true, 'rowsPerPage': -1};
         }
 
-        buildEmptyData() {
+        static buildEmptyData() {
             return {
                 data: [],
                 count: 0,
@@ -143,7 +148,7 @@
 
         private load() {
             this.loading = true;
-            this.data = this.buildEmptyData();
+            this.data = LatestExchange.buildEmptyData();
             ExchangeAPI.getTodayExchange(this.currentCurrency).then(result => {
 
                 this.data = result;

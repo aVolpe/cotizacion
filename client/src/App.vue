@@ -54,10 +54,51 @@
 
     import {Component, Vue} from 'vue-property-decorator';
     import 'vuetify/dist/vuetify.min.css'
+    import {Meta} from "./decorators";
 
 
     @Component({
         components: {},
+    })
+    @Meta({
+        title: ' ',
+        titleTemplate: '%s | Cotizaciones',
+        meta: [
+            <any>{'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8'},
+            {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+            {name: 'description', content: 'I have things here on my site.'},
+
+            {property: 'og:title', content: 'Cotizaciones del paraguay'},
+            {property: 'og:site_name', content: 'Cotizaciones del Paraguay'},
+            // The list of types is available here: http://ogp.me/#types
+            {property: 'og:type', content: 'website'},
+            // Should the the same as your canonical link, see below.
+            {property: 'og:url', content: 'https://cotizaciones.volpe.com.py/'},
+            {property: 'og:image', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'},
+
+            // Often the same as your meta description, but not always.
+            {
+                property: 'og:description',
+                content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
+            },
+
+            // Twitter card
+            {name: 'twitter:card', content: 'Cotizaciones del paraguay'},
+            {name: 'twitter:site', content: 'https://cotizaciones.volpe.com.py/'},
+            {name: 'twitter:title', content: 'Cotizaciones'},
+            {
+                name: 'twitter:description',
+                content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
+            },
+            // Your twitter handle, if you have one.
+            {name: 'twitter:creator', content: '@cochoVolpe'},
+            {name: 'twitter:image:src', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'},
+
+            // Google / Schema.org markup:
+            {itemprop: 'name', content: 'Cotizaciones del paraguay'},
+            {itemprop: 'description', content: 'Cotizaciones del paraguay'},
+            {itemprop: 'image', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'}
+        ]
     })
     export default class App extends Vue {
 
@@ -67,6 +108,7 @@
             icon: string,
             to: string
         }>;
+
 
         constructor() {
             super();
@@ -88,6 +130,7 @@
                 }
             ]
         }
+
     }
 </script>
 

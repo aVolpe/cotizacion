@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /api/
+Disallow: /v2/api-docs

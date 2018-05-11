@@ -159,9 +159,13 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {LicenseAPI} from '../api/LicenseAPI';
     import * as data from '../licenses.json';
+    import {Meta} from "../decorators";
 
 
-    @Component({})
+    @Component
+    @Meta({
+        title: 'Licencias'
+    })
     export default class Licenses extends Vue {
         baseUrl: string | undefined;
 
@@ -184,7 +188,6 @@
         }
 
         mounted() {
-            console.log(data);
             LicenseAPI.get().then(data => {
                 this.backend = data.dependencies;
             })

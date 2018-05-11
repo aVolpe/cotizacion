@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "quotes": 1                    // specify whether double or single quotes should be used
+  }
+}

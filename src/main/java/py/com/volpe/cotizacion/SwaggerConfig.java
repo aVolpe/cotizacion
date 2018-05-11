@@ -20,13 +20,12 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.any())
 				.paths(PathSelectors.any())
 				.build()
-				.host("cotizaciones.volpe.com.py")
 				.apiInfo(
 						new ApiInfoBuilder()
 								.license("MIT")
 								.title("Cotizaciones")
 								.version("1.0.0")
-								.contact(new Contact("Arturo Volpe", "https://cotizaciones.volpe.com.py", "arturovolpe@gmail.com"))
+								.contact(new Contact("Arturo Volpe", "https://www.volpe.com.py", "arturovolpe@gmail.com"))
 								.build()
 				);
 	}

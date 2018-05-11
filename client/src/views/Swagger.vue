@@ -9,7 +9,7 @@
                 </v-layout>
             </v-card-title>
 
-            <v-card-text >
+            <v-card-text>
                 <iframe :src="swaggerUrl" class="swagger-iframe">
                 </iframe>
 
@@ -20,9 +20,14 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import {Meta} from "../decorators";
 
 
-    @Component({})
+    @Component
+    @Meta({
+        title: 'API'
+
+    })
     export default class Swagger extends Vue {
 
         swaggerUrl: string | undefined;
@@ -40,6 +45,6 @@
     .swagger-iframe {
         width: 100%;
         height: 90vh;
-        
+
     }
 </style>
