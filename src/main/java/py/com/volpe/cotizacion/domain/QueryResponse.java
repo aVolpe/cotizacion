@@ -1,6 +1,8 @@
 package py.com.volpe.cotizacion.domain;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,22 +14,24 @@ import java.util.List;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
 public class QueryResponse {
 
-	@Id
-	@GeneratedValue
-	private long id;
-	private Date date;
+    @Id
+    @GeneratedValue
+    private long id;
+    private Date date;
 
-	@ManyToOne
-	private Place place;
+    @ManyToOne
+    private Place place;
 
-	@ManyToOne
-	private PlaceBranch branch;
+    @ManyToOne
+    private PlaceBranch branch;
 
-	private String fullData;
+    private String fullData;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
-	private List<QueryResponseDetail> details;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
+    private List<QueryResponseDetail> details;
 
 }

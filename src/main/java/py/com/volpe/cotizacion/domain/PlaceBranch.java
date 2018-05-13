@@ -1,7 +1,9 @@
 package py.com.volpe.cotizacion.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,26 +16,28 @@ import javax.persistence.ManyToOne;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
 public class PlaceBranch {
 
-	@Id
-	@GeneratedValue
-	private long id;
+    @Id
+    @GeneratedValue
+    private long id;
 
-	private Double latitude;
-	private Double longitude;
+    private Double latitude;
+    private Double longitude;
 
-	private String phoneNumber;
-	private String email;
-	private String image;
-	private String name;
+    private String phoneNumber;
+    private String email;
+    private String image;
+    private String name;
 
-	private String schedule;
-	private String remoteCode;
+    private String schedule;
+    private String remoteCode;
 
-	@JsonIgnore
-	@ManyToOne
-	private Place place;
+    @JsonIgnore
+    @ManyToOne
+    private Place place;
 
 
 }
