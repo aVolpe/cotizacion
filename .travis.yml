@@ -11,6 +11,8 @@ script:
     docker build \
     --build-arg BRANCH_NAME=$BRANCH \
     --build-arg SONAR_TOKEN=${SONAR_TOKEN} \
+    --build-arg CODACY_TOKEN=${CODACY_TOKEN} \
+    --build-arg CODACY_API_KEY=${CODACY_API_KEY} \
     -t avolpe/cotizacion:$BRANCH .
 
 after_success:

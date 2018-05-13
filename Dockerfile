@@ -10,6 +10,8 @@ RUN npm run build
 FROM maven:3.5.3-alpine as builder
 ARG BRANCH_NAME
 ARG SONAR_TOKEN
+ARG CODACY_TOKEN
+ARG CODACY_API_KEY
 WORKDIR /app
 COPY pom.xml /app
 COPY src /app/src
@@ -23,6 +25,11 @@ RUN mvn package \
         -Dsonar.host.url=https://sonarcloud.io \
         -Dsonar.login=$SONAR_TOKEN \
         -Dsonar.branch.name=$BRANCH_NAME
+RUN mvn jacoco:report \
+        com.gavinmogan:codacy-maven-plugin:coverage \
+        -DcoverageReportFile=target/site/jacoco/jacoco.xml \
+        -DprojectToken=$CODACY_TOKEN \
+        -DapiToken=$CODACY_API_KEY
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
