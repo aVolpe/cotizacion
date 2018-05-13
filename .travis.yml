@@ -5,16 +5,18 @@ language: generic
 services:
   - docker
 
-script: |
-  docker build \
-  --build-arg BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH} \
-  --build-arg SONAR_TOKEN=${SONAR_TOKEN} \
-  -t avolpe/cotizacion .
+script: 
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false"  ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - |
+    docker build \
+    --build-arg BRANCH_NAME=$BRANCH \
+    --build-arg SONAR_TOKEN=${SONAR_TOKEN} \
+    -t avolpe/cotizacion:$BRANCH .
 
 after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push avolpe/cotizacion:$BRANCH;
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push avolpe/cotizacion;
     curl $WEBHOOK;
     fi
 
