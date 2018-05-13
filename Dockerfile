@@ -9,6 +9,7 @@ RUN npm run build
 
 FROM maven:3.5.3-alpine as builder
 ARG BRANCH_NAME
+ARG SONAR_TOKEN
 WORKDIR /app
 COPY pom.xml /app
 COPY src /app/src

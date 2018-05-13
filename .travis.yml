@@ -5,8 +5,11 @@ language: generic
 services:
   - docker
 
-script:
-  - docker build --build-arg BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH} -t avolpe/cotizacion .
+script: |
+  docker build \
+  --build-arg BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH} \
+  --build-arg SONAR_TOKEN=${SONAR_TOKEN} \
+  -t avolpe/cotizacion .
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
