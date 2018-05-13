@@ -22,33 +22,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExchangeController {
 
-	private final QueryResponseDetailRepository detailRepository;
+    private final QueryResponseDetailRepository detailRepository;
 
 
-	@GetMapping(value = "/api/exchange/{iso}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultData byIso(@PathVariable(value = "iso") String code) {
+    @GetMapping(value = "/api/exchange/{iso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultData byIso(@PathVariable(value = "iso") String code) {
 
-		List<ByIsoCodeResult> data = detailRepository.getMaxByPlaceInISO(code);
+        List<ByIsoCodeResult> data = detailRepository.getMaxByPlaceInISO(code);
 
-		LongSummaryStatistics lsm = data.stream().collect(Collectors.summarizingLong(bicd -> bicd.getQueryDate().getTime()));
+        LongSummaryStatistics lsm = data.stream().map(ByIsoCodeResult::getQueryDate).collect(Collectors.summarizingLong(Date::getTime));
 
-		return new ResultData(new Date(lsm.getMin()),
-				new Date(lsm.getMax()),
-				lsm.getCount(),
-				data);
-	}
+        return new ResultData(
+                lsm.getMin() == Long.MAX_VALUE ? null : new Date(lsm.getMin()),
+                lsm.getMax() == Long.MIN_VALUE ? null : new Date(lsm.getMax()),
+                lsm.getCount(),
+                data);
+    }
 
-	@GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAvailableCurrencies() {
-		return detailRepository.getAvailableISO();
-	}
+    @GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<String> getAvailableCurrencies() {
+        return detailRepository.getAvailableISO();
+    }
 
 
-	@Value
-	public static class ResultData {
-		private Date firstQueryResult;
-		private Date lastQueryResult;
-		private long count;
-		private List<ByIsoCodeResult> data;
-	}
+    @Value
+    public static class ResultData {
+        private Date firstQueryResult;
+        private Date lastQueryResult;
+        private long count;
+        private List<ByIsoCodeResult> data;
+    }
 }
