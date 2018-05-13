@@ -103,7 +103,7 @@ public class Alberdi implements Gatherer {
         try {
             Map<String, List<ExchangeData>> result = getParsedData();
 
-            result.keySet().forEach(name -> p.getBranches().add(buildBranch(name, name, p)););
+            result.keySet().forEach(name -> p.getBranches().add(buildBranch(name, name, p)));
 
             return placeRepository.save(p);
         } catch (IOException e) {
