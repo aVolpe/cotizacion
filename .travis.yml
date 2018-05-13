@@ -5,14 +5,20 @@ language: generic
 services:
   - docker
 
-script:
-  - mvn package sonar:sonar -Dsonar.organization=avolpe-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -DDsonar.branch.name=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH}
-  - docker build -t avolpe/cotizacion .
+script: 
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false"  ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - |
+    docker build \
+    --build-arg BRANCH_NAME=$BRANCH \
+    --build-arg SONAR_TOKEN=${SONAR_TOKEN} \
+    --build-arg CODACY_TOKEN=${CODACY_TOKEN} \
+    --build-arg CODACY_API_KEY=${CODACY_API_KEY} \
+    -t avolpe/cotizacion:$BRANCH .
 
 after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push avolpe/cotizacion:$BRANCH;
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push avolpe/cotizacion;
     curl $WEBHOOK;
     fi
 

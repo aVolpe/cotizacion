@@ -8,6 +8,10 @@ RUN ls -la /client
 RUN npm run build
 
 FROM maven:3.5.3-alpine as builder
+ARG BRANCH_NAME
+ARG SONAR_TOKEN
+ARG CODACY_TOKEN
+ARG CODACY_API_KEY
 WORKDIR /app
 COPY pom.xml /app
 COPY src /app/src
@@ -15,7 +19,12 @@ COPY utils /app/utils
 
 COPY --from=client-builder /client/dist /app/src/main/resources/public
 RUN sh ./utils/gen_licenses.sh
-RUN mvn package -DskipTests
+RUN mvn package \
+        sonar:sonar \
+        -Dsonar.organization=avolpe-github \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=$SONAR_TOKEN \
+        -Dsonar.branch.name=$BRANCH_NAME
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
