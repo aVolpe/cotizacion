@@ -25,11 +25,6 @@ RUN mvn package \
         -Dsonar.host.url=https://sonarcloud.io \
         -Dsonar.login=$SONAR_TOKEN \
         -Dsonar.branch.name=$BRANCH_NAME
-RUN mvn jacoco:report \
-        com.gavinmogan:codacy-maven-plugin:coverage \
-        -DcoverageReportFile=target/site/jacoco/jacoco.xml \
-        -DprojectToken=$CODACY_TOKEN \
-        -DapiToken=$CODACY_API_KEY
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
