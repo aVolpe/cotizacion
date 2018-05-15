@@ -1,0 +1,352 @@
+{
+  "asuncion": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.510",
+      "venta": "5.535"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.490",
+      "venta": "1.525"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.910",
+      "venta": "7.045"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "219",
+      "venta": "235"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,635",
+      "venta": "3,693"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,500",
+      "venta": "25,200"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,253",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "villamorra": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.515",
+      "venta": "5.535"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.495",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.900",
+      "venta": "7.050"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "220",
+      "venta": "235"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,635",
+      "venta": "3,695"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,700",
+      "venta": "25,200"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,254",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "cde": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.510",
+      "venta": "5.535"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.495",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.900",
+      "venta": "7.030"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "220",
+      "venta": "235"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,640",
+      "venta": "3,685"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,500",
+      "venta": "25,000"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,253",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "salto": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.510",
+      "venta": "5.540"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.495",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.905",
+      "venta": "7.045"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "215",
+      "venta": "235"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,650",
+      "venta": "3,695"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,500",
+      "venta": "25,500"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,253",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "sanlo": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.515",
+      "venta": "5.530"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.490",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.900",
+      "venta": "7.040"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "219",
+      "venta": "235"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,635",
+      "venta": "3,695"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,700",
+      "venta": "25,200"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,253",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "cde2": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.515",
+      "venta": "5.535"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.495",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.880",
+      "venta": "7.010"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "220",
+      "venta": "233"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,640",
+      "venta": "3,685"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,700",
+      "venta": "25,000"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,249",
+      "venta": "1,268"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ],
+  "enc": [
+    {
+      "moneda": "D\u00f3lar",
+      "img": "dolar.png",
+      "compra": "5.475",
+      "venta": "5.520"
+    },
+    {
+      "moneda": "Real",
+      "img": "real.png",
+      "compra": "1.485",
+      "venta": "1.520"
+    },
+    {
+      "moneda": "Euro",
+      "img": "euro.png",
+      "compra": "6.860",
+      "venta": "7.030"
+    },
+    {
+      "moneda": "Peso Argentino",
+      "img": "peso.png",
+      "compra": "219",
+      "venta": "233"
+    },
+    {
+      "moneda": "D\u00f3lar x Real",
+      "img": "dolar_real.jpg",
+      "compra": "3,635",
+      "venta": "3,690"
+    },
+    {
+      "moneda": "D\u00f3lar x Peso Arg",
+      "img": "dolar_peso.jpg",
+      "compra": "23,700",
+      "venta": "25,000"
+    },
+    {
+      "moneda": "Euro x D\u00f3lar",
+      "img": "euro_dolar.jpg",
+      "compra": "1,253",
+      "venta": "1,272"
+    },
+    {
+      "moneda": "D\u00f3lar Cheque",
+      "img": "dolar.png",
+      "compra": "0",
+      "venta": "0"
+    }
+  ]
+}

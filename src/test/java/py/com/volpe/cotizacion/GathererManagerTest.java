@@ -22,9 +22,9 @@ public class GathererManagerTest {
         Gatherer first = Mockito.mock(Gatherer.class);
         Gatherer second = Mockito.mock(Gatherer.class);
 
-        Mockito.when(first.addOrUpdatePlace()).thenReturn(new Place());
+        Mockito.when(first.get()).thenReturn(new Place());
         Mockito.when(first.getCode()).thenReturn("p1");
-        Mockito.when(second.addOrUpdatePlace()).thenThrow(new AppException(400, "Invalid place"));
+        Mockito.when(second.get()).thenThrow(new AppException(400, "Invalid place"));
         Mockito.when(second.getCode()).thenReturn("p2");
 
         GathererManager manager = new GathererManager(Arrays.asList(first, second));
