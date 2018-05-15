@@ -4,7 +4,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Arturo Volpe
@@ -12,20 +11,29 @@ import java.util.Optional;
  */
 public interface Gatherer {
 
-	/**
-	 * Query the data from this place.
-	 * <p>
-	 * This method should store the data in the DB
-	 * <p>
-	 * This method can trow exceptions.
-	 *
-	 * @return the persisted list of data
-	 */
-	List<QueryResponse> doQuery();
+    /**
+     * Query the data from this place.
+     * <p>
+     * This method should store the data in the DB
+     * <p>
+     * This method can trow exceptions.
+     *
+     * @return the persisted list of data
+     */
+    List<QueryResponse> doQuery();
 
-	Optional<Place> get();
+    /**
+     * Get the current place (search by CODE)
+     *
+     * @return the optional place
+     */
+    Place get();
 
-	Place addOrUpdatePlace();
 
-	String getCode();
+    /**
+     * Unique code to represent this place
+     *
+     * @return the not null place code
+     */
+    String getCode();
 }

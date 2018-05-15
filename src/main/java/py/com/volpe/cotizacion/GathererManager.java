@@ -24,7 +24,7 @@ public class GathererManager {
     private final List<Gatherer> gathererList;
 
     public List<String> init(String code) {
-        return doAction("INIT", code, Gatherer::addOrUpdatePlace);
+        return doAction("INIT", code, Gatherer::get);
     }
 
     public List<String> doQuery(String code) {
