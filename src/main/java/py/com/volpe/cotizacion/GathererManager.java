@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Arturo Volpe
@@ -17,36 +21,40 @@ import java.util.function.Consumer;
 @Log4j2
 public class GathererManager {
 
-	private final List<Gatherer> gathererList;
+    private final List<Gatherer> gathererList;
 
-	public String init(String code) {
-		return doAction("INIT", code, Gatherer::addOrUpdatePlace);
-	}
+    public List<String> init(String code) {
+        return doAction("INIT", code, Gatherer::addOrUpdatePlace);
+    }
 
-	public String doQuery(String code) {
-		return doAction("GATHER", code, Gatherer::doQuery);
-	}
+    public List<String> doQuery(String code) {
+        return doAction("GATHER", code, Gatherer::doQuery);
+    }
 
-	private String doAction(String operationName, String code, Consumer<Gatherer> action) {
+    private List<String> doAction(String operationName, String code, Consumer<Gatherer> action) {
 
-		log.info("{} Initializing", operationName);
-		Consumer<Gatherer> safeAction = g -> {
-			try {
-				log.info("{} running on {}", operationName, g.getCode());
-				action.accept(g);
-				log.info("{} end ok on {}", operationName, g.getCode());
-			} catch (Exception e) {
-				log.warn("{} The gatherer {} throws an exception", operationName, g.getCode(), e);
-			}
-		};
+        log.info("{} Initializing", operationName);
+        Function<Gatherer, String> safeAction = g -> {
+            try {
+                log.info("{} running on {}", operationName, g.getCode());
+                action.accept(g);
+                log.info("{} end ok on {}", operationName, g.getCode());
+                return g.getCode();
+            } catch (Exception e) {
+                log.warn("{} The gatherer {} throws an exception", operationName, g.getCode(), e);
+                return null;
+            }
+        };
 
-		if (code != null) {
-			gathererList.stream().filter(g -> g.getCode().equals(code)).forEach(safeAction);
-		} else {
-			gathererList.parallelStream().forEach(safeAction);
-		}
+        Stream<String> toRet;
+        if (code != null) {
+            toRet = gathererList.stream().filter(g -> g.getCode().equals(code)).map(safeAction);
+        } else {
+            toRet = gathererList.parallelStream().map(safeAction);
+        }
 
-		log.info("{} Ending", operationName);
-		return code;
-	}
+        log.info("{} end", operationName);
+        return toRet.filter(Objects::nonNull).collect(Collectors.toList());
+
+    }
 }
