@@ -2,6 +2,7 @@ package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class ExchangeController {
 
 
     @GetMapping(value = "/api/exchange/{iso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Cacheable("byIso")
     public ResultData byIso(@PathVariable(value = "iso") String code) {
 
         List<ByIsoCodeResult> data = detailRepository.getMaxByPlaceInISO(code);
@@ -40,10 +42,10 @@ public class ExchangeController {
     }
 
     @GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Cacheable("isoList")
     public List<String> getAvailableCurrencies() {
         return detailRepository.getAvailableISO();
     }
-
 
     @Value
     public static class ResultData {

@@ -17,51 +17,51 @@ import java.util.List;
  */
 public interface QueryResponseDetailRepository extends JpaRepository<QueryResponseDetail, Long> {
 
-	@Query("SELECT " +
-			" new py.com.volpe.cotizacion.repository.QueryResponseDetailRepository$ByIsoCodeResult(" +
-			"   qrd.id, " +
-			"   p, " +
-			"   br," +
-			"   qr.id," +
-			"   qr.date," +
-			"   qrd.id," +
-			"   qrd.salePrice," +
-			"   qrd.purchasePrice" +
-			" ) " +
-			"FROM QueryResponseDetail qrd " +
-			"JOIN qrd.queryResponse qr " +
-			"JOIN qr.branch br " +
-			"JOIN br.place p " +
-			"WHERE " +
-			"     qrd.isoCode = ?1 " +
-			" AND qr.date IN (SELECT MAX(qr2.date) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
-			"ORDER BY " +
-			"   qr.date DESC")
-	List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);
+    @Query("SELECT " +
+            " new py.com.volpe.cotizacion.repository.QueryResponseDetailRepository$ByIsoCodeResult(" +
+            "   qrd.id, " +
+            "   p, " +
+            "   br," +
+            "   qr.id," +
+            "   qr.date," +
+            "   qrd.id," +
+            "   qrd.salePrice," +
+            "   qrd.purchasePrice" +
+            " ) " +
+            "FROM QueryResponseDetail qrd " +
+            "JOIN qrd.queryResponse qr " +
+            "JOIN qr.branch br " +
+            "JOIN br.place p " +
+            "WHERE " +
+            "     qrd.isoCode = ?1 " +
+            " AND qr.date IN (SELECT MAX(qr2.date) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
+            "ORDER BY " +
+            "   qr.date DESC")
+    List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);
 
-	@Query("SELECT qrd.isoCode " +
-			"FROM QueryResponseDetail qrd " +
-			"GROUP BY qrd.isoCode " +
-			"ORDER BY count(qrd.isoCode) DESC, qrd.isoCode")
-	List<String> getAvailableISO();
+    @Query("SELECT qrd.isoCode " +
+            "FROM QueryResponseDetail qrd " +
+            "GROUP BY qrd.isoCode " +
+            "ORDER BY count(qrd.isoCode) DESC, qrd.isoCode")
+    List<String> getAvailableISO();
 
-	@Value
-	class ByIsoCodeResult {
-		private long id;
+    @Value
+    class ByIsoCodeResult {
+        private long id;
 
-		@JsonIgnoreProperties("branches")
-		private Place place;
+        @JsonIgnoreProperties("branches")
+        private Place place;
 
-		@JsonIgnoreProperties("place")
-		private PlaceBranch branch;
+        @JsonIgnoreProperties("place")
+        private PlaceBranch branch;
 
-		private long queryId;
-		private Date queryDate;
+        private long queryId;
+        private Date queryDate;
 
-		private long queryDetailId;
-		private long salePrice;
-		private long purchasePrice;
+        private long queryDetailId;
+        private long salePrice;
+        private long purchasePrice;
 
-	}
+    }
 
 }
