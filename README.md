@@ -70,7 +70,8 @@ This project is in an continuous delivery:
 
 # TODO
 
-* Make the database a volume (now it restart every time)
+- [x] Make the database a volume (now it restart every time)
+* [ ] Add a chart to show the exchange evolution
 
 # License
 
