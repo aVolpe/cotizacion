@@ -14,7 +14,7 @@
         </v-navigation-drawer>
         <v-toolbar color="primary" dark fixed app>
             <v-spacer></v-spacer>
-            <v-toolbar-title v-on:click="goHome()">
+            <v-toolbar-title v-on:click="goHome()" class="title">
                 Cotizaciones
             </v-toolbar-title>
             <v-spacer></v-spacer>
@@ -185,6 +185,10 @@
         .main-container {
             padding: 10px !important;
         }
+    }
+
+    .title {
+        cursor: pointer
     }
 
 </style>

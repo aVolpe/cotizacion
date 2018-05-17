@@ -1,155 +1,171 @@
 <template>
     <div class="no-back">
         <div>
-            <h1>Licencias utilizadas</h1>
-            <div>
-                <v-tabs color="indigo" dark slider-color="white">
-                    <v-spacer/>
-                    <v-tab ripple>Back-end</v-tab>
-                    <v-tab ripple>Front-end</v-tab>
-                    <v-tab ripple>Otras</v-tab>
-                    <v-spacer/>
-                    <v-tab-item class="text-xs-left">
+            <div class="elevation-4">
+                <v-toolbar dark color="indigo" tabs>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-title>Licencias utilizadas</v-toolbar-title>
+                    <v-spacer></v-spacer>
 
-                        <v-container fluid grid-list-md>
-                            <v-data-iterator content-tag="v-layout"
-                                             row
-                                             wrap
-                                             hide-actions
-                                             :items="backend">
-                                <v-flex slot="item" slot-scope="props"
-                                        xs12 sm6 md5 lg4>
-                                    <v-card>
-                                        <v-card-title>
-                                            <h4>{{ props.item.name }}</h4>
-                                            <v-spacer></v-spacer>
-                                            <a :href="props.item.url " target="_blank">
-                                                <v-icon>launch</v-icon>
-                                            </a>
-                                        </v-card-title>
-                                        <v-divider></v-divider>
-                                        <v-list dense>
-                                            <v-list-tile>
-                                                <v-list-tile-content>Licencia:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.license }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                            <v-list-tile>
-                                                <v-list-tile-content>Group:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.groupId }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                            <v-list-tile>
-                                                <v-list-tile-content>Id:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.artifactId }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                            <v-list-tile>
-                                                <v-list-tile-content>Version:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.version }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                        </v-list>
-                                    </v-card>
-                                </v-flex>
-                            </v-data-iterator>
-                        </v-container>
-                        <h5 class="text-xs-center">
-                            Estas dependencias se encuentran en el
-                            <a href="https://github.com/aVolpe/cotizacion/blob/master/pom.xml" target="_blank">
-                                pom.xml
-                                <v-icon>launch</v-icon>
-                            </a>
-                        </h5>
+                    <v-tabs
+                            slot="extension"
+                            dark color="indigo" slider-color="white" v-model="tabModel" >
+                        <v-spacer></v-spacer>
+                        <v-tab ripple> Back-end</v-tab>
+                        <v-tab ripple>Front-end</v-tab>
+                        <v-tab ripple>Otras</v-tab>
+                        <v-spacer></v-spacer>
+                    </v-tabs>
+                </v-toolbar>
+
+                <v-tabs-items v-model="tabModel" >
+                    <v-tab-item class="text-xs-left">
+                        <v-card flat>
+                            <v-container fluid grid-list-md>
+                                <v-data-iterator content-tag="v-layout"
+                                                 row
+                                                 wrap
+                                                 hide-actions
+                                                 :items="backend">
+                                    <v-flex slot="item" slot-scope="props"
+                                            xs12 sm6 md5 lg4>
+                                        <v-card>
+                                            <v-card-title>
+                                                <h4>{{ props.item.name }}</h4>
+                                                <v-spacer></v-spacer>
+                                                <a :href="props.item.url " target="_blank">
+                                                    <v-icon>launch</v-icon>
+                                                </a>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-list dense>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Licencia:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.license }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Group:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.groupId }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Id:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.artifactId }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Version:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.version }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
+                                            </v-list>
+                                        </v-card>
+                                    </v-flex>
+                                </v-data-iterator>
+                            </v-container>
+
+                            <h5 class="text-xs-center">
+                                Estas dependencias se encuentran en el
+                                <a href="https://github.com/aVolpe/cotizacion/blob/master/pom.xml" target="_blank">
+                                    pom.xml
+                                    <v-icon>launch</v-icon>
+                                </a>
+                            </h5>
+                        </v-card>
                     </v-tab-item>
                     <v-tab-item class="text-xs-left">
 
-                        <v-container fluid grid-list-md>
-                            <v-data-iterator content-tag="v-layout"
-                                             row
-                                             wrap
-                                             hide-actions
-                                             :items="frontend">
-                                <v-flex slot="item" slot-scope="props"
-                                        xs12 sm6 md5 lg4>
-                                    <v-card>
-                                        <v-card-title>
-                                            <h4>{{ props.item.name }}</h4>
-                                            <v-spacer></v-spacer>
-                                            <a :href="props.item.link " target="_blank">
-                                                <v-icon>launch</v-icon>
-                                            </a>
-                                        </v-card-title>
-                                        <v-divider></v-divider>
-                                        <v-list dense>
-                                            <v-list-tile>
-                                                <v-list-tile-content>Licencia:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.licenseType }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
+                        <v-card flat>
+                            <v-container fluid grid-list-md>
+                                <v-data-iterator content-tag="v-layout"
+                                                 row
+                                                 wrap
+                                                 hide-actions
+                                                 :items="frontend">
+                                    <v-flex slot="item" slot-scope="props"
+                                            xs12 sm6 md5 lg4>
+                                        <v-card>
+                                            <v-card-title>
+                                                <h4>{{ props.item.name }}</h4>
+                                                <v-spacer></v-spacer>
+                                                <a :href="props.item.link " target="_blank">
+                                                    <v-icon>launch</v-icon>
+                                                </a>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-list dense>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Licencia:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.licenseType }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
 
 
-                                            <v-list-tile>
-                                                <v-list-tile-content>Version:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.comment }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
-                                        </v-list>
-                                    </v-card>
-                                </v-flex>
-                            </v-data-iterator>
-                        </v-container>
-                        <h5 class="text-xs-center">
-                            Estas dependencias se encuentran en el
-                            <a href="https://github.com/aVolpe/cotizacion/blob/master/client/package.json"
-                               target="_blank">
-                                package.json
-                                <v-icon>launch</v-icon>
-                            </a>
-                        </h5>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Version:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.comment }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
+                                            </v-list>
+                                        </v-card>
+                                    </v-flex>
+                                </v-data-iterator>
+                            </v-container>
+                            <h5 class="text-xs-center">
+                                Estas dependencias se encuentran en el
+                                <a href="https://github.com/aVolpe/cotizacion/blob/master/client/package.json"
+                                   target="_blank">
+                                    package.json
+                                    <v-icon>launch</v-icon>
+                                </a>
+                            </h5>
+                        </v-card>
                     </v-tab-item>
                     <v-tab-item class="text-xs-left">
+                        <v-card flat>
 
-                        <v-container fluid grid-list-md>
-                            <v-data-iterator content-tag="v-layout"
-                                             row
-                                             wrap
-                                             hide-actions
-                                             :items="other">
-                                <v-flex slot="item" slot-scope="props"
-                                        xs12 sm6 md5 lg4>
-                                    <v-card>
-                                        <v-card-title>
-                                            <h4>{{ props.item.name }}</h4>
-                                            <v-spacer></v-spacer>
-                                            <a :href="props.item.url " target="_blank">
-                                                <v-icon>launch</v-icon>
-                                            </a>
-                                        </v-card-title>
-                                        <v-divider></v-divider>
-                                        <v-list dense>
+                            <v-container fluid grid-list-md>
+                                <v-data-iterator content-tag="v-layout"
+                                                 row
+                                                 wrap
+                                                 hide-actions
+                                                 :items="other">
+                                    <v-flex slot="item" slot-scope="props"
+                                            xs12 sm6 md5 lg4>
+                                        <v-card>
+                                            <v-card-title>
+                                                <h4>{{ props.item.name }}</h4>
+                                                <v-spacer></v-spacer>
+                                                <a :href="props.item.url " target="_blank">
+                                                    <v-icon>launch</v-icon>
+                                                </a>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-list dense>
 
-                                            <v-list-tile>
-                                                <v-list-tile-content>Autor:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.author }}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Autor:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.author }}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
 
-                                            <v-list-tile>
-                                                <v-list-tile-content>Licencia:</v-list-tile-content>
-                                                <v-list-tile-content class="align-end">{{ props.item.license}}
-                                                </v-list-tile-content>
-                                            </v-list-tile>
+                                                <v-list-tile>
+                                                    <v-list-tile-content>Licencia:</v-list-tile-content>
+                                                    <v-list-tile-content class="align-end">{{ props.item.license}}
+                                                    </v-list-tile-content>
+                                                </v-list-tile>
 
 
-                                        </v-list>
-                                    </v-card>
-                                </v-flex>
-                            </v-data-iterator>
+                                            </v-list>
+                                        </v-card>
+                                    </v-flex>
+                                </v-data-iterator>
 
-                        </v-container>
+                            </v-container>
+                        </v-card>
                     </v-tab-item>
-                </v-tabs>
+                </v-tabs-items>
             </div>
         </div>
     </div>
@@ -172,10 +188,12 @@
         backend: any[];
         frontend: any[];
         other: any[];
+        tabModel: number;
 
 
         constructor() {
             super();
+            this.tabModel = 0;
             this.baseUrl = process.env.BASE_URL;
             this.backend = [];
             this.frontend = <any> data;
