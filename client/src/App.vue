@@ -14,7 +14,9 @@
         </v-navigation-drawer>
         <v-toolbar color="primary" dark fixed app>
             <v-spacer></v-spacer>
-            <v-toolbar-title>Cotizaciones</v-toolbar-title>
+            <v-toolbar-title v-on:click="goHome()">
+                Cotizaciones
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         </v-toolbar>
@@ -129,6 +131,10 @@
                     icon: 'scanner'
                 }
             ]
+        }
+
+        goHome() {
+            this.$router.push('/');
         }
 
     }

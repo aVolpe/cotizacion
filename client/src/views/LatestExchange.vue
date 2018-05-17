@@ -23,7 +23,7 @@
                         :loading="loading"
                         v-bind:pagination.sync="pagination"
                         hide-actions
-                        no-data-text="Cargando ..."
+                        no-data-text=""
                         :must-sort="true"
                         item-key="id"
                         :items="data && data.data"
@@ -33,7 +33,10 @@
                             No hay datos de hoy
                         </v-alert>
                     </template>
-                    <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                    <template slot="progress">
+                        <br />
+                        <v-progress-circular color="blue" :size="70" :width="7" indeterminate></v-progress-circular>
+                    </template>
 
 
                     <template slot="items" slot-scope="props">

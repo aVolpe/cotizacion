@@ -2,6 +2,7 @@ package py.com.volpe.cotizacion;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
 
@@ -27,6 +28,7 @@ public class GathererManager {
         return doAction("INIT", code, Gatherer::addOrUpdatePlace);
     }
 
+    @CacheEvict(cacheNames = {"byIso", "isoList"}, allEntries = true)
     public List<String> doQuery(String code) {
         return doAction("GATHER", code, Gatherer::doQuery);
     }
