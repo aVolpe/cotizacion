@@ -5,6 +5,7 @@ import Vuetify from 'vuetify'
 import Meta from 'vue-meta';
 import moment from 'moment'
 import theme from './theme';
+import 'babel-polyfill'
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify, {theme});

@@ -10,6 +10,7 @@
     "gen-licenses": "license-report --only=prod > ./src/licenses.json"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "moment": "^2.22.1",
     "vue": "^2.5.16",
     "vue-class-component": "^6.0.0",
