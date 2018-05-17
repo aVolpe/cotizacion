@@ -1,7 +1,7 @@
 spring:
 
   datasource:
-    url: jdbc:postgresql://db:5432/exchange
+    url: jdbc:postgresql://localhost:5432/exchange
     username: exchange
     password: exchange
 

@@ -26,6 +26,8 @@ RUN mvn package \
         -Dsonar.login=$SONAR_TOKEN \
         -Dsonar.branch.name=$BRANCH_NAME
 
+RUN mvn install -Ppostgres -DskipTests
+
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 COPY --from=builder /app/target/cotizaciones-1.0.0.jar app.jar
