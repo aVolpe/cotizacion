@@ -4,17 +4,10 @@ import router from './router'
 import Vuetify from 'vuetify'
 import Meta from 'vue-meta';
 import moment from 'moment'
-import colors from 'vuetify/es5/util/colors'
-
+import theme from './theme';
 
 Vue.config.productionTip = false;
-Vue.use(Vuetify, {
-    theme: {
-        primary: colors.indigo.darken3, // #E53935
-        secondary: colors.red.lighten4, // #FFCDD2
-        accent: colors.indigo.base // #3F51B5
-    }
-});
+Vue.use(Vuetify, {theme});
 Vue.use(Meta, {
     keyName: 'head'
 });

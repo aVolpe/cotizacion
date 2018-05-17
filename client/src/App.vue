@@ -57,6 +57,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import 'vuetify/dist/vuetify.min.css'
     import {Meta} from "./decorators";
+    import theme from "./theme";
 
 
     @Component({
@@ -69,6 +70,7 @@
             <any>{'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8'},
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
             {name: 'description', content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'},
+            {name: 'theme-color', content: theme.primary},
 
             {property: 'og:title', content: 'Cotizaciones del paraguay'},
             {property: 'og:site_name', content: 'Cotizaciones del Paraguay'},
