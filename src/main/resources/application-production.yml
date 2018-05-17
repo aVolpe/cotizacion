@@ -1,0 +1,10 @@
+spring:
+
+  datasource:
+    url: jdbc:postgresql://db:5432/exchange
+    username: exchange
+    password: exchange
+
+  jpa:
+    hibernate:
+      ddl-auto: update

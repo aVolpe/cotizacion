@@ -4,3 +4,13 @@ services:
     image: avolpe/cotizacion:latest
     ports:
       - "8080:8080"
+  db:
+    image: postgres:10.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=exchange
+      - POSTGRES_PASSWORD=exchange
+
