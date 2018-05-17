@@ -19,6 +19,8 @@ after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push avolpe/cotizacion:$BRANCH;
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker tag avolpe/cotizacion:$BRANCH avolpe/cotizacion:latest;
+    docker push avolpe/cotizacion:latest;
     curl $WEBHOOK;
     fi
 
