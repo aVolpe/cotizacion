@@ -19,14 +19,15 @@ COPY utils /app/utils
 
 COPY --from=client-builder /client/dist /app/src/main/resources/public
 RUN sh ./utils/gen_licenses.sh
-RUN mvn package \
+RUN mvn -B -q \
+        package \
         sonar:sonar \
         -Dsonar.organization=avolpe-github \
         -Dsonar.host.url=https://sonarcloud.io \
         -Dsonar.login=$SONAR_TOKEN \
         -Dsonar.branch.name=$BRANCH_NAME
 
-RUN mvn install -Ppostgres -DskipTests
+RUN mvn -B -q install -Ppostgres -DskipTests
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
