@@ -34,7 +34,7 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
             "JOIN br.place p " +
             "WHERE " +
             "     qrd.isoCode = ?1 " +
-            " AND qr.date IN (SELECT MAX(qr2.date) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
+            " AND qr.id IN (SELECT MAX(qr2.id) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
             "ORDER BY " +
             "   qr.date DESC")
     List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);
