@@ -18,8 +18,8 @@ public class Scheduler {
 
 	private final GathererManager manager;
 
-	@Scheduled(fixedDelay = 1000 * 60 * 10)
-	public void reportCurrentTime() {
+	@Scheduled(cron = "0 */10 7-20 * * MON-SAT", zone = "America/Asuncion")
+	public void triggerQuery() {
 		log.info("Querying the services");
 		manager.doQuery(null);
 	}
