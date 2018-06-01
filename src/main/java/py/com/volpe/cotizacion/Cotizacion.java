@@ -18,7 +18,6 @@ public class Cotizacion {
 
     public static void main(String[] args) {
         SpringApplication.run(Cotizacion.class, args);
-
     }
 
     @Bean

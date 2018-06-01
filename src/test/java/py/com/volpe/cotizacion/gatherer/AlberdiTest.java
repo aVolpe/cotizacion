@@ -14,17 +14,12 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -34,12 +29,6 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AlberdiTest {
-
-    @Mock
-    private PlaceRepository placeRepository;
-
-    @Mock
-    private QueryResponseRepository queryResponseRepository;
 
     @Mock
     private WSHelper wsHelper;
@@ -53,15 +42,13 @@ public class AlberdiTest {
         String data = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), "UTF-8");
 
         when(wsHelper.getDataWithoutSending(anyString())).thenReturn(data);
-        when(placeRepository.save(any())).thenAnswer(returnsFirstArg());
-        when(queryResponseRepository.save(any())).thenAnswer(returnsFirstArg());
     }
 
     @Test
     public void create() throws Exception {
 
 
-        Place created = alberdi.get();
+        Place created = alberdi.build();
 
         assertNotNull(created);
         assertNotNull(alberdi.getCode(), created.getCode());
@@ -85,19 +72,17 @@ public class AlberdiTest {
         try {
             alberdi.getParsedData();
             Assert.fail();
-        } catch(AppException ae) {
+        } catch (AppException ae) {
             assertEquals(500, ae.getNumber());
         }
     }
 
 
     @Test
-    public void doQuery() throws Exception {
-        Place place = alberdi.get();
-        when(placeRepository.findByCode(anyString())).thenReturn(Optional.of(place));
+    public void doQuery() {
+        Place place = alberdi.build();
 
-
-        List<QueryResponse> data = alberdi.doQuery();
+        List<QueryResponse> data = alberdi.doQuery(place, place.getBranches());
 
         assertEquals(7, data.size());
         for (QueryResponse qr : data) {

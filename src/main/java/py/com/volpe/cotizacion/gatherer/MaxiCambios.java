@@ -14,8 +14,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -40,19 +38,17 @@ public class MaxiCambios implements Gatherer {
     private static final String WS_URL_AS = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s";
     private static final String WS_URL_CDE = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/CotizacionesCDE?fecha=%s";
 
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
     private final HTTPHelper helper;
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return get().getBranches().stream().map(branch -> {
+        return branches.stream().map(branch -> {
             String url = branch.getRemoteCode().equals("0") ? WS_URL_AS : WS_URL_CDE;
 
             QueryResponse qr = new QueryResponse();
             qr.setBranch(branch);
-            qr.setPlace(branch.getPlace());
+            qr.setPlace(place);
             qr.setDate(new Date());
             qr.setDetails(getParsedData(url).stream().map(detail -> {
 
@@ -70,14 +66,9 @@ public class MaxiCambios implements Gatherer {
                 return qrd;
             }).filter(Objects::nonNull).collect(Collectors.toList()));
 
-            return queryResponseRepository.save(qr);
+            return qr;
         }).collect(Collectors.toList());
 
-    }
-
-    @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
     }
 
     @Override
@@ -91,7 +82,8 @@ public class MaxiCambios implements Gatherer {
      *
      * @return the newly created place
      */
-    private Place create() {
+    @Override
+    public Place build() {
 
 
         log.info("Creating place {}", CODE);
@@ -124,7 +116,7 @@ public class MaxiCambios implements Gatherer {
 
 
         p.setBranches(Arrays.asList(main, cde));
-        return placeRepository.save(p);
+        return p;
 
     }
 

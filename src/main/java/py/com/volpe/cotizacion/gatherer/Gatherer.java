@@ -1,6 +1,7 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 
 import java.util.List;
@@ -14,20 +15,20 @@ public interface Gatherer {
     /**
      * Query the data from this place.
      * <p>
-     * This method should store the data in the DB
-     * <p>
      * This method can trow exceptions.
      *
-     * @return the persisted list of data
+     * @return the result of the query
      */
-    List<QueryResponse> doQuery();
+    List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches);
 
     /**
-     * Get the current place (search by CODE)
+     * Build the place in the current version.
+     * <p>
+     * This method don't persist the place.
      *
-     * @return the optional place
+     * @return the place
      */
-    Place get();
+    Place build();
 
 
     /**

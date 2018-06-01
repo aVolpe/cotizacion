@@ -13,10 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +26,12 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class Alberdi implements Gatherer {
 
     private static final String CODE = "ALBERDI";
     private static final String WS_URL = "ws://cambiosalberdi.com:9300";
     private final WSHelper helper;
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
 
     @Override
     public String getCode() {
@@ -45,11 +39,11 @@ public class Alberdi implements Gatherer {
     }
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
 
         Map<String, List<ExchangeData>> result = getParsedData();
 
-        return get().getBranches().stream().map(b -> {
+        return branches.stream().map(b -> {
             QueryResponse qr = new QueryResponse(b);
             List<ExchangeData> data = result.get(b.getRemoteCode());
 
@@ -62,7 +56,7 @@ public class Alberdi implements Gatherer {
             }).filter(Objects::nonNull).collect(Collectors.toList()));
 
 
-            return queryResponseRepository.save(qr);
+            return qr;
         }).collect(Collectors.toList());
 
 
@@ -73,11 +67,7 @@ public class Alberdi implements Gatherer {
     }
 
     @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
-    }
-
-    private Place create() {
+    public Place build() {
 
 
         log.info("Creating place alberdi");
@@ -88,7 +78,7 @@ public class Alberdi implements Gatherer {
 
         result.keySet().forEach(name -> p.getBranches().add(buildBranch(name, name, p)));
 
-        return placeRepository.save(p);
+        return p;
 
     }
 
@@ -160,7 +150,7 @@ public class Alberdi implements Gatherer {
         }
     }
 
-    protected Map<String, List<ExchangeData>> getParsedData() {
+    Map<String, List<ExchangeData>> getParsedData() {
         try {
             return buildMapper().readValue(helper.getDataWithoutSending(WS_URL), new TypeReference<Map<String, List<ExchangeData>>>() {
             });

@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
+import py.com.volpe.cotizacion.repository.PlaceRepository;
+import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,14 +26,16 @@ import java.util.stream.Stream;
 public class GathererManager {
 
     private final List<Gatherer> gathererList;
+    private final PlaceRepository placeRepository;
+    private final QueryResponseRepository queryResponseRepository;
 
     public List<String> init(String code) {
-        return doAction("INIT", code, Gatherer::get);
+        return doAction("INIT", code, this::getPlace);
     }
 
     @CacheEvict(cacheNames = {"byIso", "isoList"}, allEntries = true)
     public List<String> doQuery(String code) {
-        return doAction("GATHER", code, Gatherer::doQuery);
+        return doAction("GATHER", code, this::doQuery);
     }
 
     private List<String> doAction(String operationName, String code, Consumer<Gatherer> action) {
@@ -58,5 +63,15 @@ public class GathererManager {
         log.info("{} end", operationName);
         return toRet.filter(Objects::nonNull).collect(Collectors.toList());
 
+    }
+
+    private void doQuery(Gatherer g) {
+        Place p = getPlace(g);
+        g.doQuery(p, p.getBranches())
+                .forEach(queryResponseRepository::save);
+    }
+
+    private Place getPlace(Gatherer g) {
+        return placeRepository.findByCode(g.getCode()).orElseGet(() -> placeRepository.save(g.build()));
     }
 }

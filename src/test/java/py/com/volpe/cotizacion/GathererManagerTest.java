@@ -6,9 +6,15 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
+import py.com.volpe.cotizacion.repository.PlaceRepository;
+import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
+
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
 
 /**
  * @author Arturo Volpe
@@ -19,15 +25,22 @@ public class GathererManagerTest {
     @Test
     public void init() {
 
+
         Gatherer first = Mockito.mock(Gatherer.class);
-        Gatherer second = Mockito.mock(Gatherer.class);
-
-        Mockito.when(first.get()).thenReturn(new Place());
         Mockito.when(first.getCode()).thenReturn("p1");
-        Mockito.when(second.get()).thenThrow(new AppException(400, "Invalid place"));
-        Mockito.when(second.getCode()).thenReturn("p2");
 
-        GathererManager manager = new GathererManager(Arrays.asList(first, second));
+        Gatherer second = Mockito.mock(Gatherer.class);
+        Mockito.when(second.getCode()).thenReturn("p2");
+        Mockito.when(second.build()).thenThrow(new AppException(400, "Invalid place"));
+
+        PlaceRepository pr = Mockito.mock(PlaceRepository.class);
+        Mockito.when(pr.save(any())).thenAnswer(returnsFirstArg());
+
+        Mockito.when(pr.findByCode("p1")).thenReturn(Optional.of(new Place()));
+        Mockito.when(pr.findByCode("p2")).thenReturn(Optional.empty());
+
+
+        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, null);
 
         Assert.assertEquals(1, manager.init(null).size());
         Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
@@ -38,19 +51,29 @@ public class GathererManagerTest {
 
     @Test
     public void doQuery() {
+
+        PlaceRepository pr = Mockito.mock(PlaceRepository.class);
+        Mockito.when(pr.findByCode(any())).thenReturn(Optional.of(new Place()));
+
+        QueryResponseRepository qr = Mockito.mock(QueryResponseRepository.class);
+        Mockito.when(qr.save(any())).thenAnswer(returnsFirstArg());
+
         Gatherer first = Mockito.mock(Gatherer.class);
-        Gatherer second = Mockito.mock(Gatherer.class);
-
-        Mockito.when(first.doQuery()).thenReturn(new ArrayList<>());
         Mockito.when(first.getCode()).thenReturn("p1");
-        Mockito.when(second.doQuery()).thenThrow(new AppException(400, "Invalid place"));
-        Mockito.when(second.getCode()).thenReturn("p2");
+        Mockito.when(first.doQuery(any(), any())).thenReturn(new ArrayList<>());
 
-        GathererManager manager = new GathererManager(Arrays.asList(first, second));
+        Gatherer second = Mockito.mock(Gatherer.class);
+        Mockito.when(second.getCode()).thenReturn("p2");
+        Mockito.when(second.doQuery(any(), any())).thenThrow(new AppException(400, "Invalid place"));
+
+
+
+        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, qr);
 
         Assert.assertEquals(1, manager.doQuery(null).size());
         Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
 
         Assert.assertEquals(0, manager.doQuery("p2").size());
+        Assert.assertEquals(1, manager.doQuery("p1").size());
     }
 }

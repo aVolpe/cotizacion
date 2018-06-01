@@ -12,8 +12,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -32,8 +30,6 @@ public class Amambay implements Gatherer {
     private static final String URL_CHANGE = "https://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange";
     private static final String CODE = "AMAMBAY";
 
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
     private final HTTPHelper httpHelper;
 
     @Override
@@ -42,8 +38,8 @@ public class Amambay implements Gatherer {
     }
 
     @Override
-    public List<QueryResponse> doQuery() {
-        return get().getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
+    public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
+        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
     }
 
     private QueryResponse queryBranch(PlaceBranch branch) {
@@ -56,7 +52,7 @@ public class Amambay implements Gatherer {
             qr.setDetails(data.getCurrencyExchanges().stream().map(BranchExchangeDetailsData::map).collect(Collectors.toList()));
 
 
-            return queryResponseRepository.save(qr);
+            return qr;
 
         } catch (IOException e) {
             throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
@@ -64,13 +60,7 @@ public class Amambay implements Gatherer {
     }
 
     @Override
-    public Place get() {
-
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
-    }
-
-
-    private Place create() {
+    public Place build() {
 
         Place p = new Place("Cambios Amambay", CODE);
 
@@ -78,7 +68,7 @@ public class Amambay implements Gatherer {
 
         p.setBranches(Collections.singletonList(pb));
 
-        return placeRepository.save(p);
+        return p;
     }
 
     private ObjectMapper buildMapper() {

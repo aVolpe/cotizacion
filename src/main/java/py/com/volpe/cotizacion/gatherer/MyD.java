@@ -13,8 +13,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +31,11 @@ public class MyD implements Gatherer {
 
     private static final String CODE = "MyD";
     private static final String URL = "https://www.mydcambios.com.py/?sucursal=%s";
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
 
-        return get().getBranches().stream().map(branch -> {
+        return branches.stream().map(branch -> {
 
             QueryResponse qr = new QueryResponse(branch);
 
@@ -51,15 +47,10 @@ public class MyD implements Gatherer {
                             parse(data.getSalePrice()),
                             getISOName(data))));
 
-            return queryResponseRepository.save(qr);
+            return qr;
 
         }).collect(Collectors.toList());
 
-    }
-
-    @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
     }
 
     @Override
@@ -68,7 +59,8 @@ public class MyD implements Gatherer {
     }
 
 
-    private Place create() {
+    @Override
+    public Place build() {
 
 
         log.info("Creating place MyD");
@@ -101,7 +93,7 @@ public class MyD implements Gatherer {
 
         p.setBranches(Arrays.asList(pb, villa, cde));
 
-        return placeRepository.save(p);
+        return p;
 
     }
 
