@@ -11,5 +11,5 @@ import java.util.Optional;
  */
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
-	Optional<Place> findPlaceByCode(String code);
+	Optional<Place> findByCode(String code);
 }

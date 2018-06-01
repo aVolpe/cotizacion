@@ -20,7 +20,10 @@ import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -44,9 +47,7 @@ public class MaxiCambios implements Gatherer {
     @Override
     public List<QueryResponse> doQuery() {
 
-        Place p = addOrUpdatePlace();
-
-        return p.getBranches().stream().map(branch -> {
+        return get().getBranches().stream().map(branch -> {
             String url = branch.getRemoteCode().equals("0") ? WS_URL_AS : WS_URL_CDE;
 
             QueryResponse qr = new QueryResponse();
@@ -75,13 +76,8 @@ public class MaxiCambios implements Gatherer {
     }
 
     @Override
-    public Optional<Place> get() {
-        return placeRepository.findPlaceByCode(CODE);
-    }
-
-    @Override
-    public Place addOrUpdatePlace() {
-        return placeRepository.findPlaceByCode(CODE).orElseGet(this::create);
+    public Place get() {
+        return placeRepository.findByCode(CODE).orElseGet(this::create);
     }
 
     @Override

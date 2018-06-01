@@ -17,9 +17,7 @@ import py.com.volpe.cotizacion.repository.PlaceRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,140 +29,125 @@ import java.util.stream.Collectors;
 @Log4j2
 public class CambiosChaco implements Gatherer {
 
-	public static final String URL_CHANGE = "http://www.cambioschaco.com.py/api/branch_office/%s/exchange";
-	public static final String URL_BRANCH = "http://www.cambioschaco.com.py/api/branch_office/";
-	public static final String CODE = "CAMBIOS_CHACO";
+    private static final String URL_CHANGE = "http://www.cambioschaco.com.py/api/branch_office/%s/exchange";
+    private static final String URL_BRANCH = "http://www.cambioschaco.com.py/api/branch_office/";
+    public static final String CODE = "CAMBIOS_CHACO";
 
-	private final PlaceRepository placeRepository;
-	private final QueryResponseRepository queryResponseRepository;
-	private final HTTPHelper httpHelper;
+    private final PlaceRepository placeRepository;
+    private final QueryResponseRepository queryResponseRepository;
+    private final HTTPHelper httpHelper;
 
-	@Override
-	public List<QueryResponse> doQuery() {
+    @Override
+    public List<QueryResponse> doQuery() {
 
+        return get().getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
+    }
 
-		log.info("Starting doing query in {}", CODE);
-		Place p = addOrUpdatePlace();
-		return p.getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
-	}
+    private QueryResponse queryBranch(PlaceBranch branch) {
+        try {
 
-	private QueryResponse queryBranch(PlaceBranch branch) {
-		try {
+            String query = httpHelper.doGet(String.format(URL_CHANGE, branch.getRemoteCode()));
 
-			String query = httpHelper.doGet(String.format(URL_CHANGE, branch.getRemoteCode()));
+            QueryResponse qr = new QueryResponse(branch);
 
-			QueryResponse qr = new QueryResponse();
-			qr.setBranch(branch);
-			qr.setDate(new Date());
-			qr.setPlace(branch.getPlace());
+            // for some reason, when cambios chaco doesn't has data, it returns '[]'
+            if (!"[]".equals(query)) {
+                BranchExchangeData data = buildMapper().readValue(query, BranchExchangeData.class);
+                data.getItems().forEach(d -> qr.addDetail(d.map()));
+            }
 
-			// for some reason, when cambios chaco doesn't has data, it returns '[]'
-			if (!"[]".equals(query)) {
-				BranchExchangeData data = buildMapper().readValue(query, BranchExchangeData.class);
-				qr.setDetails(data.getItems().stream().map(d -> d.map(qr)).collect(Collectors.toList()));
-			}
+            return queryResponseRepository.save(qr);
 
-			return queryResponseRepository.save(qr);
+        } catch (IOException e) {
+            throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
+        }
+    }
 
-		} catch (IOException e) {
-			throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
-		}
-	}
+    @Override
+    public Place get() {
+        return placeRepository.findByCode(CODE).orElseGet(this::create);
+    }
 
-	@Override
-	public Optional<Place> get() {
-		return placeRepository.findPlaceByCode(CODE);
-	}
+    @Override
+    public String getCode() {
+        return CODE;
+    }
 
-	@Override
-	public Place addOrUpdatePlace() {
+    private Place create() {
+        log.info("Creating 'Cambios Chaco'");
+        Place p = new Place("Cambios Chaco", CODE);
 
-		return get().orElseGet(this::create);
-	}
+        try {
+            List<BranchData> res = buildMapper().readValue(httpHelper.doGet(URL_BRANCH), new TypeReference<List<BranchData>>() {
+            });
 
-	@Override
-	public String getCode() {
-		return CODE;
-	}
+            p.setBranches(res.stream().map(d -> d.map(p)).collect(Collectors.toList()));
 
-	private Place create() {
-		log.info("Creating 'Cambios Chaco'");
-		Place p = new Place();
-		p.setName("Cambios Chaco");
-		p.setCode(CODE);
+            return placeRepository.save(p);
+        } catch (IOException e) {
+            throw new AppException(500, "Can't read the body to build the place (chaco)", e);
+        }
+    }
 
-		try {
-			List<BranchData> res = buildMapper().readValue(httpHelper.doGet(URL_BRANCH), new TypeReference<List<BranchData>>() {
-			});
+    private ObjectMapper buildMapper() {
+        return new ObjectMapper();
+    }
 
-			p.setBranches(res.stream().map(d -> d.map(p)).collect(Collectors.toList()));
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class BranchExchangeData {
+        String updateTs;
+        String branchOfficeId;
+        List<BranchExchangeDetailsData> items;
+    }
 
-			return placeRepository.save(p);
-		} catch (IOException e) {
-			throw new AppException(500, "Can't read the body to build the place (chaco)", e);
-		}
-	}
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class BranchExchangeDetailsData {
+        String isoCode;
+        long purchasePrice;
+        long salePrice;
+        long purchaseTrend;
+        long saleTrend;
 
-	private ObjectMapper buildMapper() {
-		return new ObjectMapper();
-	}
+        public QueryResponseDetail map() {
+            QueryResponseDetail toRet = new QueryResponseDetail();
+            toRet.setIsoCode(isoCode);
+            toRet.setPurchasePrice(purchasePrice);
+            toRet.setSalePrice(salePrice);
+            toRet.setPurchaseTrend(purchaseTrend);
+            toRet.setSaleTrend(saleTrend);
+            return toRet;
+        }
+    }
 
-	@Data
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class BranchExchangeData {
-		String updateTs;
-		String branchOfficeId;
-		List<BranchExchangeDetailsData> items;
-	}
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class BranchData {
+        String id;
+        String title;
+        String lat;
+        String lng;
+        String phoneNumber;
+        String address;
+        String weekdaySchedule;
+        String saturdaySchedule;
+        String sundaySchedule;
+        String imageUrl;
+        String email;
 
-	@Data
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class BranchExchangeDetailsData {
-		String isoCode;
-		long purchasePrice;
-		long salePrice;
-		long purchaseTrend;
-		long saleTrend;
-
-		public QueryResponseDetail map(QueryResponse qr) {
-			QueryResponseDetail toRet = new QueryResponseDetail();
-			toRet.setIsoCode(isoCode);
-			toRet.setQueryResponse(qr);
-			toRet.setPurchasePrice(purchasePrice);
-			toRet.setSalePrice(salePrice);
-			toRet.setPurchaseTrend(purchaseTrend);
-			toRet.setSaleTrend(saleTrend);
-			return toRet;
-		}
-	}
-
-	@Data
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class BranchData {
-		String id;
-		String title;
-		String lat;
-		String lng;
-		String phoneNumber;
-		String address;
-		String weekdaySchedule;
-		String saturdaySchedule;
-		String sundaySchedule;
-		String imageUrl;
-		String email;
-
-		public PlaceBranch map(Place place) {
-			PlaceBranch pb = new PlaceBranch();
-			pb.setRemoteCode(id);
-			pb.setPlace(place);
-			pb.setEmail(email);
-			pb.setName(title);
-			pb.setImage(imageUrl);
-			pb.setLatitude(Double.valueOf(lat));
-			pb.setLongitude(Double.valueOf(lng));
-			pb.setPhoneNumber(phoneNumber);
-			pb.setSchedule(String.format("Semana: %s, Sabado: %s, Domingo: %s", weekdaySchedule, saturdaySchedule, sundaySchedule));
-			return pb;
-		}
-	}
+        public PlaceBranch map(Place place) {
+            PlaceBranch pb = new PlaceBranch();
+            pb.setRemoteCode(id);
+            pb.setPlace(place);
+            pb.setEmail(email);
+            pb.setName(title);
+            pb.setImage(imageUrl);
+            pb.setLatitude(Double.valueOf(lat));
+            pb.setLongitude(Double.valueOf(lng));
+            pb.setPhoneNumber(phoneNumber);
+            pb.setSchedule(String.format("Semana: %s, Sabado: %s, Domingo: %s", weekdaySchedule, saturdaySchedule, sundaySchedule));
+            return pb;
+        }
+    }
 }

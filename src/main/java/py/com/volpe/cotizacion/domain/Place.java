@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,4 +29,17 @@ public class Place {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
     @Singular
     private List<PlaceBranch> branches;
+
+    public Place(String name, String code) {
+        this.name = name;
+        this.code = code;
+        this.branches = new ArrayList<>();
+    }
+
+    public void setBranches(List<PlaceBranch> branches) {
+        if (branches == null) this.branches = new ArrayList<>();
+        else this.branches = branches;
+
+        this.branches.forEach(b -> b.setPlace(this));
+    }
 }
