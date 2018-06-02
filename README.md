@@ -28,7 +28,7 @@ By default the server starts at port 8080.
 
 ## Develop endpoints
 
-This endpoints are only available in develop mode (develop profile), 
+This endpoints are only available in develop mode (develop spring profile), 
 and are disabled in production
 
 * Init exchange places: `/api/places/init`
@@ -46,10 +46,10 @@ main Dockerfile.
 
 ## Front end
 
-1. You need npm
+1. You need `npm`
 2. Execute in the `client` folder `npm run build`
 
-## Cronjobs
+## CronJobs
 
 The system query the data every 10 minutes, and are only enabled
 in production profile.
@@ -59,19 +59,20 @@ in production profile.
 This project is in an continuous delivery:
 
 1. The code is hosted in Github
-2. When a push occur, the [docker ci](https://hub.docker.com/r/avolpe/cotizacion/) is trigger 
+2. On a push (or a merge request), the [travis CI](https://travis-ci.org/aVolpe/cotizacion) is trigger 
    and a new image is generated (avolpe/cotizacion)
-3. A web hook is invoked to the server
+3. A web hook is invoked to the server (www.volpe.com.py)
 4. The server pull the new image and restart
 
 # Links
 
-* Current version: [https://www.volpe.com.py](https://www.volpe.com.py)
+* Current version: [https://cotizacion.volpe.com.py](https://cotizacion.volpe.com.py)
 
 # TODO
 
 - [x] Make the database a volume (now it restart every time)
-* [ ] Add a chart to show the exchange evolution
+- [ ] Add a chart to show the exchange evolution.
+- [ ] Add a map to show the shortest path to get the best exchange.
 
 # License
 

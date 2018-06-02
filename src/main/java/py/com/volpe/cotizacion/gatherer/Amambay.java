@@ -53,7 +53,7 @@ public class Amambay implements Gatherer {
             return qr;
 
         } catch (IOException e) {
-            throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
+            throw new AppException(500, "cant read response from Amambay " + branch.getId(), e);
         }
     }
 
