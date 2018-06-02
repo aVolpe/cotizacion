@@ -42,29 +42,36 @@ public class MaxiCambios implements Gatherer {
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return branches.stream().map(branch -> {
-            String url = branch.getRemoteCode().equals("0") ? WS_URL_AS : WS_URL_CDE;
+        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
 
-            QueryResponse qr = new QueryResponse(branch);
+    }
 
-            getParsedData(url).forEach(detail -> {
+    private QueryResponse queryBranch(PlaceBranch branch) {
 
-                String iso = mapToISO(detail);
-                if (iso == null) return;
+        QueryResponse qr = new QueryResponse(branch);
 
-                QueryResponseDetail qrd = new QueryResponseDetail();
-                qrd.setIsoCode(iso);
-                qrd.setSalePrice(parse(detail.getVenta()));
-                qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
-                qrd.setPurchasePrice(parse(detail.getCompra()));
-                qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
+        getParsedData(getURLForBranch(branch)).forEach(detail -> {
 
-                qr.addDetail(qrd);
-            });
+            String iso = mapToISO(detail);
+            if (iso != null)
+                qr.addDetail(mapToDetail(detail, iso));
+        });
 
-            return qr;
-        }).collect(Collectors.toList());
+        return qr;
+    }
 
+    private String getURLForBranch(PlaceBranch branch) {
+        return "0".equals(branch.getRemoteCode()) ? WS_URL_AS : WS_URL_CDE;
+    }
+
+    private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
+        QueryResponseDetail qrd = new QueryResponseDetail();
+        qrd.setIsoCode(iso);
+        qrd.setSalePrice(parse(detail.getVenta()));
+        qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
+        qrd.setPurchasePrice(parse(detail.getCompra()));
+        qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
+        return qrd;
     }
 
     @Override

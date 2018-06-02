@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CotizacionAppTests {
 
     @Autowired
-    GathererManager manager;
+    private GathererManager manager;
 
     @Test
     public void contextLoads() {
