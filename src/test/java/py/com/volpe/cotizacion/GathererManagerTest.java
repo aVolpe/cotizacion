@@ -67,7 +67,6 @@ public class GathererManagerTest {
         Mockito.when(second.doQuery(any(), any())).thenThrow(new AppException(400, "Invalid place"));
 
 
-
         GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, qr);
 
         Assert.assertEquals(1, manager.doQuery(null).size());
