@@ -64,15 +64,15 @@ public class MyD implements Gatherer {
 
 
         log.info("Creating place MyD");
-        Place p = new Place("Cambios MyD", CODE);
+        Place place = new Place("Cambios MyD", CODE);
 
-        PlaceBranch pb = new PlaceBranch();
-        pb.setName("Casa Matriz");
-        pb.setRemoteCode("2");
-        pb.setPhoneNumber("021451377/9");
-        pb.setLatitude(-25.281474);
-        pb.setLongitude(-57.637259);
-        pb.setImage("https://www.mydcambios.com.py/uploads/sucursal/2/_principal_myd_cambios_matriz.jpg");
+        PlaceBranch matriz = new PlaceBranch();
+        matriz.setName("Casa Matriz");
+        matriz.setRemoteCode("2");
+        matriz.setPhoneNumber("021451377/9");
+        matriz.setLatitude(-25.281474);
+        matriz.setLongitude(-57.637259);
+        matriz.setImage("https://www.mydcambios.com.py/uploads/sucursal/2/_principal_myd_cambios_matriz.jpg");
 
 
         PlaceBranch villa = new PlaceBranch();
@@ -91,9 +91,9 @@ public class MyD implements Gatherer {
         cde.setLongitude(-54.639613);
         cde.setImage("https://www.mydcambios.com.py/uploads/sucursal/4/_principal_img_20160218_wa0060.jpg");
 
-        p.setBranches(Arrays.asList(pb, villa, cde));
+        place.setBranches(Arrays.asList(matriz, villa, cde));
 
-        return p;
+        return place;
 
     }
 

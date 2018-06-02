@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -46,25 +45,22 @@ public class MaxiCambios implements Gatherer {
         return branches.stream().map(branch -> {
             String url = branch.getRemoteCode().equals("0") ? WS_URL_AS : WS_URL_CDE;
 
-            QueryResponse qr = new QueryResponse();
-            qr.setBranch(branch);
-            qr.setPlace(place);
-            qr.setDate(new Date());
-            qr.setDetails(getParsedData(url).stream().map(detail -> {
+            QueryResponse qr = new QueryResponse(branch);
+
+            getParsedData(url).forEach(detail -> {
 
                 String iso = mapToISO(detail);
-                if (iso == null) return null;
+                if (iso == null) return;
 
                 QueryResponseDetail qrd = new QueryResponseDetail();
-                qrd.setQueryResponse(qr);
                 qrd.setIsoCode(iso);
                 qrd.setSalePrice(parse(detail.getVenta()));
                 qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
                 qrd.setPurchasePrice(parse(detail.getCompra()));
                 qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
 
-                return qrd;
-            }).filter(Objects::nonNull).collect(Collectors.toList()));
+                qr.addDetail(qrd);
+            });
 
             return qr;
         }).collect(Collectors.toList());
@@ -88,13 +84,12 @@ public class MaxiCambios implements Gatherer {
 
         log.info("Creating place {}", CODE);
 
-        Place p = new Place();
-        p.setName(CODE);
-        p.setCode(CODE);
+        Place place = new Place();
+        place.setName(CODE);
+        place.setCode(CODE);
 
 
         PlaceBranch main = new PlaceBranch();
-        main.setPlace(p);
         main.setName("Shopping Multiplaza Casa Central");
         main.setLatitude(-25.3167006);
         main.setLongitude(-57.572267);
@@ -105,7 +100,6 @@ public class MaxiCambios implements Gatherer {
         main.setRemoteCode("0");
 
         PlaceBranch cde = new PlaceBranch();
-        cde.setPlace(p);
         cde.setName("Casa Central CDE");
         cde.setLatitude(-25.5083135);
         cde.setLongitude(-54.6384264);
@@ -115,8 +109,8 @@ public class MaxiCambios implements Gatherer {
         cde.setRemoteCode("13");
 
 
-        p.setBranches(Arrays.asList(main, cde));
-        return p;
+        place.setBranches(Arrays.asList(main, cde));
+        return place;
 
     }
 

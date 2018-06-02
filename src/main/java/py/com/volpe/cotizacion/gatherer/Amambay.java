@@ -14,7 +14,6 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,8 +48,7 @@ public class Amambay implements Gatherer {
 
             BranchExchangeData data = buildMapper().readValue(httpHelper.doGet(URL_CHANGE), BranchExchangeData.class);
 
-            qr.setDetails(data.getCurrencyExchanges().stream().map(BranchExchangeDetailsData::map).collect(Collectors.toList()));
-
+            data.getCurrencyExchanges().forEach(exchange -> qr.addDetail(exchange.map()));
 
             return qr;
 
@@ -62,13 +60,13 @@ public class Amambay implements Gatherer {
     @Override
     public Place build() {
 
-        Place p = new Place("Cambios Amambay", CODE);
+        Place place = new Place("Cambios Amambay", CODE);
 
-        PlaceBranch pb = PlaceBranch.builder().place(p).name("Central").build();
+        PlaceBranch centralBranch = PlaceBranch.builder().place(place).name("Central").build();
 
-        p.setBranches(Collections.singletonList(pb));
+        place.addBranch(centralBranch);
 
-        return p;
+        return place;
     }
 
     private ObjectMapper buildMapper() {

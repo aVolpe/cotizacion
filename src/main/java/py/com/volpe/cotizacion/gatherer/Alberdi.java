@@ -17,7 +17,6 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,18 +42,21 @@ public class Alberdi implements Gatherer {
 
         Map<String, List<ExchangeData>> result = getParsedData();
 
-        return branches.stream().map(b -> {
-            QueryResponse qr = new QueryResponse(b);
-            List<ExchangeData> data = result.get(b.getRemoteCode());
+        return branches.stream().map(branch -> {
 
-            qr.setDetails(data.stream().map(detail -> {
+            QueryResponse qr = new QueryResponse(branch);
+            List<ExchangeData> exchanges = result.get(branch.getRemoteCode());
 
-                String iso = mapToISO(detail);
-                if (iso == null) return null;
-                return new QueryResponseDetail(parse(detail.getVenta()), parse(detail.getCompra()), iso);
+            exchanges.forEach(exchange -> {
 
-            }).filter(Objects::nonNull).collect(Collectors.toList()));
-
+                String iso = mapToISO(exchange);
+                if (iso != null)
+                    qr.addDetail(
+                            new QueryResponseDetail(
+                                    parse(exchange.getVenta()),
+                                    parse(exchange.getCompra()),
+                                    iso));
+            });
 
             return qr;
         }).collect(Collectors.toList());
@@ -72,23 +74,23 @@ public class Alberdi implements Gatherer {
 
         log.info("Creating place alberdi");
 
-        Place p = new Place("Cambios Alberdi", CODE);
+        Place place = new Place("Cambios Alberdi", CODE);
 
         Map<String, List<ExchangeData>> result = getParsedData();
 
-        result.keySet().forEach(name -> p.getBranches().add(buildBranch(name, name, p)));
+        result.keySet().forEach(name -> place.addBranch(buildBranch(name, place)));
 
-        return p;
+        return place;
 
     }
 
-    private PlaceBranch buildBranch(String name, String code, Place p) {
+    private PlaceBranch buildBranch(String code, Place p) {
         PlaceBranch.PlaceBranchBuilder pb = PlaceBranch.builder()
-                .name(name)
+                .name(code)
                 .remoteCode(code)
                 .place(p);
 
-        switch (name) {
+        switch (code) {
             case "asuncion":
                 return pb.name("Asunción")
                         .latitude(-25.281411)
@@ -115,14 +117,14 @@ public class Alberdi implements Gatherer {
                         .schedule("08:00 horas a 17:00 horas de Lunes a Viernes, 08:00 horas a 12:00 horas Sábados")
                         .build();
             case "salto":
-                return pb.name("SALTO DEL GUAIRÁ")
+                return pb.name("Salto del Guairá")
                         .latitude(-24.055276)
                         .longitude(-54.3246485)
                         .phoneNumber("(046) 243.158 / (046) 243.159")
                         .schedule("08:00 horas a 16:00 horas de Lunes a Viernes, 07:30 horas a 11:30 horas Sábados")
                         .build();
             case "cde":
-                return pb.name("SUCURSAL 1 CDE")
+                return pb.name("Sucursal 1 CDE")
                         .latitude(-25.5098204)
                         .longitude(-54.6164127)
                         .phoneNumber("(061) 500.135 / (061) 500.417")
@@ -136,7 +138,7 @@ public class Alberdi implements Gatherer {
                         .schedule("07:00 horas a 17:00 horas de Lunes a Viernes, 07:00 horas a 12:00 horas Sábados")
                         .build();
             case "enc":
-                return pb.name("ENCARNACIÓN")
+                return pb.name("Encarnación")
                         .latitude(-27.3314553)
                         .longitude(-55.8670186)
                         .image("https://lh5.googleusercontent.com/p/AF1QipOAtjZef_kGv14qJ4h68Rt4CKOxxwYXPJW30BUY=w408-h306-k-no")
@@ -144,7 +146,7 @@ public class Alberdi implements Gatherer {
                         .phoneNumber("(071) 205.154 / (071) 205.120 / (071) 205.144")
                         .build();
             default:
-                log.warn("Unkonw branch {} of alberdi", name);
+                log.warn("Unknown branch {} of {}", code, CODE);
                 return pb.build();
 
         }
@@ -152,8 +154,10 @@ public class Alberdi implements Gatherer {
 
     Map<String, List<ExchangeData>> getParsedData() {
         try {
-            return buildMapper().readValue(helper.getDataWithoutSending(WS_URL), new TypeReference<Map<String, List<ExchangeData>>>() {
-            });
+            String queryResult = helper.getDataWithoutSending(WS_URL);
+            return buildMapper()
+                    .readValue(queryResult, new TypeReference<Map<String, List<ExchangeData>>>() {
+                    });
         } catch (IOException e) {
             throw new AppException(500, "cant parse the result of alberdi ws", e);
         }
