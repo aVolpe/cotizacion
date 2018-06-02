@@ -13,8 +13,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +31,11 @@ public class MyD implements Gatherer {
 
     private static final String CODE = "MyD";
     private static final String URL = "https://www.mydcambios.com.py/?sucursal=%s";
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
 
-        return get().getBranches().stream().map(branch -> {
+        return branches.stream().map(branch -> {
 
             QueryResponse qr = new QueryResponse(branch);
 
@@ -51,15 +47,10 @@ public class MyD implements Gatherer {
                             parse(data.getSalePrice()),
                             getISOName(data))));
 
-            return queryResponseRepository.save(qr);
+            return qr;
 
         }).collect(Collectors.toList());
 
-    }
-
-    @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
     }
 
     @Override
@@ -68,19 +59,20 @@ public class MyD implements Gatherer {
     }
 
 
-    private Place create() {
+    @Override
+    public Place build() {
 
 
         log.info("Creating place MyD");
-        Place p = new Place("Cambios MyD", CODE);
+        Place place = new Place("Cambios MyD", CODE);
 
-        PlaceBranch pb = new PlaceBranch();
-        pb.setName("Casa Matriz");
-        pb.setRemoteCode("2");
-        pb.setPhoneNumber("021451377/9");
-        pb.setLatitude(-25.281474);
-        pb.setLongitude(-57.637259);
-        pb.setImage("https://www.mydcambios.com.py/uploads/sucursal/2/_principal_myd_cambios_matriz.jpg");
+        PlaceBranch matriz = new PlaceBranch();
+        matriz.setName("Casa Matriz");
+        matriz.setRemoteCode("2");
+        matriz.setPhoneNumber("021451377/9");
+        matriz.setLatitude(-25.281474);
+        matriz.setLongitude(-57.637259);
+        matriz.setImage("https://www.mydcambios.com.py/uploads/sucursal/2/_principal_myd_cambios_matriz.jpg");
 
 
         PlaceBranch villa = new PlaceBranch();
@@ -99,9 +91,9 @@ public class MyD implements Gatherer {
         cde.setLongitude(-54.639613);
         cde.setImage("https://www.mydcambios.com.py/uploads/sucursal/4/_principal_img_20160218_wa0060.jpg");
 
-        p.setBranches(Arrays.asList(pb, villa, cde));
+        place.setBranches(Arrays.asList(matriz, villa, cde));
 
-        return placeRepository.save(p);
+        return place;
 
     }
 

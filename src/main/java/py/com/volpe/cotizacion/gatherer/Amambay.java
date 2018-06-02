@@ -12,11 +12,8 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +29,6 @@ public class Amambay implements Gatherer {
     private static final String URL_CHANGE = "https://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange";
     private static final String CODE = "AMAMBAY";
 
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
     private final HTTPHelper httpHelper;
 
     @Override
@@ -42,8 +37,8 @@ public class Amambay implements Gatherer {
     }
 
     @Override
-    public List<QueryResponse> doQuery() {
-        return get().getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
+    public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
+        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
     }
 
     private QueryResponse queryBranch(PlaceBranch branch) {
@@ -53,32 +48,25 @@ public class Amambay implements Gatherer {
 
             BranchExchangeData data = buildMapper().readValue(httpHelper.doGet(URL_CHANGE), BranchExchangeData.class);
 
-            qr.setDetails(data.getCurrencyExchanges().stream().map(BranchExchangeDetailsData::map).collect(Collectors.toList()));
+            data.getCurrencyExchanges().forEach(exchange -> qr.addDetail(exchange.map()));
 
-
-            return queryResponseRepository.save(qr);
+            return qr;
 
         } catch (IOException e) {
-            throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
+            throw new AppException(500, "cant read response from Amambay " + branch.getId(), e);
         }
     }
 
     @Override
-    public Place get() {
+    public Place build() {
 
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
-    }
+        Place place = new Place("Cambios Amambay", CODE);
 
+        PlaceBranch centralBranch = PlaceBranch.builder().place(place).name("Central").build();
 
-    private Place create() {
+        place.addBranch(centralBranch);
 
-        Place p = new Place("Cambios Amambay", CODE);
-
-        PlaceBranch pb = PlaceBranch.builder().place(p).name("Central").build();
-
-        p.setBranches(Collections.singletonList(pb));
-
-        return placeRepository.save(p);
+        return place;
     }
 
     private ObjectMapper buildMapper() {

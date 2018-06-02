@@ -13,8 +13,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,14 +31,12 @@ public class CambiosChaco implements Gatherer {
     private static final String URL_BRANCH = "http://www.cambioschaco.com.py/api/branch_office/";
     public static final String CODE = "CAMBIOS_CHACO";
 
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
     private final HTTPHelper httpHelper;
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return get().getBranches().stream().map(this::queryBranch).collect(Collectors.toList());
+        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
     }
 
     private QueryResponse queryBranch(PlaceBranch branch) {
@@ -56,7 +52,7 @@ public class CambiosChaco implements Gatherer {
                 data.getItems().forEach(d -> qr.addDetail(d.map()));
             }
 
-            return queryResponseRepository.save(qr);
+            return qr;
 
         } catch (IOException e) {
             throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
@@ -64,16 +60,11 @@ public class CambiosChaco implements Gatherer {
     }
 
     @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
-    }
-
-    @Override
     public String getCode() {
         return CODE;
     }
 
-    private Place create() {
+    public Place build() {
         log.info("Creating 'Cambios Chaco'");
         Place p = new Place("Cambios Chaco", CODE);
 
@@ -83,7 +74,7 @@ public class CambiosChaco implements Gatherer {
 
             p.setBranches(res.stream().map(d -> d.map(p)).collect(Collectors.toList()));
 
-            return placeRepository.save(p);
+            return p;
         } catch (IOException e) {
             throw new AppException(500, "Can't read the body to build the place (chaco)", e);
         }

@@ -14,8 +14,6 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
-import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,44 +37,41 @@ public class MaxiCambios implements Gatherer {
     private static final String WS_URL_AS = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s";
     private static final String WS_URL_CDE = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/CotizacionesCDE?fecha=%s";
 
-    private final PlaceRepository placeRepository;
-    private final QueryResponseRepository queryResponseRepository;
     private final HTTPHelper helper;
 
     @Override
-    public List<QueryResponse> doQuery() {
+    public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return get().getBranches().stream().map(branch -> {
-            String url = branch.getRemoteCode().equals("0") ? WS_URL_AS : WS_URL_CDE;
-
-            QueryResponse qr = new QueryResponse();
-            qr.setBranch(branch);
-            qr.setPlace(branch.getPlace());
-            qr.setDate(new Date());
-            qr.setDetails(getParsedData(url).stream().map(detail -> {
-
-                String iso = mapToISO(detail);
-                if (iso == null) return null;
-
-                QueryResponseDetail qrd = new QueryResponseDetail();
-                qrd.setQueryResponse(qr);
-                qrd.setIsoCode(iso);
-                qrd.setSalePrice(parse(detail.getVenta()));
-                qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
-                qrd.setPurchasePrice(parse(detail.getCompra()));
-                qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
-
-                return qrd;
-            }).filter(Objects::nonNull).collect(Collectors.toList()));
-
-            return queryResponseRepository.save(qr);
-        }).collect(Collectors.toList());
+        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
 
     }
 
-    @Override
-    public Place get() {
-        return placeRepository.findByCode(CODE).orElseGet(this::create);
+    private QueryResponse queryBranch(PlaceBranch branch) {
+
+        QueryResponse qr = new QueryResponse(branch);
+
+        getParsedData(getURLForBranch(branch)).forEach(detail -> {
+
+            String iso = mapToISO(detail);
+            if (iso != null)
+                qr.addDetail(mapToDetail(detail, iso));
+        });
+
+        return qr;
+    }
+
+    private String getURLForBranch(PlaceBranch branch) {
+        return "0".equals(branch.getRemoteCode()) ? WS_URL_AS : WS_URL_CDE;
+    }
+
+    private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
+        QueryResponseDetail qrd = new QueryResponseDetail();
+        qrd.setIsoCode(iso);
+        qrd.setSalePrice(parse(detail.getVenta()));
+        qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
+        qrd.setPurchasePrice(parse(detail.getCompra()));
+        qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
+        return qrd;
     }
 
     @Override
@@ -91,18 +85,18 @@ public class MaxiCambios implements Gatherer {
      *
      * @return the newly created place
      */
-    private Place create() {
+    @Override
+    public Place build() {
 
 
         log.info("Creating place {}", CODE);
 
-        Place p = new Place();
-        p.setName(CODE);
-        p.setCode(CODE);
+        Place place = new Place();
+        place.setName(CODE);
+        place.setCode(CODE);
 
 
         PlaceBranch main = new PlaceBranch();
-        main.setPlace(p);
         main.setName("Shopping Multiplaza Casa Central");
         main.setLatitude(-25.3167006);
         main.setLongitude(-57.572267);
@@ -113,7 +107,6 @@ public class MaxiCambios implements Gatherer {
         main.setRemoteCode("0");
 
         PlaceBranch cde = new PlaceBranch();
-        cde.setPlace(p);
         cde.setName("Casa Central CDE");
         cde.setLatitude(-25.5083135);
         cde.setLongitude(-54.6384264);
@@ -123,8 +116,8 @@ public class MaxiCambios implements Gatherer {
         cde.setRemoteCode("13");
 
 
-        p.setBranches(Arrays.asList(main, cde));
-        return placeRepository.save(p);
+        place.setBranches(Arrays.asList(main, cde));
+        return place;
 
     }
 

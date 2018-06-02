@@ -42,4 +42,10 @@ public class Place {
 
         this.branches.forEach(b -> b.setPlace(this));
     }
+
+    public void addBranch(PlaceBranch newBranch) {
+        if (this.branches == null) this.branches = new ArrayList<>();
+        newBranch.setPlace(this);
+        this.branches.add(newBranch);
+    }
 }
