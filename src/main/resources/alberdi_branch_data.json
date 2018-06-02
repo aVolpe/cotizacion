@@ -1,0 +1,72 @@
+{
+  "cde2" : {
+    "latitude" : -25.5095271,
+    "longitude" : -54.6485326,
+    "phoneNumber" : "(061) 571.540 / (061) 571.536",
+    "email" : null,
+    "image" : null,
+    "name" : "CDE KM 4",
+    "schedule" : "07:00 horas a 17:00 horas de Lunes a Viernes, 07:00 horas a 12:00 horas Sábados",
+    "remoteCode" : "cde2"
+  },
+  "sanlo" : {
+    "latitude" : -25.3459184,
+    "longitude" : -57.5151255,
+    "phoneNumber" : "(021) 571.215 / (021) 571.216",
+    "email" : null,
+    "image" : "https://lh5.googleusercontent.com/p/AF1QipM0yx3fvWQArt0kY6EwyaaAsgX1jYRy3OuIobjr=w408-h725-k-no",
+    "name" : "San Lorenzo",
+    "schedule" : "08:00 horas a 17:00 horas de Lunes a Viernes, 08:00 horas a 12:00 horas Sábados",
+    "remoteCode" : "sanlo"
+  },
+  "asuncion" : {
+    "latitude" : -25.281411,
+    "longitude" : -57.6375917,
+    "phoneNumber" : "(021) 447.003 / (021) 447.004",
+    "email" : "matriz@cambiosalberdi.com",
+    "image" : "https://lh5.googleusercontent.com/p/AF1QipMxA2Nv-mtjAzqti1pUgd_Bt3z8nfbBBizklGEw=w408-h244-k-no",
+    "name" : "Asunción",
+    "schedule" : "07:45 horas a 17:00 horas de Lunes a Viernes, 07:45 horas a 12:00 horas Sábados",
+    "remoteCode" : "asuncion"
+  },
+  "villamorra" : {
+    "latitude" : -25.2962143,
+    "longitude" : -57.5766948,
+    "phoneNumber" : "(021) 609.905 / (021) 609.906",
+    "email" : null,
+    "image" : "https://lh5.googleusercontent.com/p/AF1QipP9gq7gRfgXTFGdQFGJYWLZGq_9SSLJ_pKYN4Uk=w408-h306-k-no",
+    "name" : "Villa Morra",
+    "schedule" : "08:00 horas a 17:00 horas de Lunes a Viernes, 08:00 horas a 12:00 horas Sábados",
+    "remoteCode" : "villamorra"
+  },
+  "cde" : {
+    "latitude" : -25.5098204,
+    "longitude" : -54.6164127,
+    "phoneNumber" : "(061) 500.135 / (061) 500.417",
+    "email" : null,
+    "image" : null,
+    "name" : "Sucursal 1 CDE",
+    "schedule" : "07:00 horas a 17:00 horas de Lunes a Viernes, 07:00 horas a 12:00 horas Sábados",
+    "remoteCode" : "cde"
+  },
+  "salto" : {
+    "latitude" : -24.055276,
+    "longitude" : -54.3246485,
+    "phoneNumber" : "(046) 243.158 / (046) 243.159",
+    "email" : null,
+    "image" : null,
+    "name" : "Salto del Guairá",
+    "schedule" : "08:00 horas a 16:00 horas de Lunes a Viernes, 07:30 horas a 11:30 horas Sábados",
+    "remoteCode" : "salto"
+  },
+  "enc" : {
+    "latitude" : -27.3314553,
+    "longitude" : -55.8670186,
+    "phoneNumber" : "(071) 205.154 / (071) 205.120 / (071) 205.144",
+    "email" : null,
+    "image" : "https://lh5.googleusercontent.com/p/AF1QipOAtjZef_kGv14qJ4h68Rt4CKOxxwYXPJW30BUY=w408-h306-k-no",
+    "name" : "Encarnación",
+    "schedule" : "07:45 horas a 17:00 horas de Lunes a Viernes, 07:45 horas a 12:00 horas Sábados",
+    "remoteCode" : "enc"
+  }
+}
