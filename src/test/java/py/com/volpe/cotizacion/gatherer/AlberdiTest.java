@@ -92,6 +92,17 @@ public class AlberdiTest {
             assertNotNull(qr.getDate());
             assertEquals(4, qr.getDetails().size());
 
+            if (qr.getBranch().getRemoteCode().equalsIgnoreCase("asuncion")) {
+
+                QueryResponseDetail qrdAsuncion = qr.getDetails()
+                        .stream()
+                        .filter(d -> d.getIsoCode().equals("USD"))
+                        .findFirst().get();
+
+                assertEquals(qrdAsuncion.getPurchasePrice(), 5510);
+                assertEquals(qrdAsuncion.getSalePrice(), 5535);
+            }
+
             assertThat(
                     qr.getDetails().stream().map(QueryResponseDetail::getIsoCode).collect(Collectors.toList()),
                     hasItems("EUR", "USD", "BRL", "ARS")

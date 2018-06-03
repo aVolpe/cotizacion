@@ -55,8 +55,8 @@ public class Alberdi implements Gatherer {
                 if (iso != null)
                     qr.addDetail(
                             new QueryResponseDetail(
-                                    parse(exchange.getVenta()),
                                     parse(exchange.getCompra()),
+                                    parse(exchange.getVenta()),
                                     iso));
             });
 
