@@ -36,8 +36,29 @@ Vue.filter('mfn', function (value: string) {
     }
 });
 
+/**
+ * This is a dirty hack
+ *
+ * Vuetify removes the '#app' component from the tree, so if we
+ * first 'prerender' the app, the div disappear and we can't mount
+ * the main Component, so to fix this we see what is the div that
+ * the pre-rendering keeps, and use it to the start Vue.
+ *
+ * The div that Vuetify doesn't remove is the main 'v-app' id (see
+ * App.vue), so we need to use that node instead of '#app'.
+ *
+ * The second time we 'mount' vue it occur something called hydration,
+ * which means that vue is inserted in the 'plain' html
+ *
+ **/
+let whereToMount = 'app';
+if (!document.getElementById(whereToMount)) {
+  whereToMount = 'inspire';
+}
+
 new Vue({
+    render: h => h(App),
     router,
-    render: h => h(App)
-}).$mount('#app');
+    el: '#' + whereToMount
+});
 
