@@ -4,6 +4,13 @@ services:
     image: avolpe/cotizacion:latest
     ports:
       - "8080:8080"
+    links:
+      - "db:db"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=production
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/exchange
+
   db:
     image: postgres:10.4
     ports:
