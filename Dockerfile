@@ -25,7 +25,7 @@ COPY utils /app/utils
 COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
 RUN sh ./utils/gen_licenses.sh
 RUN mvn -B -q \
-        package 
+        package \
 		sonar:sonar \
 		-Dsonar.organization=avolpe-github \
 		-Dsonar.host.url=https://sonarcloud.io \
