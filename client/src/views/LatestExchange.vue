@@ -3,10 +3,18 @@
         <v-card>
             <v-card-title class="title">
                 <v-layout justify-center align-center>
-                    <v-flex text-xs-center xs12 md3 mt-1>
-                        Cotizaciones de
+                    <v-flex text-xs-center xs12 md3>
+                        Cambio de
                     </v-flex>
-                    <v-flex text-xs-center xs12 md3 mt-1>
+                    <v-flex text-xs-center xs12 md2>
+                        <v-text-field v-model="currentAmount"
+                                      label="Cantidad"
+                                      align="rigth"
+                                      style="text-align:right"
+                                      class="amount-input text-xs-right"
+                                      single-line></v-text-field>
+                    </v-flex>
+                    <v-flex text-xs-center xs12 md2>
                         <v-select :items="currencies"
                                   v-model="currentCurrency"
                                   v-on:change="changeCurrency"
@@ -34,7 +42,7 @@
                         </v-alert>
                     </template>
                     <template slot="progress">
-                        <br />
+                        <br/>
                         <v-progress-circular color="blue" :size="70" :width="7" indeterminate></v-progress-circular>
                     </template>
 
@@ -46,8 +54,8 @@
                                 <br/>
                                 {{ props.item.branch.name }}
                             </td>
-                            <td class="text-xs-right">{{ props.item.purchasePrice | fn}}</td>
-                            <td class="text-xs-right">{{ props.item.salePrice | fn}}</td>
+                            <td class="text-xs-right">{{ props.item.purchasePrice | multiply(currentAmount) | fn}}</td>
+                            <td class="text-xs-right">{{ props.item.salePrice | multiply(currentAmount) |fn}}</td>
                             <td class="text-xs-right" v-if="!isSmall">
                                 <a v-on:click="showDialog(props.item)">
                                     <v-icon dark color="primary" slot="activator">info</v-icon>
@@ -97,6 +105,7 @@
 
         currencies: Array<string>;
         currentCurrency: string;
+        currentAmount: number;
         data: {
             firstQueryResult: number,
             lastQueryResult: number,
@@ -127,6 +136,7 @@
             if (!this.isSmall) {
                 this.headers.push({text: ' ', value: '', sortable: false});
             }
+            this.currentAmount = 1;
             this.pagination = {'sortBy': 'purchasePrice', 'descending': true, 'rowsPerPage': -1};
         }
 
@@ -202,6 +212,18 @@
             padding-bottom: 1px !important;
         }
 
+    }
+
+    .amount-input > input {
+        text-align: right;
+    }
+
+    .amount-input > label {
+        text-align: right;
+    }
+
+    .input-group__input > input {
+        text-align: right !important;
     }
 
     .input-group__selections__comma {
