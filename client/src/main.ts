@@ -13,6 +13,11 @@ Vue.use(Meta, {
     keyName: 'head'
 });
 
+Vue.filter('multiply', function (value: number, multiplier: number = 1) {
+    if (!multiplier || multiplier < 1 || isNaN(multiplier)) return value;
+    return value * multiplier;
+});
+
 Vue.filter('fn', function (value: number) {
     if (typeof value !== "number") {
         return value;
@@ -53,7 +58,7 @@ Vue.filter('mfn', function (value: string) {
  **/
 let whereToMount = 'app';
 if (!document.getElementById(whereToMount)) {
-  whereToMount = 'inspire';
+    whereToMount = 'inspire';
 }
 
 new Vue({
