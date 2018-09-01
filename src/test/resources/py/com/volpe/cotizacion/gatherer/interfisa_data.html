@@ -1,0 +1,775 @@
+
+<!DOCTYPE HTML>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="es-ES"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="es-ES"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="es-ES"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="es-ES"> <!--<![endif]--><head>
+
+<title>Interfisa Banco</title>
+<meta name="description" content="Grupo Internacional de Finanzas Sociedad Anónima de Capital Abierto (Interfisa Banco SAECA) es una empresa privada del sistema financiero paraguayo, fundada el 24 de julio de 1978, con aprobación de su Estatuto Social y reconocimiento de su personería jurídica por Decreto del Poder Ejecutivo Nº 2256, de fecha 22 de noviembre de 1978, y autorizada por el Banco Central del Paraguay por Res. N° 1, Acta N° 117 del 25 de junio de 1979." />
+<meta name="keywords" content="banco, paraguay, saeca, centro, credito, ahorros, tarjeta, envio de dinero, cambios, transferencia" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="googlebot" content="Index, Follow" />
+<meta name="robots" content="all" />
+<meta name="author" content="Puntopy" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<meta http-equiv="x-rim-auto-match" content="none">
+<meta name="format-detection" content="telephone=no">
+
+<base href="https://www.interfisa.com.py/" />
+<!--<meta property="og:image" content="" />--> 
+
+<link rel="shortcut icon" href="favicon.ico" />
+
+<link href="css/interfisa.css" rel="stylesheet" type="text/css" />
+<link href="css/programacion.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<!--<link href="css/flexnav.css" rel="stylesheet" type="text/css" />-->
+
+<!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="css/ie.css" />
+<![endif]-->
+
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/selectivizr-min.js"></script>
+<script type="text/javascript" src="js/modernizr-latest.js"></script>
+<script type="text/javascript" src="js/jquery.flexnav.min.js"></script>
+<script type="text/javascript" src="js/jquery.hoverIntent.minified.js"></script>
+<script type="text/javascript" src="js/jquery.number.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/moodjs.js"></script>
+<script type="text/javascript" src="js/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="js/blockUI.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".flexnav").flexNav({
+			'hoverIntent': true // use with hoverIntent plugin 
+		});
+		
+		$(".btnPopup").fancybox({
+			padding: 0
+		});
+		
+		$(".showHide").click(function(){
+			$(this).next('.contenido').slideToggle();
+			$(this).toggleClass('active');
+		});
+	});
+</script>
+
+<link rel="stylesheet" href="css/zebra_datepicker.css" type="text/css">
+<script type="text/javascript" src="js/zebra_datepicker.js"></script>
+<link href="css/flexslider.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.flexslider-min.js"></script>
+
+<script type="text/javascript">
+    
+    $(document).ready(function() {
+        
+        $('#bannerHome').flexslider({
+            animation: "slide",
+            directionNav: true,
+            animationLoop: false,
+			slideshowSpeed: 12000,           
+		  	animationSpeed: 600,
+            smoothHeight: true,
+            pauseOnHover: true
+        });
+
+       
+
+        /*
+        var cantidad = $("monedadesc").length; 
+        
+        var dolar_compra = $("monedapack5 compra").html();
+        dolar_compra = $.number(dolar_compra,0,',','.');
+        $("#dolar_compra").html(dolar_compra); 
+        var dolar_venta = $("monedapack5 venta").html();
+        dolar_venta = $.number(dolar_venta,0,',','.');
+        $("#dolar_venta").html(dolar_venta); 
+
+        var euro_compra = $("monedapack1 compra").html();
+        euro_compra = $.number(euro_compra,0,',','.');
+        $("#euro_compra").html(euro_compra); 
+        var euro_venta = $("monedapack1 venta").html();
+        euro_venta = $.number(euro_venta,0,',','.');
+        $("#euro_venta").html(euro_venta); 
+
+        var peso_compra = $("monedapack3 compra").html();
+        peso_compra = $.number(peso_compra,0,',','.');
+        $("#peso_compra").html(peso_compra); 
+        var peso_venta = $("monedapack3 venta").html();
+        peso_venta = $.number(peso_venta,0,',','.');
+        $("#peso_venta").html(peso_venta); 
+
+        var real_compra = $("monedapack4 compra").html();
+        real_compra = $.number(real_compra,0,',','.');
+        $("#real_compra").html(real_compra); 
+        var real_venta = $("monedapack4 venta").html();
+        real_venta = $.number(real_venta,0,',','.');
+        $("#real_venta").html(real_venta); 
+        */
+        
+        $('#destacadosHome').flexslider({
+            animation: "slide",
+            animationLoop: false,
+            itemWidth: 231,
+            itemMargin: 12,
+            slideshowSpeed: 12000
+
+        });
+        
+        $('#logoSlide').flexslider({
+            animation: "slide",
+            animationLoop: false,
+            itemWidth: 130,
+            itemMargin: 11
+        });
+        
+        $('#slideNoticias').flexslider({
+            animation: "slide",
+            controlNav: false
+        });
+      
+        $(".fancybox").fancybox({
+            padding: 0
+        });
+    });
+</script>
+
+<script type="text/javascript">
+<!--
+function MM_showHideLayers() { //v9.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) 
+  with (document) if (getElementById && ((obj=getElementById(args[i]))!=null)) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+
+<style>
+
+#apDiv1 {
+    
+    z-index:1000;
+    width:100%;
+    height:1515px;
+    display:block;
+    position:absolute;
+    background:url(images/bg_trans.png);
+}
+
+.close {
+    cursor: pointer;
+    margin-right: -15px;
+    margin-top: -35px;
+    float: right;
+    height: 36px;
+    right: 270px;
+    top: 75px;
+    width: 36px;
+    z-index: 8040;
+    background-image: url("images/fancybox_sprite.png");
+}
+
+.fancybox-image{
+    cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body id="sec_inicio">
+<div style="display:none"><pre>
+</pre>
+</div>
+
+<!-- background="images/bg_popup.jpg" -->
+
+<!--<div id="apDiv1">
+  <table border="0" cellspacing="0"  align="center" style="margin:10% auto;">
+    <tr>
+      <td align="right"  style="font-size:16px; font-family:Myriad Pro; font-style:italic;"><span class="style1" onClick="MM_showHideLayers('apDiv1','','hide')" onMouseOver="this.style.cursor='pointer'"
+onmouseout="this.style.cursor='default'"><font face="Myriad Pro" class="close"></font></span></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="images/horario_especial.jpg" border="0" usemap="#Map" /></td>
+    </tr>
+  </table>
+</div>-->
+
+    <!-- HEADER -->
+    	<div id="suscribirseBox">
+    	<h2>Suscribirse a novedades</h2>
+        <div class="content">
+        	            
+			<div id="suscribir_container"> 
+				 		<p>Si aún no esta suscripto, suscribase y reciba las mejores promociones y novedades de Interfisa.</p>
+		<form action="" method="post" name="suscripcion" id="suscripcion" class="" onSubmit="suscribir();return!1;">
+			<label>Nombre y Apellido</label>
+			<input name="suscripcion_nombre" id="suscripcion_nombre" type="text" placeholder="nombre" class="left" value=""/>							
+						
+			<label>E-mail</label>
+			<input name="suscripcion_email" id="suscripcion_email" type="text" placeholder="usuario@mail.com" class="left" value=""/>							
+						<input type="hidden" name="token_suscribir" id="token_suscribir" value="iVZfc+J1YaFlnAckALqZMKCQ2FhcUtpilkEDy0i2NHc=">
+			<input name="enviar" type="submit" value="Suscribirme" class="leermasVerde" />
+		</form>
+		
+ 					</div>
+							
+        </div>
+    </div>
+    <div id="western-unionBox">
+    	
+        <div class="content">
+        	<div><img src="images/wu_argentina.jpg" /></div>	
+            
+        </div>
+    </div>
+   
+   
+   
+    <div id="promocionesBox">
+    	<h2>Promociones Vigentes</h2>
+        <div class="content">
+        	
+            <p>Estamos trabajando para ofrecerle más y mejores beneficios para Ud. que serán comunicados en breve</p>
+        </div>
+    </div>
+    
+    
+    <div id="atencionBox">
+    	<h2>Horarios de Atención</h2>
+        <div class="content">
+        	<p><strong>MATRIZ Y SUCURSALES</strong></p>
+            <p><strong>Lunes a Viernes</strong> de 08:00 a 17:00 hs
+            <p><strong>SUCURSALES</strong></p>
+            <p><strong>Sábados</strong> de 08:30 a 11:30 hs</p>
+        </div>
+    </div>
+    
+    <div id="trabajeBox">
+    	<h2>Trabaje con nosotros</h2>
+        <div class="content clear" id="trabajar_container">
+        	<p>Si querés trabajar con nosotros, anexa tu Curriculum Vitae especificando en el Asunto: área de desempeño y nos pondremos en contacto contigo.</p>
+				  
+		
+                <form action="js/trabajar" method="post" name="suscripcion" id="trabajo" class="" target="upload_frame" enctype="multipart/form-data">			
+					<label>Nombre</label>
+					<input name="trabaje_nombre" id="trabaje_nombre" type="text" tabindex="1" value=""/>
+										
+					<label>Asunto</label>
+					<input name="trabaje_asunto" id="trabaje_asunto" type="text" tabindex="2" value=""/>
+										
+					<label>Adjuntar C.V. [.doc, .docx, .pdf]</label>
+					<input style="width: 99.476%;" type="file" name="trabaje_file_name" id="trabaje_file_name" tabindex="3"/><br />
+										
+					<div class="clear mb20"></div>
+					<div class="clear">
+						<label for="captcha" style="float:left;">Ingrese el código: </label>
+						<div style="float:left; width: 100%; text-align: center;">
+						<input type="text" name="trabaje_captcha" id="trabaje_captcha" tabindex="11" style="float:left; margin: 3px 0; width: 90.4762%;"/>
+						<img src="https://www.interfisa.com.py/images/captcha_jpg.php?51018576" id="captcha_image_2" style="float:left;"/>
+							<a href="javascript:;" title="Recargar imagen" class="codelink" onclick="reloadCaptcha_2();" id="change-image" style="float:left; width:45px; margin:7px 0 0 7px; text-align: center;"><b> Refrescar código</b></a>
+						</div>     
+											</div></br>
+					<input type="hidden" name="token_trabajar" id="token_trabajar" value="AAtVm0rXJUjSYt+oCPJB50OqlRsYE6Zks7tS4HNpMow=">
+                    <input name="enviar" type="submit" value="Enviar CV" tabindex="4" class="leermasVerde left" />
+					
+				</form>
+				<iframe name="upload_frame" id="upload_frame" style="border:none;width:10px; height:10px;"></iframe>
+ 		
+        </div>
+    </div>
+    
+    <div id="headerWrapper">
+    	<header class="clear">
+        	<!-- LOGO -->
+        	<a href="./" class="logo"><img src="images/logo-interfisa.png" alt="Interfisa" /></a>
+            
+            <!-- ITEMS DERECHA -->
+            <div class="hRight">
+ <a href="https://seguro.interfisa.com.py/" class="btnBanking"><img src="images/ico-banking.png" alt="Seguro" class="left" /><span class="desc"><strong class="destacar">24hs</strong> <strong>HOME</strong>BANKING&nbsp;<img src="images/arrow-banking.png" alt="»" /></span></a>
+               
+               
+                <a href="http://www.interfisapymes.com.py/" target="_blank" class="logopymes2"><img src="images/logo-pymes.png" alt="Interfisa" /> <!--<span>pymes</span>--></a>
+
+                <!-- 
+            	<div id="idioma">
+                    <a href="javascript:void(0);" class="select">Español</a>
+                </div> -->
+               
+                <!--<div class="pin"><a href="media/contrato_homebanking_interfisa.pdf" class="displayblock"><strong>Aún no tienes Homebanking?</strong></a><a href="mailto:interfisa@interfisa.com.py" class="displayblock">Solicitá tu PIN »</a></div>-->
+               
+                <!--<a href="western-union" class="right wunion"><img src="images/wu.png" alt="Western Union" /></a>-->
+            	<div class="clear"></div>
+            </div>
+            <div class="menu-button">Menu</div>
+        </header>
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>    <!-- TERMINA HEADER -->
+    
+    <!-- CONTENIDO -->
+    <div id="bg">
+        <div id="content" class="clear">
+            
+            <!-- MENU -->
+            ﻿			<a href="western-union" class="right wunion"><img src="images/wu.png" alt="Western Union" /></a>
+            <p class="right callcenter"><span>CALL CENTER</span>&nbsp;<img src="images/ico-tel.png" alt="Telefono" />&nbsp;415 9000</p>
+            <div id="top" class="clear">
+            	
+            	<ul id="menu" class="flexnav" data-breakpoint="800">
+                    <li>
+                    	<a href="#"><img src="images/ico-microfinanzas.png" alt="Microfinanzas" />&nbsp;&nbsp;Microfinanzas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="prestamos-microfinanzas">Créditos</a>
+                                <!--<ul>
+                                	<li><a href="prestamos-microempresas">Préstamos Microempresas</a></li>
+                                    <li><a href="prestamos-pymes">Préstamos Pymes</a></li>
+                                    <li><a href="prestamos-descuentos-cheques">Descuentos de cheques</a></li>
+                                    <li><a href="prestamos-corporativos">Préstamos Corporativos</a></li>
+                                </ul>-->
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-vale">Ahorro Valé</a></li>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                    <li><a href="ahorro-pago-salarios.php">Pago de Salarios</a></li>
+                                </ul>
+                            </li>
+                             <li class="btnTarjetasDebito">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            <li class="btnTarjetas">
+                            	<a href="tarjetas-microfinanzas">Tarjetas de Crédito</a> 
+                                <!--<ul>
+                                	<li><a href="mastercard-agro">MasterCard Agro</a></li>
+                                    <li><a href="tarjetas/mastercard">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa">Visa Internacional</a></li>
+                                    <li><a href="tarjetas/credicard">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+					</li>
+                    
+                    <li>
+                    	<a href="#"><img src="images/ico-personas.png" alt="personas" />&nbsp;&nbsp;Personas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="#">Créditos</a>
+                                <ul>
+                                	<li><a href="prestamos-para-la-vivienda">Préstamos para vivienda</a></li>
+                                    <!--<li><a href="prestamos-de-consumo">Préstamos de consumo</a></li>-->
+                                    <li><a href="prestamos">Préstamos</a></li>
+                                    <!--<li><a href="prestamos-para-asociaciones">Préstamos para asocioaciones</a></li>-->
+                                    <!--<li><a href="prestamos-al-consumidor-final.php">Préstamos al consumidor final</a></li>-->
+                                </ul>
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-vale">Ahorro Valé</a></li>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                   <li><a href="cuenta-corriente-personas">Cuenta Corriente</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTarjetasDebito"  style="background-image:none !important;">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            
+                            <li class="btnTarjetas"  style="background-image:none !important;">
+                            	<a href="tarjetas">Tarjetas de Crédito</a>
+                                <!--<ul>
+                                	<li><a href="mastercard-black">MasterCard Black</a></li>
+                                    <li><a href="tarjetas/mastercard">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa">Visa Internacional</a></li>
+                                    <li><a href="tarjetas/credicard">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                             <!--<li class="btnCtacorriente">
+                            	<a href="cuenta-corriente-personas">Cuenta Corriente</a>
+                                </li>-->
+                            <li class="btnEnvios">
+                            	<a href="envios-de-dinero">Envíos de dinero</a>
+                            </li>
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                    	<a href="#"><img src="images/ico-empresa.png" alt="Empresas" />&nbsp;&nbsp;Empresas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="#">Créditos</a>
+                                <ul>
+                                	<li><a href="prestamos-corporativos">Préstamos Corporativos</a></li>
+                                    <li><a href="prestamos-pymes">Préstamos Pymes</a></li>
+                                    <li><a href="prestamos-descuentos-cheques">Descuentos de cheques</a></li>
+                                    <!--<li><a href="prestamos-corporativos.php">Préstamos Corporativos</a></li>-->
+                                </ul>
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                    <li><a href="ahorro-pago-salarios">Pago de Salarios</a></li>
+                                   <li><a href="cuenta-corriente-empresas">Cuenta Corriente</a></li>
+                                </ul>
+                            </li>
+                             <li class="btnTarjetasDebito">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            <li class="btnTarjetas">
+                            	<a href="tarjetas-de-credito-empresariales">Tarjetas de Crédito</a>
+                               <!-- <ul>
+                                	<li><a href="tarjetas-mastercard-black.php">MasterCard Black</a></li>
+                                    <li><a href="tarjetas-mastercard.php">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa-empresas">Visa Internacional</a></li>
+                                    <li><a href="tarjetas-credicard.php">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                            <!-- <li class="btnCtacorriente">
+                            	<a href="cuenta-corriente-empresas">Cuenta Corriente</a>
+                                </li>-->
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>            <!-- TERMINA MENU -->
+            <div class="clear"></div>
+            
+            <!-- BANNER -->
+            <div id="bannerHome">
+                <ul class="slides">
+                                            <!--<li><img src="" alt="promociones" /></li>-->
+                                                            
+                    <li><img src="images/slides/banner1.jpg" alt="" /></li>
+                    
+		    <li><a href="https://www.interfisa.com.py/bc_promo_viajes.pdf" target="_blank"><img src="images/slides/banner2.jpg" alt="" /></a></li>
+                    
+		    <li><a href="https://goo.gl/B6NkF2" target="_blank"><img src="images/slides/banner3.jpg" alt="" /></a></li>
+                    
+                    <li><a href="https://land.ly/Interfisa" target="_blank"><img src="images/slides/banner4.jpg" alt="" /></a></li>
+                    
+                    <li><img src="images/slides/banner6.jpg" alt="" /></li>
+
+                </ul>
+            </div>
+            <!-- TERMINA BANNER -->
+            
+            <!-- DESTACADOS -->
+            <div id="destacadosHome" class="clear mb12">
+                <ul class="slides">
+                    <li>
+                        <article class="infterfisaMovil">
+                            <h2><a href="images/interfisa-movil.jpg" class="fancybox">INTERFISA MÓVIL</a></h2>
+                            <h3><strong>¡Interfisa movil</strong><br />en todos los <br />celulares!<br />Marcá <strong>*445#</strong></h3>
+                            <a href="images/interfisa-movil.jpg" class="leermas right fancybox">Ver más</a>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="tarjetasCredito interpuntos">
+                            <h2><a href="https://www.interpuntos.com.py/" target="_blank">INTERPUNTOS</a></h2>
+                            <h3>¡Accedé aquí para saber más como<br>canjear  tus<br>Puntos!</h3>
+                            <a href="https://www.interpuntos.com.py/" class="leermas right" target="_blank">Ver más</a>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="creditos">
+                            <h2><a href="creditos.php">CRÉDITOS</a></h2>
+                            <h3>¡Completá el<br />formulario y<br />solicitá tu<br /><strong>crédito ya!</strong></h3>
+                            <a href="creditos.php" class="leermas right">Ver más</a>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="servicios">
+                            <h2><a href="servicios.php">SERVICIOS</a></h2>
+                            <h3>Cajeros, pagos<br />DDJJ, cobro de<br />servicios, caja<br />de seguridad</h3>
+                            <a href="servicios.php" class="leermas right">Ver más</a>
+                        </article>
+                    </li>
+                </ul>
+            </div>
+            <!-- TERMINA DESTACADOS -->
+            
+            <div class="dosCols left">
+                <div class="cuatroCols left">
+                    				<ul id="subnav" class="mb12">
+                    <li><a href="#suscribirseBox" class="btnPopup">Suscribirse a novedades</a></li>
+                    <li><a href="sucursales.php">Sucursales</a></li>
+                    <li><a href="#atencionBox" class="btnPopup">Horarios de Atención</a></li>
+                    <li><a href="tasas">Tasas y comisiones</a></li>
+                     <li><a href="solicitudes-y-contratos">Solicitudes y Contratos</a></li>
+                </ul>                </div>
+                
+                <div id="cotizaciones" class="cuatroCols left ml12">
+                    <article class="block">
+                        <h2 class="titulo"><img src="images/ico-cotizaciones.png" alt="Cotizaciones" />COTIZACIÓN DE MONEDAS</h2>
+                        <div class="content">
+                            <table width="100%" border="0">
+                                <tr>
+                                    <th>Moneda</th>
+                                    <th>Compra</th>
+                                    <th>Venta</th>
+                                </tr>
+                                                                <tr>
+                                    <td><img src="images/dolares.png" alt="Dolar" />Dólar</td>
+                                    <td id="dolar_compra">5.750</td>
+                                    <td id="dolar_venta">5.830</td>
+                                </tr>
+                                                                <tr>
+                                    <td><img src="images/euro.png" alt="Euro" />Euro</td>
+                                    <td id="euro_compra">6.500</td>
+                                    <td id="euro_venta">7.000</td>
+                                </tr>
+                                                                <tr>
+                                    <td><img src="images/peso.png" alt="Peso" />Peso</td>
+                                    <td id="peso_compra">150</td>
+                                    <td id="peso_venta">190</td>
+                                </tr>
+                                                                <tr>
+                                    <td><img src="images/real.png" alt="Real" />Real</td>
+                                    <td id="real_compra">1.300</td>
+                                    <td id="real_venta">1.450</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </article>
+
+                    <!-- nuevo formato de cheques -->
+
+                    <ul class="subnav mb12">                    
+                        <li><a href="media/nuevo-formato-cheques-2017.pdf" target="_blank">Nuevo formato de cheques</a></li>
+                    </ul>
+
+                    <!-- fin nuevo formato de cheques -->
+
+
+                </div>
+                <div class="clear mb12"></div>
+            
+                <article class="block">
+                    <div class="content">
+                        <div id="logoSlide">
+                            <ul class="slides">
+                                <li><a href="smart-campaign.php"><img src="images/logos/smart-campaign.jpg" alt="the Smart Campaign" /></a></li>
+                                <li><a href="pacto-global.php"><img src="images/logos/pacto-mundial.jpg" alt="Pacto Mundial" /></a></li>
+                                <li><a href="womens-world-banking.php"><img src="images/logos/wwb.png" alt="wwb" /></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="dosCols right">
+                <!-- LAVADO DE DINERO -->
+                <div id="lavadoDinero" class="cuatroCols left">
+                    <article class="block">
+                        <h2 class="titulo clear"><img src="images/ico-lavado.png" alt="Lavado" class="left" />Prevención de lavado de dinero</h2>
+                        <div class="content clear">
+                            <p>INTERFISA BANCO asume su responsabilidad y compromiso con la sociedad en la lucha contra el Lavado de Dinero y el Financiamiento del Terrorismo. Garantizamos la seguridad de nuestros clientes y damos fiel cumplimiento a las regulaciones de la Secretaría de Prevención de Lavado de Dinero (SEPRELAD) que rigen la materia...</p>
+                            <a href="lavado-de-dinero.php" class="leermas left">Leer más</a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Garantia de deposito -->
+                <div id="lavadoDinero" class="cuatroCols right">
+                    <article class="block">
+                        <h3 class="titulo clear"><img src="images/ico-fdo-garantia.png" alt="Fondo de Garantía de Depósito" class="left" />¿Qué es el Fondo de Garantía de Depósito?</h3>
+                        <div class="content clear">
+                            <p>El Fondo de Garantía de Depósito (FGD) fue creado por Ley Nº 2334 del 12 de diciembre 2003, como parte de la Red de Seguridad Financiera. INTERFISA BANCO es miembro del Fondo de Garantía de Depósito. El objetivo del régimen de garantía de depósitos y resolu­ción de entidades es garantizar los depósitos en las entidades financieras privadas autorizadas...</p>
+                            <a href="media/informativo_fondo_de_garantia de_deposito.pdf" target="_blank" class="leermas left">Leer más</a>
+                        </div>
+                    </article>
+                </div>
+                <!-- ULTIMAS NOTICIAS -->
+                <!--<div id="ultimasNoticias" class="cuatroCols left ml12">
+                    <article class="block">
+                        <h2 class="clear">Últimas noticias</h2>
+                        <div id="slideNoticias">
+                            <ul class="slides">
+                                                               <li>
+                                    <a href="noticia.php?noticia_id=>" alt="noticia" /></a>
+                                    <div class="content clear">
+                                        <h3> </h3>
+                                        <a href="noticia.php?noticia_id=" class="leermas left">Leer más</a>
+                                    </div>
+                                </li>
+                                                          </ul>
+                        </div>
+                        <a href="noticias.php" class="vertodo">Leer todas las noticias&nbsp;&nbsp;<img src="images/arrow-banking.png" alt="»" /></a>
+                    </article>
+                </div>-->
+            </div>
+            
+        </div>
+    </div>
+    <!-- TERMINA CONTENIDO -->
+    
+    <!-- FOOTER -->
+    	<div id="footerWrapper">
+    	<footer class="clear">
+        	<div class="dosCols left">
+            	<div class="footerItem left productosfooter">
+                	<h3>Productos</h3>
+                	<ul>
+                    	<li><a href="creditos">Créditos</a></li>
+                        <li><a href="ahorros">Ahorros</a></li>
+                        <li><a href="tarjetas">Tarjeta de crédito</a></li>
+                        <li><a href="envios-de-dinero">Envíos de dinero</a></li>
+                        <li><a href="servicios">Servicios</a></li>
+					</ul>
+                </div>
+                <div class="footerItem left infofooter">
+                	<h3>INFORMACIÓN CORPORATIVA</h3>
+                	<ul>
+                    	<li><a href="quienes-somos">Quiénes Somos</a></li>
+                        <li><a href="directorio-asamblea">Directorio y Asamblea</a></li>
+                        <li><a href="estatutos">Estatutos </a></li>
+                        <li><a href="memoria-balance">Memoria y Balances </a></li>
+                        <!--<li><a href="media/informe-anual-de-gobierno-corporativo-2013.pdf" download="media/informe-anual-de-gobierno-corporativo-2013.pdf">Informe Gobierno Corporativo</a></li>-->
+                        <li><a href="inf-gobierno-corporativo">Informe Gobierno Corporativo</a></li>
+                        <li><a href="informacion_accionistas">Información para accionistas</a></li>
+					</ul>
+                </div>
+                <div class="footerItem left otrasfooter">
+                	<h3>OTRAS SECCIONES</h3>
+                	<ul>
+                    	<li><a href="responsabilidad-social">Responsabilidad Social</a></li>
+                        <li><a href="interfisaclub">Interfisa Club</a></li>
+                        <!--<li><a href="promociones">Promociones</a></li>-->
+                        <li><a href="leyes-resoluciones-y-circulares">Leyes, Resoluciones y Circulares</a></li>
+                        <li><a href="cambios-transferencias">Cambios y transferencias</a></li>
+                        <li><a href="media/SIPAP.pdf" target="_blank">SIPAP</a></li>
+                        <li><a href="media/preguntas_frecuentes_FATCA.pdf" target="_blank">Fatca Preguntas Frecuentes</a></li>
+					</ul>
+                </div>
+            </div>
+            
+            <div class="dosCols right">
+            	<div class="footerItem right datosContacto">
+                	<h3>INTERFISA SAECA</h3>
+                    <p>Para más información le invitamos a comunicarse a nuestro call center</p>
+                    <p><strong><img src="images/callcenter-white.png" alt="Call Center" />&nbsp;&nbsp;415 9000</strong></p>
+                    <a href="contactenos.php">» Contáctenos</a>
+                </div>
+            	<div id="trabaje-seguinos" class="right">
+					<a href="http://postulate.interfisa.com.py:55" class="trabaje clear btnPopup">
+                        <figure class="ico"><img src="images/ico-trabaje.png" alt="Trabaje con nosotros" /></figure>
+                        <span class="txt">TRABAJA CON <br />NOSOTROS&nbsp;<img src="images/arrow-banking.png" alt="»" /></span>
+                    </a>
+                    <div class="seguinos">
+                    	<p>Seguinos en</p>
+                        <a href="https://www.facebook.com/InterfisaBanco?ref=hl" target="_blank" title="Facebook"><img src="images/fb.png" alt="Facebook" /></a>
+                        <a href="http://twitter.com/interfisapy" target="_blank" title="Twitter"><img src="images/tw.png" alt="Twitter" /></a>
+                        <a href="https://www.youtube.com/interfisapy" target="_blank" title="YouTube"><img src="images/yt.png" alt="YouTube" /></a>
+                        <a href="http://instagram.com/interfisa" target="_blank" title="Instagram"><img src="images/ins.png" alt="Instagram" /></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <div id="bottomWrapper">
+        	<div id="bottom" class="clear">
+            	<p class="left">INTERFISA © 2017 - Todos los derechos reservados</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-55195434-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+    <!-- fin analytics -->    <!-- TERMINA FOOTER -->
+
+    <script>
+        
+        $(document).ready(function () {
+
+
+
+         $.fancybox({
+            
+             'autoScale': true,
+             'transitionIn': 'fade',
+             'transitionOut': 'fade',
+             'href': 'images/popup-app.jpg',
+             'afterShow'  : function (){
+                $(".fancybox-image").click(function(){
+                    //window.open("media/Comunicado_ASOBAN_Interfisa.pdf", "_blank");
+                });
+             }
+         });   
+
+        var $video = $('#vid');
+            $video.on('canplaythrough', function() {
+               this.play();
+            });
+
+        $('#vid').click(function(){
+            $(this).play();
+        });
+});
+
+    </script>
+
+</body>
+</html>

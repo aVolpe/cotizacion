@@ -18,6 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class Place {
 
+    public enum Type {
+        BUREAU,
+        BANK
+    }
+
     @Id
     @GeneratedValue
     private long id;
@@ -25,10 +30,20 @@ public class Place {
     private String code;
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
     @Singular
     private List<PlaceBranch> branches;
+
+    @PostLoad
+    void init() {
+        if (this.type == null) {
+            this.type = Type.BUREAU;
+        }
+    }
 
     public Place(String name, String code) {
         this.name = name;

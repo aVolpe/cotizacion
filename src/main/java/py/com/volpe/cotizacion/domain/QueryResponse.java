@@ -47,12 +47,6 @@ public class QueryResponse {
         this.details = new ArrayList<>();
     }
 
-    public void setDetails(List<QueryResponseDetail> details) {
-        if (details == null) this.details = new ArrayList<>();
-        else this.details = details;
-        this.details.forEach(d -> d.setQueryResponse(this));
-    }
-
     public void addDetail(QueryResponseDetail detail) {
         this.getDetails().add(detail);
         detail.setQueryResponse(this);

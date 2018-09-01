@@ -88,7 +88,7 @@ public class Amambay implements Gatherer {
         private long purchasePrice;
         private long salePrice;
 
-        QueryResponseDetail map() {
+        private QueryResponseDetail map() {
             return new QueryResponseDetail(purchasePrice, salePrice, isoCode);
         }
     }
