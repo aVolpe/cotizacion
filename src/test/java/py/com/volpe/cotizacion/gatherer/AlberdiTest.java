@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import py.com.volpe.cotizacion.AppException;
-import py.com.volpe.cotizacion.WSHelper;
+import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class AlberdiTest {
 
     @Mock
-    private WSHelper wsHelper;
+    private HTTPHelper wsHelper;
 
     @InjectMocks
     private Alberdi alberdi;
@@ -41,7 +41,7 @@ public class AlberdiTest {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), "UTF-8");
 
-        when(wsHelper.getDataWithoutSending(anyString())).thenReturn(data);
+        when(wsHelper.doGet(anyString())).thenReturn(data);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class AlberdiTest {
     @Test
     public void failToReadFile() {
 
-        when(wsHelper.getDataWithoutSending(anyString())).thenReturn("[]");
+        when(wsHelper.doGet(anyString())).thenReturn("[]");
         try {
             alberdi.getParsedData();
             Assert.fail();

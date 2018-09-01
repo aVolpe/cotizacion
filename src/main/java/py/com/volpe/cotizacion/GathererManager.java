@@ -3,15 +3,17 @@ package py.com.volpe.cotizacion;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import py.com.volpe.cotizacion.domain.Execution;
 import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
+import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +34,7 @@ public class GathererManager {
 
     private final List<Gatherer> gathererList;
     private final PlaceRepository placeRepository;
+    private final ExecutionRepository executionRepository;
     private final QueryResponseRepository queryResponseRepository;
 
     /**
@@ -40,8 +43,8 @@ public class GathererManager {
      * @param code the code of the place, null for all places
      * @return the list of places initialized
      */
-    public List<String> init(String code) {
-        return doAction("INIT", code, this::getPlace);
+    public Set<String> init(String code) {
+        return doAction("INIT", code, this::getPlace).keySet();
     }
 
     /**
@@ -51,8 +54,11 @@ public class GathererManager {
      * @return the list of places with new data
      */
     @CacheEvict(cacheNames = {"byIso", "isoList"}, allEntries = true)
-    public List<String> doQuery(String code) {
-        return doAction("GATHER", code, this::doQuery);
+    public Set<String> doQuery(String code) {
+        Map<String, List<QueryResponse>> data = doAction("GATHER", code, this::doQuery);
+
+
+        return data.keySet();
     }
 
     /**
@@ -66,23 +72,23 @@ public class GathererManager {
      * @param action the action to do
      * @return a list with the codes of every gatherer where the action was performed successfully
      */
-    private List<String> doAction(String name, String code, Consumer<Gatherer> action) {
+    private <T> Map<String, T> doAction(String name, String code, Function<Gatherer, T> action) {
 
         log.info("{} Initializing", name);
 
-        Function<Gatherer, String> safeAction = gatherer -> {
+        Function<Gatherer, Pair<String, T>> safeAction = gatherer -> {
             try {
                 log.info("{} running on {}", name, gatherer.getCode());
-                action.accept(gatherer);
+                T data = action.apply(gatherer);
                 log.info("{} end ok on {}", name, gatherer.getCode());
-                return gatherer.getCode();
+                return Pair.of(gatherer.getCode(), data);
             } catch (Exception e) {
                 log.warn("{} The gatherer {} throws an exception", name, gatherer.getCode(), e);
                 return null;
             }
         };
 
-        Stream<String> toRet;
+        Stream<Pair<String, T>> toRet;
         if (code != null) {
             toRet = gathererList.stream().filter(g -> g.getCode().equals(code)).map(safeAction);
         } else {
@@ -90,21 +96,29 @@ public class GathererManager {
         }
 
         log.info("{} end", name);
-        return toRet.filter(Objects::nonNull).collect(Collectors.toList());
+        return toRet.filter(Objects::nonNull).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
     }
 
     /**
      * Make a query in a gatherer
      * <p>
-     * This methods is in charge of provides the correct parameters.
+     * This methods is in charge of provide the correct parameters.
      *
      * @param gatherer the gatherer.
      */
-    private void doQuery(Gatherer gatherer) {
+    private List<QueryResponse> doQuery(Gatherer gatherer) {
         Place p = getPlace(gatherer);
-        gatherer.doQuery(p, p.getBranches())
-                .forEach(queryResponseRepository::save);
+        List<QueryResponse> response = gatherer.doQuery(p, p.getBranches())
+                .stream()
+                .map(queryResponseRepository::save)
+                .collect(Collectors.toList());
+
+        Execution e = new Execution();
+        e.setDate(new Date());
+        e.setResponses(response);
+        executionRepository.save(e);
+        return response;
     }
 
     /**

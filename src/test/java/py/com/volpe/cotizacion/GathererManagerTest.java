@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
+import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
@@ -26,6 +27,8 @@ public class GathererManagerTest {
     public void init() {
 
 
+        ExecutionRepository er = Mockito.mock(ExecutionRepository.class);
+
         Gatherer first = Mockito.mock(Gatherer.class);
         Mockito.when(first.getCode()).thenReturn("p1");
 
@@ -40,7 +43,7 @@ public class GathererManagerTest {
         Mockito.when(pr.findByCode("p2")).thenReturn(Optional.empty());
 
 
-        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, null);
+        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, er, null);
 
         Assert.assertEquals(1, manager.init(null).size());
         Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
@@ -51,6 +54,8 @@ public class GathererManagerTest {
 
     @Test
     public void doQuery() {
+
+        ExecutionRepository er = Mockito.mock(ExecutionRepository.class);
 
         PlaceRepository pr = Mockito.mock(PlaceRepository.class);
         Mockito.when(pr.findByCode(any())).thenReturn(Optional.of(new Place()));
@@ -67,7 +72,7 @@ public class GathererManagerTest {
         Mockito.when(second.doQuery(any(), any())).thenThrow(new AppException(400, "Invalid place"));
 
 
-        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, qr);
+        GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, er, qr);
 
         Assert.assertEquals(1, manager.doQuery(null).size());
         Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));

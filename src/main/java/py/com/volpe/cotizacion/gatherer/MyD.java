@@ -99,6 +99,7 @@ public class MyD implements Gatherer {
 
     private static List<ExchangeData> getData(String sucId) {
         try {
+            log.info("MyD calling {}", String.format(URL, sucId));
             Document doc = Jsoup.connect(String.format(URL, sucId)).get();
             List<ExchangeData> data = new ArrayList<>();
 
