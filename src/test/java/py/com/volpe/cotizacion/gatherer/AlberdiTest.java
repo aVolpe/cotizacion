@@ -1,7 +1,6 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +70,7 @@ public class AlberdiTest {
         when(wsHelper.doGet(anyString())).thenReturn("[]");
         try {
             alberdi.getParsedData();
-            Assert.fail();
+            fail("this should fail, the file is invalid");
         } catch (AppException ae) {
             assertEquals(500, ae.getNumber());
         }
