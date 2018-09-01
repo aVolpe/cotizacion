@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import py.com.volpe.cotizacion.GathererManager;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.assertThat;
 
@@ -20,13 +20,12 @@ public class PlaceControllerTest {
         GathererManager manager = Mockito.mock(GathererManager.class);
         PlaceController pc = new PlaceController(manager);
 
-        Mockito.when(manager.doQuery(Mockito.anyString())).thenReturn(singletonList("a"));
-        Mockito.when(manager.init(Mockito.anyString())).thenReturn(singletonList("a"));
+        Mockito.when(manager.doQuery(Mockito.anyString())).thenReturn(singleton("a"));
+        Mockito.when(manager.init(Mockito.anyString())).thenReturn(singleton("a"));
 
 
         assertThat(pc.doQuery("a"), hasItem("a"));
         assertThat(pc.init("a"), hasItem("a"));
-
 
 
     }

@@ -37,6 +37,9 @@ public class QueryResponse {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
     private List<QueryResponseDetail> details;
 
+    @ManyToOne
+    private Execution execution;
+
     public QueryResponse(PlaceBranch pb) {
         this.place = pb.getPlace();
         this.date = new Date();

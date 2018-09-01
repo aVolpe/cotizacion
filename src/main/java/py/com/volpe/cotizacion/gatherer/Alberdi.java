@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.AppException;
-import py.com.volpe.cotizacion.WSHelper;
+import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
@@ -31,8 +31,9 @@ import java.util.stream.Collectors;
 public class Alberdi implements Gatherer {
 
     private static final String CODE = "ALBERDI";
-    private static final String WS_URL = "ws://cambiosalberdi.com:9300";
-    private final WSHelper helper;
+//    private static final String WS_URL = "ws://cambiosalberdi.com:9300";
+    private static final String WS_URL = "http://cambiosalberdi.com/ws/getCotizaciones.json";
+    private final HTTPHelper helper;
 
     @Override
     public String getCode() {
@@ -107,7 +108,7 @@ public class Alberdi implements Gatherer {
 
     protected Map<String, List<ExchangeData>> getParsedData() {
         try {
-            String queryResult = helper.getDataWithoutSending(WS_URL);
+            String queryResult = helper.doGet(WS_URL);
             return buildMapper()
                     .readValue(queryResult, new TypeReference<Map<String, List<ExchangeData>>>() {
                     });
