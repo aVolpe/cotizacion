@@ -87,19 +87,19 @@ public class CambiosChaco implements Gatherer {
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BranchExchangeData {
-        String updateTs;
-        String branchOfficeId;
-        List<BranchExchangeDetailsData> items;
+        private String updateTs;
+        private String branchOfficeId;
+        private List<BranchExchangeDetailsData> items;
     }
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BranchExchangeDetailsData {
-        String isoCode;
-        long purchasePrice;
-        long salePrice;
-        long purchaseTrend;
-        long saleTrend;
+        private String isoCode;
+        private long purchasePrice;
+        private long salePrice;
+        private long purchaseTrend;
+        private long saleTrend;
 
         public QueryResponseDetail map() {
             QueryResponseDetail toRet = new QueryResponseDetail();
@@ -115,17 +115,17 @@ public class CambiosChaco implements Gatherer {
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BranchData {
-        String id;
-        String title;
-        String lat;
-        String lng;
-        String phoneNumber;
-        String address;
-        String weekdaySchedule;
-        String saturdaySchedule;
-        String sundaySchedule;
-        String imageUrl;
-        String email;
+        private String id;
+        private String title;
+        private String lat;
+        private String lng;
+        private String phoneNumber;
+        private String address;
+        private String weekdaySchedule;
+        private String saturdaySchedule;
+        private String sundaySchedule;
+        private String imageUrl;
+        private String email;
 
         public PlaceBranch map(Place place) {
             PlaceBranch pb = new PlaceBranch();

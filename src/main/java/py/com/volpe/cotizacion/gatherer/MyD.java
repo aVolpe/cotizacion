@@ -162,8 +162,8 @@ public class MyD implements Gatherer {
 
     @Value
     private static final class ExchangeData {
-        String currency;
-        String salePrice;
-        String purchasePrice;
+        private String currency;
+        private String salePrice;
+        private String purchasePrice;
     }
 }
