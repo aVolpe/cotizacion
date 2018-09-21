@@ -14,8 +14,8 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -38,31 +38,36 @@ public class Amambay implements Gatherer {
 
     @Override
     public List<QueryResponse> doQuery(Place p, List<PlaceBranch> branches) {
-        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
-    }
 
-    private QueryResponse queryBranch(PlaceBranch branch) {
         try {
 
-            QueryResponse qr = new QueryResponse(branch);
+            QueryResponse qr = new QueryResponse(p);
 
             BranchExchangeData data = buildMapper().readValue(httpHelper.doGet(URL_CHANGE), BranchExchangeData.class);
 
             data.getCurrencyExchanges().forEach(exchange -> qr.addDetail(exchange.map()));
 
-            return qr;
+            return Collections.singletonList(qr);
 
         } catch (IOException e) {
-            throw new AppException(500, "cant read response from Amambay " + branch.getId(), e);
+            throw new AppException(500, "cant read response from Amambay ", e);
         }
+
     }
+
 
     @Override
     public Place build() {
 
         Place place = new Place("Cambios Amambay", CODE);
+        place.setType(Place.Type.BANK);
 
-        PlaceBranch centralBranch = PlaceBranch.builder().place(place).name("Central").build();
+        PlaceBranch centralBranch = PlaceBranch.builder()
+                .place(place)
+                .name("Central")
+                .latitude(-25.2857864)
+                .longitude(-57.5718767)
+                .build();
 
         place.addBranch(centralBranch);
 

@@ -16,13 +16,9 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 /**
@@ -44,25 +40,23 @@ public class Interfisa implements Gatherer {
 
         Map<String, Pair<String, String>> data = getParsedData();
 
-        return branches.stream().map(branch -> {
 
-            QueryResponse qr = new QueryResponse(branch);
+        QueryResponse qr = new QueryResponse(place);
 
-            data.forEach((key, value) -> {
+        data.forEach((key, value) -> {
 
-                String iso = mapToISO(key);
-                if (iso == null) {
-                    return;
-                }
-                qr.addDetail(
-                        new QueryResponseDetail(
-                                parse(value.getFirst()),
-                                parse(value.getSecond()),
-                                iso));
-            });
+            String iso = mapToISO(key);
+            if (iso == null) {
+                return;
+            }
+            qr.addDetail(
+                    new QueryResponseDetail(
+                            parse(value.getFirst()),
+                            parse(value.getSecond()),
+                            iso));
+        });
 
-            return qr;
-        }).collect(Collectors.toList());
+        return Collections.singletonList(qr);
     }
 
     @Override
