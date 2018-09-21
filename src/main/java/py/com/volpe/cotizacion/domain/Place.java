@@ -39,7 +39,7 @@ public class Place {
     private List<PlaceBranch> branches;
 
     @PostLoad
-    void init() {
+    private void init() {
         if (this.type == null) {
             this.type = Type.BUREAU;
         }
