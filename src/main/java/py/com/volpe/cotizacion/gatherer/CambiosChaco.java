@@ -49,7 +49,12 @@ public class CambiosChaco implements Gatherer {
             // for some reason, when cambios chaco doesn't has data, it returns '[]'
             if (!"[]".equals(query)) {
                 BranchExchangeData data = buildMapper().readValue(query, BranchExchangeData.class);
-                data.getItems().forEach(d -> qr.addDetail(d.map()));
+                data.getItems()
+                        .forEach(d -> {
+                            if (d.getPurchasePrice() > 0) {
+                                qr.addDetail(d.map());
+                            }
+                        });
             }
 
             return qr;
