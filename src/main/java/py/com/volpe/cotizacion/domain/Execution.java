@@ -2,7 +2,6 @@ package py.com.volpe.cotizacion.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,6 @@ import java.util.List;
  */
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 public class Execution {
 
@@ -29,4 +27,8 @@ public class Execution {
 
     @OneToMany(mappedBy = "execution")
     private List<QueryResponse> responses;
+
+    public Execution() {
+        date = new Date();
+    }
 }

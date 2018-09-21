@@ -64,7 +64,10 @@ public class Amambay implements Gatherer {
 
         PlaceBranch centralBranch = PlaceBranch.builder()
                 .place(place)
-                .name("Central")
+                .name("Casa Matriz")
+                .phoneNumber("Tel: (595-21) 618-7000.")
+                .remoteCode("central")
+                .schedule("Lunes a viernes de 8:30 a 16:00")
                 .latitude(-25.2857864)
                 .longitude(-57.5718767)
                 .build();

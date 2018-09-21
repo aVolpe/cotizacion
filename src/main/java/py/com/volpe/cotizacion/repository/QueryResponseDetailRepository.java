@@ -28,10 +28,10 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
             "   qrd.salePrice," +
             "   qrd.purchasePrice" +
             " ) " +
-            "FROM QueryResponseDetail qrd " +
-            "JOIN qrd.queryResponse qr " +
-            "JOIN qr.branch br " +
-            "JOIN br.place p " +
+            "FROM QueryResponse qr " +
+            "JOIN qr.details qrd " +
+            "LEFT JOIN qr.branch br " +
+            "JOIN qr.place p " +
             "JOIN qr.execution e " +
             "WHERE " +
             "      qrd.isoCode = ?1 " +

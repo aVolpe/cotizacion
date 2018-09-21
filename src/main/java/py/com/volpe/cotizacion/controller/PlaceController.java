@@ -1,14 +1,14 @@
 package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import py.com.volpe.cotizacion.GathererManager;
+import py.com.volpe.cotizacion.domain.PlaceBranch;
+import py.com.volpe.cotizacion.repository.PlaceBranchRepository;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Arturo Volpe
@@ -16,19 +16,14 @@ import java.util.Set;
  */
 @RestController
 @RequiredArgsConstructor
-@Profile("develop")
 public class PlaceController {
 
-    private final GathererManager manager;
+    private final PlaceBranchRepository branchRepository;
 
-    @GetMapping(value = "/api/places/init", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Set<String> init(@RequestParam(value = "code", required = false) String code) {
-        return manager.init(code);
+    @GetMapping(value = "/api/places/{code}/branches", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PlaceBranch> init(@PathVariable(value = "code") String code) {
+        return branchRepository.getByPlaceCode(code);
     }
 
-    @GetMapping(value = "/api/places/doQuery", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Set<String> doQuery(@RequestParam(value = "code", required = false) String code) {
-        return manager.doQuery(code);
-    }
 
 }

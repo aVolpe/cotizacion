@@ -83,20 +83,20 @@
             </v-card-text>
         </v-card>
         <v-dialog v-model="branchDialog" max-width="500px">
-            <Branch v-on:ok="branchDialog = false" :branch="currentBranch"></Branch>
+            <ExchangeData v-on:ok="branchDialog = false" :data="currentBranch"></ExchangeData>
         </v-dialog>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI} from "../api/ExchangeAPI";
-    import Branch from "@/components/Branch.vue";
+    import {ExchangeAPI, QueryResponseDetail} from "../api/ExchangeAPI";
+    import ExchangeData from "@/components/ExchangeData.vue";
     import {Meta} from "../decorators";
 
     @Component({
         components: {
-            Branch
+            ExchangeData
         }
     })
     @Meta({
@@ -156,9 +156,40 @@
             this.load();
         }
 
-        private showDialog(query: any) {
+        setDialogData(query: QueryResponseDetail) {
+
             this.branchDialog = true;
-            this.currentBranch = query.branch;
+            this.currentBranch = {
+                place: query.place,
+                branch: query.branch,
+                exchange: {
+                    purchasePrice: query.purchasePrice,
+                    salePrice: query.salePrice,
+                    currency: this.currentCurrency,
+                    date: query.queryDate
+                }
+            };
+            console.log(query.place.type, this.currentBranch);
+        }
+
+        private showDialog(query: QueryResponseDetail) {
+
+            if (query.place.type === 'BANK') {
+
+                ExchangeAPI.getBranches(query.place.code).then(data => {
+                    data.forEach(d => {
+                        if (d.latitude)
+                            d.gmaps = `https://www.google.com/maps/search/?api=1&query=${d.latitude},${d.longitude}`;
+                        else
+                            d.gmaps = null;
+                    });
+                    query.place.branches = data;
+                    this.setDialogData(query);
+                });
+
+            } else {
+                this.setDialogData(query);
+            }
         }
 
         private load() {
@@ -168,40 +199,21 @@
 
                 if (result === null) return;
 
-                const banks: { [K: string]: any } = {};
                 const toRet: Array<any> = [];
 
                 for (let row of result.data) {
-                    if (row.branch.latitude)
-                        row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
-                    else
-                        row.branch.gmaps = null;
+                    if (row.branch) {
+                        if (row.branch.latitude)
+                            row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
+                        else
+                            row.branch.gmaps = null;
 
-                    row.branch.place = row.place;
-                    row.branch.exchange = {
-                        purchasePrice: row.purchasePrice,
-                        salePrice: row.salePrice,
-                        currency: this.currentCurrency,
-                        date: row.queryDate
-                    };
-
-                    if (row.place.type === 'BANK') {
-                        const place = row.place;
-                        if (!banks[place.code]) {
-                            place.branches = [];
-                            banks[place.code] = place;
-                            toRet.push(row)
-                        }
-                        banks[place.code].branches.push(row);
-                    } else {
-
-                        toRet.push(row)
-
+                        row.branch.place = row.place;
                     }
 
+                    toRet.push(row)
+
                 }
-                console.log(toRet);
-                console.log(banks);
                 this.loading = false;
                 this.data = {
                     ...result,

@@ -74,17 +74,21 @@ public class VisionBanco implements Gatherer {
             VisionBancoModel.VisionBranches sourceBranches = new ObjectMapper().readValue(data, VisionBancoModel.VisionBranches.class);
 
 
+            Place p = Place.builder()
+                    .code(getCode())
+                    .type(Place.Type.BANK)
+                    .name("Banco Visión")
+                    .build();
+
             List<PlaceBranch> branches = sourceBranches.getItems()
                     .stream()
                     .filter(this::hasExchange)
                     .map(this::buildBranch)
                     .collect(Collectors.toList());
 
-            return Place.builder()
-                    .code(getCode())
-                    .branches(branches)
-                    .name("Banco Visión")
-                    .build();
+            p.setBranches(branches);
+
+            return p;
 
         } catch (IOException e) {
             throw new AppException(500, "Can't build " + getCode(), e);
@@ -103,7 +107,7 @@ public class VisionBanco implements Gatherer {
         StringBuilder schedule = new StringBuilder();
         if (!CollectionUtils.isEmpty(item.getHours())) {
             for (VisionBancoModel.Hour hour : item.getHours()) {
-                schedule.append(hour.getDays())
+                schedule.append(hour.getDays().toValue())
                         .append(": ")
                         .append(hour.getOpen())
                         .append(" - ")

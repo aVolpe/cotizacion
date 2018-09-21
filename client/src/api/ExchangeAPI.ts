@@ -58,7 +58,11 @@ export class ExchangeAPI {
         return APICaller.doGet(`exchange/${isoCode}`);
     }
 
-    static getCurrencies() {
+    public static getCurrencies() {
         return APICaller.doGet(`exchange/`);
+    }
+
+    public static getBranches(code: string): Promise<Array<Branch>> {
+        return APICaller.doGet(`places/${code}/branches`);
     }
 }
