@@ -31,19 +31,12 @@ public class Place {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private Type type = Type.BUREAU;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
     @Singular
     private List<PlaceBranch> branches;
-
-    @PostLoad
-    private void init() {
-        if (this.type == null) {
-            this.type = Type.BUREAU;
-        }
-    }
 
     public Place(String name, String code) {
         this.name = name;

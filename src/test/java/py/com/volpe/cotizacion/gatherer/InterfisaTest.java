@@ -73,28 +73,20 @@ public class InterfisaTest {
 
 
         assertNotNull(response);
-        assertEquals(2, response.size());
+        assertEquals(1, response.size());
 
 
         assertEquals(5750, getDetail(response.get(0), "USD").getPurchasePrice());
         assertEquals(5830, getDetail(response.get(0), "USD").getSalePrice());
-        assertEquals(5750, getDetail(response.get(1), "USD").getPurchasePrice());
-        assertEquals(5830, getDetail(response.get(1), "USD").getSalePrice());
 
         assertEquals(1300, getDetail(response.get(0), "BRL").getPurchasePrice());
         assertEquals(1450, getDetail(response.get(0), "BRL").getSalePrice());
-        assertEquals(1300, getDetail(response.get(1), "BRL").getPurchasePrice());
-        assertEquals(1450, getDetail(response.get(1), "BRL").getSalePrice());
 
         assertEquals(6500, getDetail(response.get(0), "EUR").getPurchasePrice());
         assertEquals(7000, getDetail(response.get(0), "EUR").getSalePrice());
-        assertEquals(6500, getDetail(response.get(1), "EUR").getPurchasePrice());
-        assertEquals(7000, getDetail(response.get(1), "EUR").getSalePrice());
 
         assertEquals(150, getDetail(response.get(0), "ARS").getPurchasePrice());
         assertEquals(190, getDetail(response.get(0), "ARS").getSalePrice());
-        assertEquals(150, getDetail(response.get(1), "ARS").getPurchasePrice());
-        assertEquals(190, getDetail(response.get(1), "ARS").getSalePrice());
     }
 
     private QueryResponseDetail getDetail(QueryResponse response, String iso) {

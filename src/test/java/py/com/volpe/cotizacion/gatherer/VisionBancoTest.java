@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Arturo Volpe
@@ -45,8 +44,8 @@ public class VisionBancoTest {
 
         List<QueryResponse> response = visionBanco.doQuery(p, Collections.emptyList());
 
-        assertTrue(!response.isEmpty());
-        assertTrue(!response.get(0).getDetails().isEmpty());
+        assertFalse(response.isEmpty());
+        assertFalse(response.get(0).getDetails().isEmpty());
 
 
         assertThat(
@@ -76,6 +75,9 @@ public class VisionBancoTest {
 
         Place p = visionBanco.build();
 
-        System.out.println(p);
+
+        assertNotNull(p);
+        assertFalse(p.getBranches().isEmpty());
+
     }
 }

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+import py.com.volpe.cotizacion.AppException;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,8 +20,7 @@ public final class VisionBancoModel {
 
     @Data
     @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-
-    public static class VisionBranches {
+    static class VisionBranches {
         private List<Item> items;
     }
 
@@ -58,7 +57,7 @@ public final class VisionBancoModel {
 
 
     @Data
-    public static class Hour {
+    static class Hour {
         private Days days;
         private String open;
         private String close;
@@ -76,18 +75,17 @@ public final class VisionBancoModel {
                     return "Domingo";
                 case LUNES_VIERNES:
                     return "Lunes - Viernes";
-                case SBADO:
+                default:
                     return "S\u00e1bado";
             }
-            return null;
         }
 
         @JsonCreator
-        public static Days forValue(String value) throws IOException {
-            if (value.equals("Domingo")) return DOMINGO;
-            if (value.equals("Lunes - Viernes")) return LUNES_VIERNES;
-            if (value.equals("S\u00e1bado")) return SBADO;
-            throw new IOException("Cannot deserialize Days");
+        public static Days forValue(String value) {
+            if ("Domingo".equals(value)) return DOMINGO;
+            if ("Lunes - Viernes".equals(value)) return LUNES_VIERNES;
+            if ("S\u00e1bado".equals(value)) return SBADO;
+            throw new AppException(500, "Cannot deserialize Days" + value);
         }
     }
 
@@ -113,17 +111,18 @@ public final class VisionBancoModel {
                     return "tauser";
                 case TIMER:
                     return "timer";
+                default:
+                    return null;
             }
-            return null;
         }
 
         @JsonCreator
-        public static Icon forValue(String value) throws IOException {
-            if (value.equals("atm")) return ATM;
-            if (value.equals("sac")) return SAC;
-            if (value.equals("tauser")) return TAUSER;
-            if (value.equals("timer")) return TIMER;
-            throw new IOException("Cannot deserialize Icon");
+        public static Icon forValue(String value) {
+            if ("atm".equals(value)) return ATM;
+            if ("sac".equals(value)) return SAC;
+            if ("tauser".equals(value)) return TAUSER;
+            if ("timer".equals(value)) return TIMER;
+            throw new AppException(500, "Cannot deserialize Icon: " + value);
         }
     }
 
@@ -142,17 +141,18 @@ public final class VisionBancoModel {
                     return "Horario extendido";
                 case TAUSER:
                     return "Tauser";
+                default:
+                    return null;
             }
-            return null;
         }
 
         @JsonCreator
-        public static Name forValue(String value) throws IOException {
-            if (value.equals("Atenci\u00f3n a cliente")) return ATENCIN_A_CLIENTE;
-            if (value.equals("ATM")) return ATM;
-            if (value.equals("Horario extendido")) return HORARIO_EXTENDIDO;
-            if (value.equals("Tauser")) return TAUSER;
-            throw new IOException("Cannot deserialize Name");
+        public static Name forValue(String value) {
+            if ("Atenci\u00f3n a cliente".equals(value)) return ATENCIN_A_CLIENTE;
+            if ("ATM".equals(value)) return ATM;
+            if ("Horario extendido".equals(value)) return HORARIO_EXTENDIDO;
+            if ("Tauser".equals(value)) return TAUSER;
+            throw new AppException(500, "Cannot deserialize Name" + value);
         }
     }
 
