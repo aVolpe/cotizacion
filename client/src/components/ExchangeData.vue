@@ -6,12 +6,14 @@
                           :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
                           height="200px"></v-card-media>
         </span>
-        <v-card-title primary-title>
+        <span v-if="data.place.type === 'BANK'">
+            <v-card-media :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
+                          height="200px"></v-card-media>
+        </span>
+        <v-card-title primary-title v-if="data.place.type !== 'BANK'">
             <div>
-                <h3 class="headline mb-0">
-                    <span v-if="data.place.type === 'BANK'">{{ data.place.name }}</span>
-                    <span v-if="data.place.type !== 'BANK'">{{ data.branch.name }} - {{ data.place.name }}</span>
-
+                <h3 class="headline mb-0 text-md-center">
+                    {{ data.branch.name }} - {{ data.place.name }}
                 </h3>
             </div>
         </v-card-title>
@@ -23,16 +25,16 @@
                     <v-flex xs4>
                         <v-subheader>Compra de {{ data.exchange.currency }}</v-subheader>
                     </v-flex>
-                    <v-flex xs8>
-                        <v-subheader><b>{{ data.exchange.purchasePrice | fn}}</b></v-subheader>
+                    <v-flex xs6>
+                        <v-subheader class="text-xs-right"><b>{{ data.exchange.purchasePrice | fn}}</b></v-subheader>
                     </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex xs4>
                         <v-subheader>Venta de {{ data.exchange.currency }}</v-subheader>
                     </v-flex>
-                    <v-flex xs8>
-                        <v-subheader><b>{{ data.exchange.salePrice | fn}}</b></v-subheader>
+                    <v-flex xs6 class="text-xs-right">
+                        <v-subheader class="text-xs-right"><b>{{ data.exchange.salePrice | fn}}</b></v-subheader>
                     </v-flex>
                 </v-layout>
                 <v-layout row v-if="data.branch && data.branch.email">
@@ -68,7 +70,7 @@
                             :must-sort="true"
                             item-key="id"
                             :items="data.place.branches"
-                            class="elevation-1 branches">
+                            class="branches">
                         <template slot="items" slot-scope="props">
                             <tr>
                                 <td class="text-xs-left name-column">
@@ -83,8 +85,8 @@
                                     </span>
 
                                 </td>
-                                <td class="text-xs-right">{{ props.item.schedule }}</td>
-                                <td class="text-xs-right">{{ props.item.phoneNumber }}</td>
+                                <td class="text-xs-right" v-html="getSchedule(props.item)"></td>
+                                <td class="text-xs-right" v-html="getPhone(props.item)"></td>
                             </tr>
                         </template>
                     </v-data-table>
@@ -101,7 +103,8 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn :href="data.branch.gmaps" v-if="data.place.type === 'BUREAU' && data.branch.gmaps" target="_blank" flat
+            <v-btn :href="data.branch.gmaps" v-if="data.place.type === 'BUREAU' && data.branch.gmaps" target="_blank"
+                   flat
                    color="orange">
                 Ir al mapa
             </v-btn>
@@ -131,9 +134,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Branch} from "../api/ExchangeAPI";
 
     @Component
-    export default class Branch extends Vue {
+    export default class ExchangeData extends Vue {
         @Prop() private data: any;
         isSmall: boolean;
         headers: any[];
@@ -150,6 +154,42 @@
             ];
 
             this.pagination = {sortBy: 'name', descending: false, rowsPerPage: 3};
+        }
+
+        getSchedule(branch: Branch) {
+            if (!branch || !branch.schedule) return '';
+
+            return branch.schedule
+                .replace(/Lunes/, "L")
+                .replace(/Martes/, "Ma")
+                .replace(/Miercoles/, "Mi")
+                .replace(/Jueves/, "J")
+                .replace(/Viernes/, "V")
+                .replace(/Sabado/, "S")
+                .replace(/Domingo/, "D")
+
+
+                .replace(/LUNES_VIERNES/, "L a V")
+                .replace(/SBADO/, "S")
+                .replace(/DOMINGO/, "D")
+                .replace(/hs /, "")
+
+                .replace(/0 a /, "0-")
+                .replace(/\./, "<br />")
+        }
+
+        getPhone(branch: Branch) {
+            if (!branch || !branch.phoneNumber) return '';
+
+            return branch.phoneNumber
+                .replace(/.*Cel.:/, "")
+                .replace(/\(RA\)/, "")
+                .replace(/\/.*/, "")
+                .replace(/y .*/, "")
+                .trim();
+
+            ;
+
         }
 
     }
@@ -173,6 +213,10 @@
 </style>
 
 <style>
+    div.branches {
+        width: 100%;
+    }
+
     div.branches tbody td {
         padding: 0 4px !important;
     }
