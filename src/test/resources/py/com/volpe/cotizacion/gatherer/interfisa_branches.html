@@ -1,0 +1,954 @@
+
+<!DOCTYPE HTML>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="es-ES"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="es-ES"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="es-ES"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="es-ES"> <!--<![endif]-->
+<head>
+
+<title>Sucursales | Interfisa Banco</title>
+<meta name="description" content="Interfisa cuenta con sucursales en varios departamentos del país para poder estar lo más cerca posible de nuestros clientes." />
+<meta name="keywords" content="banco, paraguay, saeca, centro, credito, ahorros, tarjeta, envio de dinero, cambios, transferencia, sucursales, sucursal interfisa, interior" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="googlebot" content="Index, Follow" />
+<meta name="robots" content="all" />
+<meta name="author" content="Puntopy" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<meta http-equiv="x-rim-auto-match" content="none">
+<meta name="format-detection" content="telephone=no">
+
+<base href="https://www.interfisa.com.py/" />
+<!--<meta property="og:image" content="" />--> 
+
+<link rel="shortcut icon" href="favicon.ico" />
+
+<link href="css/interfisa.css" rel="stylesheet" type="text/css" />
+<link href="css/programacion.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<!--<link href="css/flexnav.css" rel="stylesheet" type="text/css" />-->
+
+<!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="css/ie.css" />
+<![endif]-->
+
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/selectivizr-min.js"></script>
+<script type="text/javascript" src="js/modernizr-latest.js"></script>
+<script type="text/javascript" src="js/jquery.flexnav.min.js"></script>
+<script type="text/javascript" src="js/jquery.hoverIntent.minified.js"></script>
+<script type="text/javascript" src="js/jquery.number.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/moodjs.js"></script>
+<script type="text/javascript" src="js/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="js/blockUI.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".flexnav").flexNav({
+			'hoverIntent': true // use with hoverIntent plugin 
+		});
+		
+		$(".btnPopup").fancybox({
+			padding: 0
+		});
+		
+		$(".showHide").click(function(){
+			$(this).next('.contenido').slideToggle();
+			$(this).toggleClass('active');
+		});
+	});
+</script>
+
+<link rel="stylesheet" href="css/zebra_datepicker.css" type="text/css">
+<script type="text/javascript" src="js/zebra_datepicker.js"></script>
+<!--<link rel="stylesheet" href="js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="js/fancybox/jquery.fancybox.pack.js"></script>-->
+
+<script type="text/javascript">
+	$(function(){
+		acordeon();
+		
+		//colocar en el rel del link la latitud y longitud
+		$("a.mapa").click(function(e){
+			e.preventDefault();
+			var dir = $(this).attr('href');
+			var obj = $(this).attr('rel').split(",");
+			//var desc = $(this).parent().children('p').html();
+			var titulo = $(this).parents('li').children('h3').text();
+			$.fancybox({
+				padding: 0,
+				href: dir,
+				type: 'ajax',
+				autoSize: false,
+				fitToView: false,
+				//width: 640,
+				//height: 480,
+				maxWidth: 640,
+				maxHeight: 480,
+				helpers : {
+					title : null            
+				},
+				ajax: {
+					type: "POST",
+					data: {lat:obj[0], lng:obj[1], /*desc: desc, */titulo: titulo}
+				}
+			});
+			return false;
+		});
+	})
+</script>
+
+</head>
+
+<body>
+	
+    <!-- HEADER -->
+		<div id="suscribirseBox">
+    	<h2>Suscribirse a novedades</h2>
+        <div class="content">
+        	            
+			<div id="suscribir_container"> 
+				 		<p>Si aún no esta suscripto, suscribase y reciba las mejores promociones y novedades de Interfisa.</p>
+		<form action="" method="post" name="suscripcion" id="suscripcion" class="" onSubmit="suscribir();return!1;">
+			<label>Nombre y Apellido</label>
+			<input name="suscripcion_nombre" id="suscripcion_nombre" type="text" placeholder="nombre" class="left" value=""/>							
+						
+			<label>E-mail</label>
+			<input name="suscripcion_email" id="suscripcion_email" type="text" placeholder="usuario@mail.com" class="left" value=""/>							
+						<input type="hidden" name="token_suscribir" id="token_suscribir" value="1RqxoL2eDqNnuESaMipGC2LSZvFoXzf9nIwiEXaQYd8=">
+			<input name="enviar" type="submit" value="Suscribirme" class="leermasVerde" />
+		</form>
+		
+ 					</div>
+							
+        </div>
+    </div>
+    <div id="western-unionBox">
+    	
+        <div class="content">
+        	<div><img src="images/wu_argentina.jpg" /></div>	
+            
+        </div>
+    </div>
+   
+   
+   
+    <div id="promocionesBox">
+    	<h2>Promociones Vigentes</h2>
+        <div class="content">
+        	
+            <p>Estamos trabajando para ofrecerle más y mejores beneficios para Ud. que serán comunicados en breve</p>
+        </div>
+    </div>
+    
+    
+    <div id="atencionBox">
+    	<h2>Horarios de Atención</h2>
+        <div class="content">
+        	<p><strong>MATRIZ Y SUCURSALES</strong></p>
+            <p><strong>Lunes a Viernes</strong> de 08:00 a 17:00 hs
+            <p><strong>SUCURSALES</strong></p>
+            <p><strong>Sábados</strong> de 08:30 a 11:30 hs</p>
+        </div>
+    </div>
+    
+    <div id="trabajeBox">
+    	<h2>Trabaje con nosotros</h2>
+        <div class="content clear" id="trabajar_container">
+        	<p>Si querés trabajar con nosotros, anexa tu Curriculum Vitae especificando en el Asunto: área de desempeño y nos pondremos en contacto contigo.</p>
+				  
+		
+                <form action="js/trabajar" method="post" name="suscripcion" id="trabajo" class="" target="upload_frame" enctype="multipart/form-data">			
+					<label>Nombre</label>
+					<input name="trabaje_nombre" id="trabaje_nombre" type="text" tabindex="1" value=""/>
+										
+					<label>Asunto</label>
+					<input name="trabaje_asunto" id="trabaje_asunto" type="text" tabindex="2" value=""/>
+										
+					<label>Adjuntar C.V. [.doc, .docx, .pdf]</label>
+					<input style="width: 99.476%;" type="file" name="trabaje_file_name" id="trabaje_file_name" tabindex="3"/><br />
+										
+					<div class="clear mb20"></div>
+					<div class="clear">
+						<label for="captcha" style="float:left;">Ingrese el código: </label>
+						<div style="float:left; width: 100%; text-align: center;">
+						<input type="text" name="trabaje_captcha" id="trabaje_captcha" tabindex="11" style="float:left; margin: 3px 0; width: 90.4762%;"/>
+						<img src="https://www.interfisa.com.py/images/captcha_jpg.php?714154654" id="captcha_image_2" style="float:left;"/>
+							<a href="javascript:;" title="Recargar imagen" class="codelink" onclick="reloadCaptcha_2();" id="change-image" style="float:left; width:45px; margin:7px 0 0 7px; text-align: center;"><b> Refrescar código</b></a>
+						</div>     
+											</div></br>
+					<input type="hidden" name="token_trabajar" id="token_trabajar" value="pdfoQT/bvlY15TOdAS1loyw6buZdCTWJX0UKiDer35c=">
+                    <input name="enviar" type="submit" value="Enviar CV" tabindex="4" class="leermasVerde left" />
+					
+				</form>
+				<iframe name="upload_frame" id="upload_frame" style="border:none;width:10px; height:10px;"></iframe>
+ 		
+        </div>
+    </div>
+    
+    <div id="headerWrapper">
+    	<header class="clear">
+        	<!-- LOGO -->
+        	<a href="../../../../../../../main/java" class="logo"><img src="images/logo-interfisa.png" alt="Interfisa" /></a>
+            
+            <!-- ITEMS DERECHA -->
+            <div class="hRight">
+ <a href="https://seguro.interfisa.com.py/" class="btnBanking"><img src="images/ico-banking.png" alt="Seguro" class="left" /><span class="desc"><strong class="destacar">24hs</strong> <strong>HOME</strong>BANKING&nbsp;<img src="images/arrow-banking.png" alt="»" /></span></a>
+               
+               
+                <a href="http://www.interfisapymes.com.py/" target="_blank" class="logopymes2"><img src="images/logo-pymes.png" alt="Interfisa" /> <!--<span>pymes</span>--></a>
+
+                <!-- 
+            	<div id="idioma">
+                    <a href="javascript:void(0);" class="select">Español</a>
+                </div> -->
+               
+                <!--<div class="pin"><a href="media/contrato_homebanking_interfisa.pdf" class="displayblock"><strong>Aún no tienes Homebanking?</strong></a><a href="mailto:interfisa@interfisa.com.py" class="displayblock">Solicitá tu PIN »</a></div>-->
+               
+                <!--<a href="western-union" class="right wunion"><img src="images/wu.png" alt="Western Union" /></a>-->
+            	<div class="clear"></div>
+            </div>
+            <div class="menu-button">Menu</div>
+        </header>
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>    <!-- TERMINA HEADER -->
+    
+    <!-- CONTENIDO -->
+    <div id="bg">
+    	<div id="content" class="clear">
+        	
+            <!-- MENU -->
+        	﻿			<a href="western-union" class="right wunion"><img src="images/wu.png" alt="Western Union" /></a>
+            <p class="right callcenter"><span>CALL CENTER</span>&nbsp;<img src="images/ico-tel.png" alt="Telefono" />&nbsp;415 9000</p>
+            <div id="top" class="clear">
+            	
+            	<ul id="menu" class="flexnav" data-breakpoint="800">
+                    <li>
+                    	<a href="#"><img src="images/ico-microfinanzas.png" alt="Microfinanzas" />&nbsp;&nbsp;Microfinanzas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="prestamos-microfinanzas">Créditos</a>
+                                <!--<ul>
+                                	<li><a href="prestamos-microempresas">Préstamos Microempresas</a></li>
+                                    <li><a href="prestamos-pymes">Préstamos Pymes</a></li>
+                                    <li><a href="prestamos-descuentos-cheques">Descuentos de cheques</a></li>
+                                    <li><a href="prestamos-corporativos">Préstamos Corporativos</a></li>
+                                </ul>-->
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-vale">Ahorro Valé</a></li>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                    <li><a href="ahorro-pago-salarios.php">Pago de Salarios</a></li>
+                                </ul>
+                            </li>
+                             <li class="btnTarjetasDebito">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            <li class="btnTarjetas">
+                            	<a href="tarjetas-microfinanzas">Tarjetas de Crédito</a> 
+                                <!--<ul>
+                                	<li><a href="mastercard-agro">MasterCard Agro</a></li>
+                                    <li><a href="tarjetas/mastercard">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa">Visa Internacional</a></li>
+                                    <li><a href="tarjetas/credicard">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+					</li>
+                    
+                    <li>
+                    	<a href="#"><img src="images/ico-personas.png" alt="personas" />&nbsp;&nbsp;Personas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="#">Créditos</a>
+                                <ul>
+                                	<li><a href="prestamos-para-la-vivienda">Préstamos para vivienda</a></li>
+                                    <!--<li><a href="prestamos-de-consumo">Préstamos de consumo</a></li>-->
+                                    <li><a href="prestamos">Préstamos</a></li>
+                                    <!--<li><a href="prestamos-para-asociaciones">Préstamos para asocioaciones</a></li>-->
+                                    <!--<li><a href="prestamos-al-consumidor-final.php">Préstamos al consumidor final</a></li>-->
+                                </ul>
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-vale">Ahorro Valé</a></li>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                   <li><a href="cuenta-corriente-personas">Cuenta Corriente</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTarjetasDebito"  style="background-image:none !important;">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            
+                            <li class="btnTarjetas"  style="background-image:none !important;">
+                            	<a href="tarjetas">Tarjetas de Crédito</a>
+                                <!--<ul>
+                                	<li><a href="mastercard-black">MasterCard Black</a></li>
+                                    <li><a href="tarjetas/mastercard">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa">Visa Internacional</a></li>
+                                    <li><a href="tarjetas/credicard">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                             <!--<li class="btnCtacorriente">
+                            	<a href="cuenta-corriente-personas">Cuenta Corriente</a>
+                                </li>-->
+                            <li class="btnEnvios">
+                            	<a href="envios-de-dinero">Envíos de dinero</a>
+                            </li>
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                    	<a href="#"><img src="images/ico-empresa.png" alt="Empresas" />&nbsp;&nbsp;Empresas</a>
+                        <ul>
+                        	<li><img src="images/menu-arrow.png" alt="desplegar" /></li>
+                        	<li class="btnCreditos">
+                            	<a href="#">Créditos</a>
+                                <ul>
+                                	<li><a href="prestamos-corporativos">Préstamos Corporativos</a></li>
+                                    <li><a href="prestamos-pymes">Préstamos Pymes</a></li>
+                                    <li><a href="prestamos-descuentos-cheques">Descuentos de cheques</a></li>
+                                    <!--<li><a href="prestamos-corporativos.php">Préstamos Corporativos</a></li>-->
+                                </ul>
+                            </li>
+                            <li class="btnAhorros">
+                            	<a href="#">Ahorros y Cuentas</a>
+                                <ul>
+                                	<li><a href="ahorro-a-la-vista">Caja de Ahorro a la Vista</a></li>
+                                    <li><a href="ahorro-certificado-de-deposito">CDA (Certificados de Depósito de Ahorro)</a></li>
+                                    <li><a href="ahorro-pago-salarios">Pago de Salarios</a></li>
+                                   <li><a href="cuenta-corriente-empresas">Cuenta Corriente</a></li>
+                                </ul>
+                            </li>
+                             <li class="btnTarjetasDebito">
+                            	<a href="tarjetas-debito">Tarjetas de Débito</a>
+                            </li>
+                            <li class="btnTarjetas">
+                            	<a href="tarjetas-de-credito-empresariales">Tarjetas de Crédito</a>
+                               <!-- <ul>
+                                	<li><a href="tarjetas-mastercard-black.php">MasterCard Black</a></li>
+                                    <li><a href="tarjetas-mastercard.php">MasterCard</a></li>
+                                    <li><a href="tarjetas/visa-empresas">Visa Internacional</a></li>
+                                    <li><a href="tarjetas-credicard.php">Credicard</a></li>
+                                </ul>-->
+                            </li>
+                            <!-- <li class="btnCtacorriente">
+                            	<a href="cuenta-corriente-empresas">Cuenta Corriente</a>
+                                </li>-->
+                            <li class="btnServicios">
+                            	<a href="#">Servicios</a>
+                                <ul>
+                                	<li><a href="servicios-cajeros">Cajeros</a></li>
+                                    <li><a href="servicios-pago-impuestos">Pago de Impuestos</a></li>
+                                    <li><a href="servicios-cobro-de-servicios">Cobro de Servicios</a></li>
+                                    <li><a href="servicios-cajas-seguridad">Cajas de Seguridad</a></li>
+                                </ul>
+                            </li>
+                            <li class="btnTransferencias">
+                            	<a href="cambios-transferencias">Cambios y transferencias</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>            <!-- TERMINA MENU -->
+            <div class="clear"></div>
+            
+            <article id="info" class="left">
+                <h1>Sucursales Interfisa</h1>
+                <p class="resaltar">Interfisa cuenta con sucursales en varios departamentos del país para poder estar lo más cerca posible de nuestros clientes.</p>
+                <h2>En Asunción y gran Asunción</h2>
+                <ul class="acordeon mb20">
+					<li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CASA MATRIZ</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 25 de Mayo esq. Paraguarí. N° 417
+                            <br /><strong>Tel.:</strong> (021) 415 9500 (RA)</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.285444, -57.630389">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;PLAZA URUGUAYA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 25 de Mayo e/ Paraguarí y Antequera.
+							<br /><strong>Tel.:</strong> (021) 415 9500 (RA)</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.285667, -57.630028">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;VILLA MORRA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Mcal. López Nº 3750
+                            <br /><strong>Tel.:</strong> (021) 600 352 
+                            <br /><strong>Cel.:</strong> (0971) 160 044 / (0983) 206 308</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.294472, -57.578917">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;PINOZA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Eusebio Ayala Nº 1570
+                            <br /><strong>Tel.:</strong> (021) 558 250 
+                            <br /><strong>Cel.:</strong> (0981) 900 268</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.304889, -57.608222">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    <!-- <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SAJONIA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Carlos Antonio Lopez y Testanova
+                            <br /><strong>Tel.:</strong> (021) 483 003/5 
+                            <br /><strong>Cel.:</strong> (0981) 764 682 / (0972) 340 447</p>
+                          
+                        </div>
+                    </li>-->
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;GENERAL DÍAZ</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Gral. Díaz esq. 15 de Agosto
+                            <br /><strong>Tel.:</strong> (021) 491 784/5 - 447 701 
+                            <br /><strong>Cel.:</strong> (0982) 402 809</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.2825, -57.63875">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;FERNANDO DE LA MORA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta Mcal Estigarribia Km 7 esquina 1° de marzo
+                            <br /><strong>Tel.:</strong> (021) 506 664 
+                            <br /><strong>Cel.:</strong> (0981) 804 131</p>
+                           <!-- <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.321889, -57.557278">Ver en mapa</a>-->
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;LAMBARÉ</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Cacique Lambaré 1019 c/ 1º de Marzo
+                            <br /><strong>Tel.:</strong> (021) 904 402 
+                            <br /><strong>Cel.:</strong> (0981) 900 356</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.342492, -57.623910">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SAN LORENZO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Rodríguez de Francia y 10 de agosto.
+                            <br /><strong>Tel.:</strong> (021) 575 905 
+                            <br /><strong>Cel.:</strong> (0981) 900 309</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.345556, -57.505898">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;LUQUE</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Cerro Corá esq. Carlos Antonio López
+                            <br /><strong>Tel.:</strong> (021) 647 501 
+                            <br /><strong>Cel.:</strong> (0981) 900 213</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.26775, -57.491056">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;LOMA PYTA </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta Transchaco y Máxima Lugo
+                            <br /><strong>Tel.:</strong> (021) 752 061
+                            <br /><strong>Cel.:</strong> (0981) 900 271</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.2382525, -57.5430574">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                   
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;ACCESO SUR</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Acceso Sur 2581 esq. Francisco Paredes
+                            <br /><strong>Tel.:</strong> (021) 943 628 
+                            <br /><strong>Cel.:</strong> (0981) 110 853</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.349125, -57.574457">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;MCAL. LÓPEZ</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Mcal. López esq. Irala Camperchiolli
+                            <br /><strong>Tel.:</strong> (021) 678 131/3 
+                            <br /><strong>Cel.:</strong> (0984) 939 875</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.308583, -57.532667">Ver en mapa</a>
+                        </div>
+                    </li>
+                     
+                    
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;5TA AVENIDA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 5ta Avenida esq. Parapiti
+                            <br /><strong>Tel.:</strong> (021) 393 600</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.298444, -57.6355">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    
+                 
+                    
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;LIMPIO CENTRO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 3 Gral. E. Aquino km 22 esq. Monseñor Moreno
+                            <br /><strong>Tel.:</strong> (021) 782 024/6 
+                            <br /><strong>Cel.:</strong> (0986) 124 167</p>
+                            <!--<a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.23725, -57.541167">Ver en mapa</a>-->
+                        </div>
+                    </li>
+                    
+                   
+                    
+                  
+                  
+                </ul>
+                
+                <h2>Interior del País</h2>
+                <ul class="acordeon mb20">
+					<li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;ENCARNACION</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. B. Caballero esq. Mcal. Estigarribia
+                            <br /><strong>Tel.:</strong> (071) 202 550 / 204 993 / 202 416 
+                            <br /><strong>Cel.:</strong> (0981) 110 835
+                             <br /><strong>Cel.:</strong> (0972) 730 172</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-27.32625, -55.867139">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CORONEL BOGADO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 1 Mcal. López esq. Mcal. Estigarribia
+                            <br /><strong>Tel.:</strong> (0741) 252 445 
+                            <br /><strong>Cel.:</strong> (0981) 900 343</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-27.155861, -56.239417">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CARAPEGUÁ</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 1 Mcal. López esq. Consejal Gerónimo Vera
+                            <br /><strong>Tel.:</strong>  (0532) 212 580 / 212 875/6  
+                            <br /><strong>Cel.:</strong> (0981) 110 847</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.767806, -57.239972">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SAN IGNACIO </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 1 Mcal. López esq. Mcal. Estigarribia
+                            <br /><strong>Tel.:</strong> (0782) 232 892 / 232 896  
+                            <br /><strong>Cel.:</strong> (0981) 110 846 </p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-26.885411, -57.028394">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CAACUPE</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Mcal. Estigarribia esq. Tte. Fariña
+                            <br /><strong>Tel.:</strong> (0511) 243 405/6 
+                            <br /><strong>Cel.:</strong> (0981) 900 323</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.385944, -57.143417">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CORONEL OVIEDO </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 2 Mcal. Estigarribia esq. Panchito López
+                            <br /><strong>Tel.:</strong> (0521) 203 635
+                            <br /><strong>Cel.:</strong> (0981) 110 862</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.449611, -56.442444">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CAAGUAZU CENTRO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Manuel A Godoy c/ Walter Insfran
+                            <br /><strong>Tel.:</strong> (0522) 43 428/9 
+                            <br /><strong>Cel.:</strong>  (0981) 950 126</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.463667, -56.0175">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <!--
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CAAGUAZU MERCADO CENTRAL</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Mercado Central de Abasto. Calle Cerro Cora esq. 15 de Agosto y Enrique Vera
+                            <br /><strong>Tel.:</strong>  (0522) 40 509 / 43 362 / 41 924 
+                            <br /><strong>Cel.:</strong> (0976) 997 824 </p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.477056, -56.015417">Ver en mapa</a>
+                        </div>
+                    </li>
+                    -->
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;ITAUGUA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 2 Mcal. Estigarribia Km 30
+                            <br /><strong>Tel.:</strong> (0294) 222 140 / 222 219  
+                            <br /><strong>Cel.:</strong> (0981) 492 023</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.392222, -57.354861">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;MARIA AUXILIADORA </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Maria Auxiliadora, sobre ruta sexta Km 117 - Barrio Virgen de Fatima
+                            <br /><strong>Tel.:</strong> (0764) 20 438 
+                            <br /><strong>Cel.:</strong> (0981) 975 600</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-26.527111, -55.262">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SUCURSAL CAMPO 9</h3>
+                        <div class="desplegable clear">
+                        	<p>Dr. J. E. Estigarribia (Campo 9)</p>
+                        	<p><strong>Dirección:</strong> José A. Flores 475 c/ Carlos Antonio López <br>
+                            Ruta 7 km 213
+                            <br /><strong>Tel.:</strong> (0528) 222 861
+                            <br /><strong>Cel.:</strong>  (0981) 975 500</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.378444, -55.705806">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SAN ESTANISLAO </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Cnel. Zoilo González esq. Mcal. López
+                            <br /><strong>Tel.:</strong> (0343) 421 575 / 421 585 
+                            <br /><strong>Cel.:</strong> (0981) 492 075 y (0972) 794 404</p>
+                          <!--  <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.308561,-57.576543">Ver en mapa</a>-->
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;VILLARRICA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Humaitá esq. Mcal Estigarribia
+                            <br /><strong>Tel.:</strong> (0541) 44 528/30  
+                            <br /><strong>Cel.:</strong> (0984) 173 063</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.781111, -56.449111">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CIUDAD DEL ESTE</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Julio Cesar Riquelme c/ RI 3 Corrales Km 7 - Barrio Ciudad Nueva
+                            <br /><strong>Tel.:</strong> (061) 574 151 / 574 156 
+                            <br /><strong>Cel.:</strong> (0984) 422 238</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.500167, -54.667028">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CIUDAD DEL ESTE CENTRO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avda. Adrián Jara esq. Pampliega
+                            <br /><strong>Tel.:</strong> (061) 510 119 / 510 977
+                          <!--  <br /><strong>Cel.:</strong> 0984 422 238--></p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.5106945, -54.6143611">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;NUEVA ESPERANZA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Inga 712 c/ Lapacho (Super Carretera Itaipu km 135)
+                            <br /><strong>Tel.:</strong> (0464) 20 346/8 
+                            <br /><strong>Cel.:</strong> (0982) 904 145</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-24.507583, -54.853639">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SANTA ROSA DEL AGUARAY</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Cruce Santa Rosa Ruta 3 Gral Elizardo Aquino y Ruta 11 Juana de Lara
+                            <br /><strong>Tel.:</strong> (0433) 240 075/8</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-23.825639, -56.519167">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SALTO DEL GUAIRA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Paraguay esq. Cerro Corá
+                            <br /><strong>Tel.:</strong> (046) 243 126 
+                            <br /><strong>Cel.:</strong> (0985) 129 431</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-24.070862, -54.308198">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;NATALIO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Los Lapachos esq. Cerro Corá
+                            <br /><strong>Tel.:</strong> (0765) 206 047 
+                            <br /><strong>Cel.:</strong> (0982) 110 928</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-26.7585, -55.138694">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;OBLIGADO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Av. Gaspar R. de Francia e/ Curupayty y Pirizal
+                            <br /><strong>Tel.:</strong> (0717) 20 553/5 
+                            <br /><strong>Cel.:</strong> (0982) 110 884</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-27.058333, -55.63075">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;PILAR</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 14 de Mayo esq. Antequera
+                            <br /><strong>Tel.:</strong> (0786) 234 020/22 
+                            <br /><strong>Cel.:</strong> (0983) 189 822 / (0971) 337 200</p>
+                            <br>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-26.858028, -58.299722">Ver en mapa</a>
+                        </div>
+                    </li>
+                    
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;PARAGUARI</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 14 de Mayo esq. Gral. Aquino
+                            <br /><strong>Tel.:</strong> (0531) 433 619/21 
+                            <br /><strong>Cel.:</strong>  (0984) 939 876</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.622167, -57.15175">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;VILLA HAYES</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta Transchaco km 32.5 esq. España
+                            <br /><strong>Tel.:</strong> (0226) 263 790/92 
+                            <br /><strong>Cel.:</strong> (0985) 569 135</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.088972, -57.530778">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SAN JUAN NEPOMUCENO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Paí Fariña esq. Humaitá
+                            <br /><strong>Tel.:</strong> (0544) 320 807 
+                            <br /><strong>Cel.:</strong> (0981) 300 093</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-26.114306, -55.938361">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;QUIINDY</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Ruta 1 Mcal. Francisco Solano López esq. San Lorenzo
+                            <br /><strong>Tel.:</strong> (0536) 282 762/4 
+                            <br /><strong>Cel.:</strong> (0985) 708 210</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.975889, -57.234056">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CURUGUATY</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> 14 de Mayo esq. Silvio Petirossi
+                            <br /><strong>Tel.:</strong> (048) 210 752 
+                            <br /><strong>Cel.:</strong> (0985) 336 243 / (0971) 543 380</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-24.476778, -55.689361">Ver en mapa</a>
+                        </div>
+                    </li>
+                     <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;PEDRO JUAN CABALLERO</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Carlos Antonio Lopez y 14 de Mayo
+                            <br /><strong>Tel.:</strong> ((0336) 273 527 / 272 927 
+                            <br /><strong>Cel.:</strong> (0972) 730 154 / (0986) 399 951</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-22.541972, -55.731806">Ver en mapa</a>
+                        </div>
+                    </li>
+                    <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;CONCEPCIÓN</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Presidente Franco y Fulgencio Yegros
+                            <br /><strong>Tel.:</strong> (0331) 241 881 / 242 929 / 242 555 
+                            <br /><strong>Cel.:</strong> (0972) 730 171 / (0986) 420 020</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-23.407722, -57.442583">Ver en mapa</a>
+                        </div>
+                    </li>
+                   
+                   <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SANTA RITA</h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Avenida Gaspar Rodríguez de Francia c/ Eusebio Ayala
+                            <br /><strong>Tel.:</strong> (0673) 221 912/3 
+                            <br /><strong>Cel.:</strong> (0986) 600 631 / (0972) 340 640 </p>
+                            <!--<a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-23.407722, -57.442583">Ver en mapa</a>-->
+                        </div>
+                    </li>
+                        <li>
+                        <h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;VAQUERÍA </h3>
+                        <div class="desplegable clear">
+                            <p><strong>Dirección:</strong> Avda. San Blas esq. Fulgencio Yegros.
+                            <br /><strong>Tel.:</strong> (021) 338 3826</p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-25.002358, -55.823379">Ver en mapa</a>
+                        </div>
+                    </li>
+
+                  <!--  <li>
+                    	<h3><img src="images/ico-place.png" alt="" />&nbsp;&nbsp;SANTANÍ </h3>
+                        <div class="desplegable clear">
+                        	<p><strong>Dirección:</strong> Cnel. Zoilo González esq. Mcal. López
+                            <br /><strong>Tel.:</strong> 595 3434 21 575 / 21 585
+                            <br /><strong>Cel.:</strong> 0981 492 075 / 0972 794 404 </p>
+                            <a href="ajax/mapa-sucursal.php" class="leermas left mapa" rel="-24.662667, -56.443444">Ver en mapa</a>
+                        </div>
+                    </li>
+                   -->
+                    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                    
+                    
+            	</ul>
+                
+                
+            </article>
+            
+            <!-- SIDEBAR -->
+            <aside id="sidebar" class="right">
+            					<ul id="subnav" class="mb12">
+                    <li><a href="#suscribirseBox" class="btnPopup">Suscribirse a novedades</a></li>
+                    <li><a href="sucursales.php">Sucursales</a></li>
+                    <li><a href="#atencionBox" class="btnPopup">Horarios de Atención</a></li>
+                    <li><a href="tasas">Tasas y comisiones</a></li>
+                     <li><a href="solicitudes-y-contratos">Solicitudes y Contratos</a></li>
+                </ul>            </aside>
+            <!-- TERMINA SIDEBAR -->
+
+        </div>
+    </div>
+    <!-- TERMINA CONTENIDO -->
+    
+    <!-- FOOTER -->
+    	<div id="footerWrapper">
+    	<footer class="clear">
+        	<div class="dosCols left">
+            	<div class="footerItem left productosfooter">
+                	<h3>Productos</h3>
+                	<ul>
+                    	<li><a href="creditos">Créditos</a></li>
+                        <li><a href="ahorros">Ahorros</a></li>
+                        <li><a href="tarjetas">Tarjeta de crédito</a></li>
+                        <li><a href="envios-de-dinero">Envíos de dinero</a></li>
+                        <li><a href="servicios">Servicios</a></li>
+					</ul>
+                </div>
+                <div class="footerItem left infofooter">
+                	<h3>INFORMACIÓN CORPORATIVA</h3>
+                	<ul>
+                    	<li><a href="quienes-somos">Quiénes Somos</a></li>
+                        <li><a href="directorio-asamblea">Directorio y Asamblea</a></li>
+                        <li><a href="estatutos">Estatutos </a></li>
+                        <li><a href="memoria-balance">Memoria y Balances </a></li>
+                        <!--<li><a href="media/informe-anual-de-gobierno-corporativo-2013.pdf" download="media/informe-anual-de-gobierno-corporativo-2013.pdf">Informe Gobierno Corporativo</a></li>-->
+                        <li><a href="inf-gobierno-corporativo">Informe Gobierno Corporativo</a></li>
+                        <li><a href="informacion_accionistas">Información para accionistas</a></li>
+					</ul>
+                </div>
+                <div class="footerItem left otrasfooter">
+                	<h3>OTRAS SECCIONES</h3>
+                	<ul>
+                    	<li><a href="responsabilidad-social">Responsabilidad Social</a></li>
+                        <li><a href="interfisaclub">Interfisa Club</a></li>
+                        <!--<li><a href="promociones">Promociones</a></li>-->
+                        <li><a href="leyes-resoluciones-y-circulares">Leyes, Resoluciones y Circulares</a></li>
+                        <li><a href="cambios-transferencias">Cambios y transferencias</a></li>
+                        <li><a href="media/SIPAP.pdf" target="_blank">SIPAP</a></li>
+                        <li><a href="media/preguntas_frecuentes_FATCA.pdf" target="_blank">Fatca Preguntas Frecuentes</a></li>
+					</ul>
+                </div>
+            </div>
+            
+            <div class="dosCols right">
+            	<div class="footerItem right datosContacto">
+                	<h3>INTERFISA SAECA</h3>
+                    <p>Para más información le invitamos a comunicarse a nuestro call center</p>
+                    <p><strong><img src="images/callcenter-white.png" alt="Call Center" />&nbsp;&nbsp;415 9000</strong></p>
+                    <a href="contactenos.php">» Contáctenos</a>
+                </div>
+            	<div id="trabaje-seguinos" class="right">
+					<a href="http://postulate.interfisa.com.py:55" class="trabaje clear btnPopup">
+                        <figure class="ico"><img src="images/ico-trabaje.png" alt="Trabaje con nosotros" /></figure>
+                        <span class="txt">TRABAJA CON <br />NOSOTROS&nbsp;<img src="images/arrow-banking.png" alt="»" /></span>
+                    </a>
+                    <div class="seguinos">
+                    	<p>Seguinos en</p>
+                        <a href="https://www.facebook.com/InterfisaBanco?ref=hl" target="_blank" title="Facebook"><img src="images/fb.png" alt="Facebook" /></a>
+                        <a href="http://twitter.com/interfisapy" target="_blank" title="Twitter"><img src="images/tw.png" alt="Twitter" /></a>
+                        <a href="https://www.youtube.com/interfisapy" target="_blank" title="YouTube"><img src="images/yt.png" alt="YouTube" /></a>
+                        <a href="http://instagram.com/interfisa" target="_blank" title="Instagram"><img src="images/ins.png" alt="Instagram" /></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <div id="bottomWrapper">
+        	<div id="bottom" class="clear">
+            	<p class="left">INTERFISA © 2017 - Todos los derechos reservados</p>
+                <p class="firmappy right"><a href="http://www.actimedia.com.py" target="_blank"><img src="http://www.actimedia.com.py/footer-email-actimedia/firma-ppy.png" alt="Actimedia" /></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-55195434-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+    <!-- fin analytics -->    <!-- TERMINA FOOTER -->
+
+</body>
+</html>

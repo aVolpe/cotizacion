@@ -13,7 +13,10 @@ import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -55,8 +58,10 @@ public class GathererManager {
      */
     @CacheEvict(cacheNames = {"byIso", "isoList"}, allEntries = true)
     public Set<String> doQuery(String code) {
-        Map<String, List<QueryResponse>> data = doAction("GATHER", code, this::doQuery);
 
+        Execution e = executionRepository.save(new Execution());
+
+        Map<String, List<QueryResponse>> data = doAction("GATHER", code, (gatherer -> this.doQuery(gatherer, e)));
 
         return data.keySet();
     }
@@ -107,18 +112,16 @@ public class GathererManager {
      *
      * @param gatherer the gatherer.
      */
-    private List<QueryResponse> doQuery(Gatherer gatherer) {
+    private List<QueryResponse> doQuery(Gatherer gatherer, Execution e) {
+
+
         Place p = getPlace(gatherer);
-        List<QueryResponse> response = gatherer.doQuery(p, p.getBranches())
+
+        return gatherer.doQuery(p, p.getBranches())
                 .stream()
+                .peek(qr -> qr.setExecution(e))
                 .map(queryResponseRepository::save)
                 .collect(Collectors.toList());
-
-        Execution e = new Execution();
-        e.setDate(new Date());
-        e.setResponses(response);
-        executionRepository.save(e);
-        return response;
     }
 
     /**

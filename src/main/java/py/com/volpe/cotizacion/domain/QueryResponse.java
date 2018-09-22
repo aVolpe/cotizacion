@@ -40,17 +40,15 @@ public class QueryResponse {
     @ManyToOne
     private Execution execution;
 
-    public QueryResponse(PlaceBranch pb) {
-        this.place = pb.getPlace();
+    public QueryResponse(Place place) {
+        this.place = place;
         this.date = new Date();
-        this.branch = pb;
         this.details = new ArrayList<>();
     }
 
-    public void setDetails(List<QueryResponseDetail> details) {
-        if (details == null) this.details = new ArrayList<>();
-        else this.details = details;
-        this.details.forEach(d -> d.setQueryResponse(this));
+    public QueryResponse(PlaceBranch pb) {
+        this(pb.getPlace());
+        this.branch = pb;
     }
 
     public void addDetail(QueryResponseDetail detail) {

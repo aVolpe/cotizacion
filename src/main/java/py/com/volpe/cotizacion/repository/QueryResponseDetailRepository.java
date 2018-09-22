@@ -28,13 +28,14 @@ public interface QueryResponseDetailRepository extends JpaRepository<QueryRespon
             "   qrd.salePrice," +
             "   qrd.purchasePrice" +
             " ) " +
-            "FROM QueryResponseDetail qrd " +
-            "JOIN qrd.queryResponse qr " +
-            "JOIN qr.branch br " +
-            "JOIN br.place p " +
+            "FROM QueryResponse qr " +
+            "JOIN qr.details qrd " +
+            "LEFT JOIN qr.branch br " +
+            "JOIN qr.place p " +
+            "JOIN qr.execution e " +
             "WHERE " +
-            "     qrd.isoCode = ?1 " +
-            " AND qr.id IN (SELECT MAX(qr2.id) FROM QueryResponse qr2 WHERE qr2.branch = br) " +
+            "      qrd.isoCode = ?1 " +
+            "  AND e.id IN (SELECT MAX(e2.id) FROM Execution e2) " +
             "ORDER BY " +
             "   qr.date DESC")
     List<ByIsoCodeResult> getMaxByPlaceInISO(String isoCode);

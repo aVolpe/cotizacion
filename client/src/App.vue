@@ -2,7 +2,7 @@
     <v-app id="inspire">
         <v-navigation-drawer right floating v-model="drawer" app>
             <v-list dense>
-                <v-list-tile :to="route.to" v-for="route in routes">
+                <v-list-tile :to="route.to" v-for="route in routes" :key="route.to">
                     <v-list-tile-action>
                         <v-icon>{{ route.icon }}</v-icon>
                     </v-list-tile-action>

@@ -52,7 +52,8 @@
                             <td class="text-xs-left name-column">
                                 <b>{{ props.item.place.name }}</b>
                                 <br/>
-                                {{ props.item.branch.name }}
+                                <span v-if="props.item.place.type === 'BANK'">Ver sucursales</span>
+                                <span v-if="props.item.place.type !== 'BANK'">{{ props.item.branch.name }}</span>
                             </td>
                             <td class="text-xs-right">{{ props.item.purchasePrice | multiply(currentAmount) | fn}}</td>
                             <td class="text-xs-right">{{ props.item.salePrice | multiply(currentAmount) |fn}}</td>
@@ -60,7 +61,8 @@
                                 <a v-on:click="showDialog(props.item)">
                                     <v-icon dark color="primary" slot="activator">info</v-icon>
                                 </a>
-                                <a :href="props.item.branch.gmaps" v-if="props.item.branch.gmaps" target="_blank">
+                                <a :href="props.item.branch.gmaps"
+                                   v-if="props.item.place.type === 'BUREAU' && props.item.branch.gmaps" target="_blank">
                                     <v-icon>map</v-icon>
                                 </a>
                             </td>
@@ -81,20 +83,20 @@
             </v-card-text>
         </v-card>
         <v-dialog v-model="branchDialog" max-width="500px">
-            <Branch v-on:ok="branchDialog = false" :branch="currentBranch"></Branch>
+            <ExchangeData v-on:ok="branchDialog = false" :data="currentBranch"></ExchangeData>
         </v-dialog>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI} from "../api/ExchangeAPI";
-    import Branch from "@/components/Branch.vue";
+    import {ExchangeAPI, QueryResponseDetail} from "../api/ExchangeAPI";
+    import ExchangeData from "@/components/ExchangeData.vue";
     import {Meta} from "../decorators";
 
     @Component({
         components: {
-            Branch
+            ExchangeData
         }
     })
     @Meta({
@@ -107,12 +109,12 @@
         currentCurrency: string;
         currentAmount: number;
         data: {
-            firstQueryResult: number,
-            lastQueryResult: number,
-            count: number,
-            data: Array<any>
+            firstQueryResult: string;
+            lastQueryResult: string;
+            count: number;
+            data: any[];
         };
-        headers: Array<any>;
+        headers: any[];
         loading = false;
         pagination: any;
         isSmall: boolean;
@@ -144,8 +146,8 @@
             return {
                 data: [],
                 count: 0,
-                firstQueryResult: 0,
-                lastQueryResult: 0
+                firstQueryResult: '',
+                lastQueryResult: ''
             };
         }
 
@@ -154,34 +156,72 @@
             this.load();
         }
 
-        private showDialog(query: any) {
+        setDialogData(query: QueryResponseDetail) {
+
             this.branchDialog = true;
-            this.currentBranch = query.branch;
+            this.currentBranch = {
+                place: query.place,
+                branch: query.branch,
+                exchange: {
+                    purchasePrice: query.purchasePrice,
+                    salePrice: query.salePrice,
+                    currency: this.currentCurrency,
+                    date: query.queryDate
+                }
+            };
+            console.log(query.place.type, this.currentBranch);
+        }
+
+        private showDialog(query: QueryResponseDetail) {
+
+            if (query.place.type === 'BANK') {
+
+                ExchangeAPI.getBranches(query.place.code).then(data => {
+                    data.forEach(d => {
+                        if (d.latitude)
+                            d.gmaps = `https://www.google.com/maps/search/?api=1&query=${d.latitude},${d.longitude}`;
+                        else
+                            d.gmaps = null;
+                    });
+                    query.place.branches = data;
+                    this.setDialogData(query);
+                });
+
+            } else {
+                this.setDialogData(query);
+            }
         }
 
         private load() {
             this.loading = true;
             this.data = LatestExchange.buildEmptyData();
-            ExchangeAPI.getTodayExchange(this.currentCurrency).then(result => {
+            ExchangeAPI.getTodayExchange(this.currentCurrency).then((result) => {
 
-                this.data = result;
-                if (this.data === null) return;
+                if (result === null) return;
 
-                for (let row of this.data.data) {
-                    if (row.branch.latitude)
-                        row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
-                    else
-                        row.branch.gmaps = null;
+                const toRet: Array<any> = [];
 
-                    row.branch.place = row.place;
-                    row.branch.exchange = {
-                        purchasePrice: row.purchasePrice,
-                        salePrice: row.salePrice,
-                        currency: this.currentCurrency,
-                        date: row.queryDate
-                    };
+                for (let row of result.data) {
+                    if (row.branch) {
+                        if (row.branch.latitude)
+                            row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
+                        else
+                            row.branch.gmaps = null;
+
+                        row.branch.place = row.place;
+                    }
+
+                    toRet.push(row)
+
                 }
                 this.loading = false;
+                this.data = {
+                    ...result,
+                    lastQueryResult: result.lastQueryResult,
+                    firstQueryResult: result.firstQueryResult,
+                    count: result.count,
+                    data: toRet
+                };
             });
         }
 

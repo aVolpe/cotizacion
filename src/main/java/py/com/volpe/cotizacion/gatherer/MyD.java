@@ -14,7 +14,6 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -119,8 +118,8 @@ public class MyD implements Gatherer {
 
             return data;
 
-        } catch (IOException e) {
-            throw new AppException(500, "Can't connect to to MyD page");
+        } catch (Exception e) {
+            throw new AppException(500, "Can't connect to to MyD page (branch: " + sucId + ")");
         }
 
 

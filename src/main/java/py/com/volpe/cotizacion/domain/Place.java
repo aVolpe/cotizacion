@@ -18,12 +18,20 @@ import java.util.List;
 @AllArgsConstructor
 public class Place {
 
+    public enum Type {
+        BUREAU,
+        BANK
+    }
+
     @Id
     @GeneratedValue
     private long id;
 
     private String code;
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private Type type = Type.BUREAU;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)

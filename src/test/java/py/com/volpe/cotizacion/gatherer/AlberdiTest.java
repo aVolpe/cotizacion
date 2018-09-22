@@ -76,7 +76,6 @@ public class AlberdiTest {
         }
     }
 
-
     @Test
     public void doQuery() {
         Place place = alberdi.build();
@@ -96,10 +95,10 @@ public class AlberdiTest {
                 QueryResponseDetail qrdAsuncion = qr.getDetails()
                         .stream()
                         .filter(d -> d.getIsoCode().equals("USD"))
-                        .findFirst().get();
+                        .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-                assertEquals(qrdAsuncion.getPurchasePrice(), 5510);
-                assertEquals(qrdAsuncion.getSalePrice(), 5535);
+                assertEquals(5510, qrdAsuncion.getPurchasePrice());
+                assertEquals(5535, qrdAsuncion.getSalePrice());
             }
 
             assertThat(

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mvn \
     -Ppostgres,devel \
     org.codehaus.mojo:license-maven-plugin:1.16:add-third-party \
