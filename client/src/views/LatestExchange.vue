@@ -171,7 +171,7 @@
             };
         }
 
-        private showDialog(query: QueryResponseDetail) {
+        showDialog(query: QueryResponseDetail) {
 
             if (query.place.type === 'BANK') {
 
@@ -191,14 +191,14 @@
             }
         }
 
-        private load() {
+        load() {
             this.loading = true;
             this.data = LatestExchange.buildEmptyData();
             ExchangeAPI.getTodayExchange(this.currentCurrency).then((result) => {
 
                 if (result === null) return;
 
-                const toRet: Array<any> = [];
+                const toRet: any[] = [];
 
                 for (let row of result.data) {
                     if (row.branch) {
@@ -210,7 +210,7 @@
                         row.branch.place = row.place;
                     }
 
-                    toRet.push(row)
+                    toRet.push(row);
 
                 }
                 this.loading = false;
@@ -226,7 +226,7 @@
 
         mounted() {
             this.loading = true;
-            ExchangeAPI.getCurrencies().then((currencies: Array<string>) => {
+            ExchangeAPI.getCurrencies().then(currencies => {
                 this.currencies = currencies;
                 if (currencies.includes('USD')) this.currentCurrency = 'USD';
                 else this.currentCurrency = this.currencies[0];

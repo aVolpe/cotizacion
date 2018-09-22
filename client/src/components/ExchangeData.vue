@@ -156,42 +156,42 @@
             this.pagination = {sortBy: 'name', descending: false, rowsPerPage: 3};
         }
 
-        getSchedule(branch: Branch) {
+        public getSchedule(branch: Branch) {
             if (!branch || !branch.schedule) return '';
 
             return branch.schedule
                 .toLowerCase()
-                .replace(/\n/g, " ")
-                .replace(/lunes/, "L")
-                .replace(/martes/, "Ma")
-                .replace(/miercoles/, "Mi")
-                .replace(/jueves/, "J")
-                .replace(/viernes/, "V")
-                .replace(/sabado/, "S")
-                .replace(/sábado/, "S")
-                .replace(/domingo/, "D")
+                .replace(/\n/g, ' ')
+                .replace(/lunes/, 'L')
+                .replace(/martes/, 'Ma')
+                .replace(/miercoles/, 'Mi')
+                .replace(/jueves/, 'J')
+                .replace(/viernes/, 'V')
+                .replace(/sabado/, 'S')
+                .replace(/sábado/, 'S')
+                .replace(/domingo/, 'D')
 
 
-                .replace(/lunes_viernes/, "L a V")
-                .replace(/sbado/, "S")
-                .replace(/domingo/, "D")
-                .replace(/hs /, "")
+                .replace(/lunes_viernes/, 'L a V')
+                .replace(/sbado/, 'S')
+                .replace(/domingo/, 'D')
+                .replace(/hs /, '')
 
-                .replace(/0 a /, "0-")
-                .replace(/ - /g, "-")
-                .replace(/\./, "<br />")
-                .replace(/(\d) (S|D)/g, "$1<br />$2")
+                .replace(/0 a /, '0-')
+                .replace(/ - /g, '-')
+                .replace(/\./, '<br />')
+                .replace(/(\d) (S|D)/g, '$1<br />$2')
                 .trim()
         }
 
-        getPhone(branch: Branch) {
+        public getPhone(branch: Branch) {
             if (!branch || !branch.phoneNumber) return '';
 
             return branch.phoneNumber
-                .replace(/.*Cel.:/, "")
-                .replace(/\(RA\)/, "")
-                .replace(/\/.*/, "")
-                .replace(/y .*/, "")
+                .replace(/.*Cel.:/, '')
+                .replace(/\(RA\)/, '')
+                .replace(/\/.*/, '')
+                .replace(/y .*/, '')
                 .trim();
 
             ;

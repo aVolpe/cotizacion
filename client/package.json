@@ -1,47 +1,35 @@
 {
   "name": "cotizaciones",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "prebuild": "npm run gen-licenses",
-    "preserve": "npm run gen-licenses",
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "gen-licenses": "license-report --only=prod > ./src/licenses.json"
+    "gen-licenses": "license-report --only=prod > ./src/licenses.json",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "prerender-spa-plugin": "^3.2.1",
-    "puppeteer": "^1.4.0",
+    "register-service-worker": "^1.0.0",
     "vue": "^2.5.16",
     "vue-class-component": "^6.0.0",
     "vue-meta": "^1.5.0",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.17"
+    "vuetify": "^1.0.17",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.7",
-    "@vue/cli-plugin-typescript": "^3.0.0-beta.7",
-    "@vue/cli-service": "^3.0.0-beta.7",
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-pwa": "^3.0.3",
+    "@vue/cli-plugin-typescript": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "typescript": "^3.0.0",
+    "vue-template-compiler": "^2.5.17",
     "license-report": "^2.1.1",
-    "sitemap-webpack-plugin": "^0.5.1",
-    "vue-template-compiler": "^2.5.13"
-  },
-  "babel": {
-    "presets": [
-      "@vue/app"
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "puppeteer": "^1.4.0",
+    "sitemap-webpack-plugin": "^0.5.1"
+  }
 }

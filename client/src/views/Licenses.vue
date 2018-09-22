@@ -9,7 +9,7 @@
 
                     <v-tabs
                             slot="extension"
-                            dark color="indigo" slider-color="white" v-model="tabModel" >
+                            dark color="indigo" slider-color="white" v-model="tabModel">
                         <v-spacer></v-spacer>
                         <v-tab ripple> Back-end</v-tab>
                         <v-tab ripple>Front-end</v-tab>
@@ -18,7 +18,7 @@
                     </v-tabs>
                 </v-toolbar>
 
-                <v-tabs-items v-model="tabModel" >
+                <v-tabs-items v-model="tabModel">
                     <v-tab-item class="text-xs-left">
                         <v-card flat>
                             <v-container fluid grid-list-md>
@@ -174,8 +174,8 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {LicenseAPI} from '../api/LicenseAPI';
-    import * as data from '../licenses.json';
-    import {Meta} from "../decorators";
+    // import * as data from '../licenses.json';
+    import {Meta} from '../decorators';
 
 
     @Component
@@ -196,19 +196,19 @@
             this.tabModel = 0;
             this.baseUrl = process.env.BASE_URL;
             this.backend = [];
-            this.frontend = <any> data;
+            this.frontend = [];
             this.other = [{
                 name: 'lukaszadam Free Illustrations',
                 author: 'Lukasz Dzikowski',
                 url: 'https://lukaszadam.com/illustrations',
                 license: 'MIT License'
-            }]
+            }];
         }
 
         mounted() {
-            LicenseAPI.get().then(data => {
-                this.backend = data.dependencies;
-            })
+            LicenseAPI.get().then(response => {
+                this.backend = response.dependencies;
+            });
         }
 
     }

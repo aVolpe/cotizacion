@@ -1,11 +1,16 @@
+console.log('iniciando');
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import Vuetify from 'vuetify'
 import Meta from 'vue-meta';
 import moment from 'moment'
+import store from './store';
+import './registerServiceWorker';
 import theme from './theme';
-import 'babel-polyfill'
+// import 'babel-polyfill'
+
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify, {theme});
@@ -64,6 +69,7 @@ if (!document.getElementById(whereToMount)) {
 new Vue({
     render: h => h(App),
     router,
+    store,
     el: '#' + whereToMount
 });
 
