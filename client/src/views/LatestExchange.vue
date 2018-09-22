@@ -169,7 +169,6 @@
                     date: query.queryDate
                 }
             };
-            console.log(query.place.type, this.currentBranch);
         }
 
         private showDialog(query: QueryResponseDetail) {

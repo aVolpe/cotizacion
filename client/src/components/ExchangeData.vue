@@ -160,22 +160,28 @@
             if (!branch || !branch.schedule) return '';
 
             return branch.schedule
-                .replace(/Lunes/, "L")
-                .replace(/Martes/, "Ma")
-                .replace(/Miercoles/, "Mi")
-                .replace(/Jueves/, "J")
-                .replace(/Viernes/, "V")
-                .replace(/Sabado/, "S")
-                .replace(/Domingo/, "D")
+                .toLowerCase()
+                .replace(/\n/g, " ")
+                .replace(/lunes/, "L")
+                .replace(/martes/, "Ma")
+                .replace(/miercoles/, "Mi")
+                .replace(/jueves/, "J")
+                .replace(/viernes/, "V")
+                .replace(/sabado/, "S")
+                .replace(/sábado/, "S")
+                .replace(/domingo/, "D")
 
 
-                .replace(/LUNES_VIERNES/, "L a V")
-                .replace(/SBADO/, "S")
-                .replace(/DOMINGO/, "D")
+                .replace(/lunes_viernes/, "L a V")
+                .replace(/sbado/, "S")
+                .replace(/domingo/, "D")
                 .replace(/hs /, "")
 
                 .replace(/0 a /, "0-")
+                .replace(/ - /g, "-")
                 .replace(/\./, "<br />")
+                .replace(/(\d) (S|D)/g, "$1<br />$2")
+                .trim()
         }
 
         getPhone(branch: Branch) {
