@@ -28,6 +28,7 @@
     "curly": [
       true,
       "as-needed"
-    ]
+    ],
+    "no-console": false
   }
 }

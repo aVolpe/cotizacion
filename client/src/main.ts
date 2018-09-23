@@ -1,15 +1,12 @@
-console.log('iniciando');
-
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import Vuetify from 'vuetify'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import Vuetify from 'vuetify';
 import Meta from 'vue-meta';
-import moment from 'moment'
+import moment from 'moment';
 import store from './store';
 import './registerServiceWorker';
 import theme from './theme';
-// import 'babel-polyfill'
 
 
 Vue.config.productionTip = false;
@@ -18,32 +15,24 @@ Vue.use(Meta, {
     keyName: 'head'
 });
 
-Vue.filter('multiply', function (value: number, multiplier: number = 1) {
+Vue.filter('multiply', (value: number, multiplier: number = 1) => {
     if (!multiplier || multiplier < 1 || isNaN(multiplier)) return value;
     return value * multiplier;
 });
 
-Vue.filter('fn', function (value: number) {
-    if (typeof value !== "number") {
-        return value;
-    }
+Vue.filter('fn', (value: number | null) => {
+    if (typeof value !== 'number') return value;
     return value.toLocaleString('es-PY');
 });
 
-Vue.filter('fd', function (value: string, format: string) {
+Vue.filter('fd', (value: string, format: string) => {
 
-    (<any> window).m = moment;
     const finalFormat = format ? format : 'MM/DD/YYYY hh:mm';
-    if (value) {
-        return moment(String(value)).format(finalFormat)
-    }
+    if (value) return moment(String(value)).format(finalFormat);
 });
 
-Vue.filter('mfn', function (value: string) {
-
-    if (value) {
-        return moment(String(value)).locale('es').fromNow();
-    }
+Vue.filter('mfn', (value: string) => {
+    if (value) return moment(String(value)).locale('es').fromNow();
 });
 
 /**
@@ -60,16 +49,15 @@ Vue.filter('mfn', function (value: string) {
  * The second time we 'mount' vue it occur something called hydration,
  * which means that vue is inserted in the 'plain' html
  *
- **/
+ */
 let whereToMount = 'app';
-if (!document.getElementById(whereToMount)) {
-    whereToMount = 'inspire';
-}
+if (!document.getElementById(whereToMount)) whereToMount = 'inspire';
 
-new Vue({
-    render: h => h(App),
+const app = new Vue({
+    render: (h: any) => h(App),
     router,
     store,
     el: '#' + whereToMount
-});
+} as any);
 
+console.log('loaded', app);

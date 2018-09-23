@@ -7,7 +7,7 @@
                         Cambio de
                     </v-flex>
                     <v-flex text-xs-center xs12 md2>
-                        <v-text-field v-model="currentAmount"
+                        <v-text-field v-model="current.amount"
                                       label="Cantidad"
                                       align="rigth"
                                       style="text-align:right"
@@ -16,8 +16,8 @@
                     </v-flex>
                     <v-flex text-xs-center xs12 md2>
                         <v-select :items="currencies"
-                                  v-model="currentCurrency"
-                                  v-on:change="changeCurrency"
+                                  v-model="current.amount"
+                                  v-on:change="current.amount"
                                   align="center"
                                   label="Moneda"
                                   single-line></v-select>
@@ -28,14 +28,13 @@
             <v-card-text class="main-table-wrapper">
                 <v-data-table
                         :headers="headers"
-                        :loading="loading"
+                        :loading="currencies.loading"
                         v-bind:pagination.sync="pagination"
                         hide-actions
                         no-data-text=""
                         :must-sort="true"
                         item-key="id"
-                        :items="data && data.data"
-                        class="elevation-1 ">
+                        :items="data && data.data">
                     <template slot="no-data">
                         <v-alert :value="true" color="warning" icon="warning" v-if="!loading">
                             No hay datos de hoy
@@ -90,9 +89,10 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI, QueryResponseDetail} from "../api/ExchangeAPI";
-    import ExchangeData from "@/components/ExchangeData.vue";
-    import {Meta} from "../decorators";
+    import ExchangeData from '@/components/ExchangeData.vue';
+    import {Meta} from '@/decorators';
+    import {Action, State} from 'vuex-class';
+    import {Loaded} from '@/store';
 
     @Component({
         components: {
@@ -105,29 +105,18 @@
     })
     export default class LatestExchange extends Vue {
 
-        currencies: Array<string>;
-        currentCurrency: string;
-        currentAmount: number;
-        data: {
-            firstQueryResult: string;
-            lastQueryResult: string;
-            count: number;
-            data: any[];
-        };
+        @State currencies!: Loaded<string[]>;
+        @State current!: { currency: string, amount: number };
+
+        @Action showExchangeData!: () => void;
+        @Action fetchCurrencies!: () => void;
+
         headers: any[];
-        loading = false;
         pagination: any;
         isSmall: boolean;
 
-        branchDialog: boolean = false;
-        currentBranch: any = null;
-
         constructor() {
             super();
-
-            this.currencies = ['USD', 'EUR'];
-            this.currentCurrency = this.currencies[0];
-            this.data = LatestExchange.buildEmptyData();
 
             this.isSmall = window.innerWidth < 600;
             this.headers = [
@@ -135,104 +124,18 @@
                 {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
                 {text: 'Venta', value: 'salePrice', sortable: true, class: 'text-xs-right'}
             ];
-            if (!this.isSmall) {
+            if (!this.isSmall)
                 this.headers.push({text: ' ', value: '', sortable: false});
-            }
-            this.currentAmount = 1;
-            this.pagination = {'sortBy': 'purchasePrice', 'descending': true, 'rowsPerPage': -1};
-        }
 
-        static buildEmptyData() {
-            return {
-                data: [],
-                count: 0,
-                firstQueryResult: '',
-                lastQueryResult: ''
-            };
-        }
-
-        changeCurrency(newCur: string) {
-            this.currentCurrency = newCur;
-            this.load();
-        }
-
-        setDialogData(query: QueryResponseDetail) {
-
-            this.branchDialog = true;
-            this.currentBranch = {
-                place: query.place,
-                branch: query.branch,
-                exchange: {
-                    purchasePrice: query.purchasePrice,
-                    salePrice: query.salePrice,
-                    currency: this.currentCurrency,
-                    date: query.queryDate
-                }
-            };
-        }
-
-        showDialog(query: QueryResponseDetail) {
-
-            if (query.place.type === 'BANK') {
-
-                ExchangeAPI.getBranches(query.place.code).then(data => {
-                    data.forEach(d => {
-                        if (d.latitude)
-                            d.gmaps = `https://www.google.com/maps/search/?api=1&query=${d.latitude},${d.longitude}`;
-                        else
-                            d.gmaps = null;
-                    });
-                    query.place.branches = data;
-                    this.setDialogData(query);
-                });
-
-            } else {
-                this.setDialogData(query);
-            }
-        }
-
-        load() {
-            this.loading = true;
-            this.data = LatestExchange.buildEmptyData();
-            ExchangeAPI.getTodayExchange(this.currentCurrency).then((result) => {
-
-                if (result === null) return;
-
-                const toRet: any[] = [];
-
-                for (let row of result.data) {
-                    if (row.branch) {
-                        if (row.branch.latitude)
-                            row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
-                        else
-                            row.branch.gmaps = null;
-
-                        row.branch.place = row.place;
-                    }
-
-                    toRet.push(row);
-
-                }
-                this.loading = false;
-                this.data = {
-                    ...result,
-                    lastQueryResult: result.lastQueryResult,
-                    firstQueryResult: result.firstQueryResult,
-                    count: result.count,
-                    data: toRet
-                };
-            });
+            this.pagination = {sortBy: 'purchasePrice', descending: true, rowsPerPage: -1};
         }
 
         mounted() {
-            this.loading = true;
-            ExchangeAPI.getCurrencies().then(currencies => {
-                this.currencies = currencies;
-                if (currencies.includes('USD')) this.currentCurrency = 'USD';
-                else this.currentCurrency = this.currencies[0];
-                this.load();
-            });
+
+
+            this.fetchCurrencies();
         }
+
     }
 </script>
 <style>

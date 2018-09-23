@@ -36,7 +36,7 @@ export interface Branch {
         salePrice: number,
         currency: string,
         date: string
-    }
+    };
 }
 
 export interface Place {
@@ -48,9 +48,22 @@ export interface Place {
 }
 
 export enum Type {
-    Bank = "BANK",
-    Bureau = "BUREAU",
+    Bank = 'BANK',
+    Bureau = 'BUREAU'
+
 }
+
+export interface ExchangeData {
+    place: Place;
+    branch: Branch;
+    exchange: {
+        purchasePrice: number;
+        salePrice: number;
+        currency: string;
+        date: Date;
+    };
+}
+
 
 export class ExchangeAPI {
 
@@ -62,7 +75,7 @@ export class ExchangeAPI {
         return APICaller.doGet(`exchange/`);
     }
 
-    public static getBranches(code: string): Promise<Array<Branch>> {
+    public static getBranches(code: string): Promise<Branch[]> {
         return APICaller.doGet(`places/${code}/branches`);
     }
 }

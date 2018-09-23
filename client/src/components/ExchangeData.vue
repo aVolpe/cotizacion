@@ -134,21 +134,25 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {Branch} from "../api/ExchangeAPI";
+    import {Branch} from '../api/ExchangeAPI';
 
     @Component
     export default class ExchangeData extends Vue {
-        @Prop() private data: any;
+        @Prop() data: any;
         isSmall: boolean;
         headers: any[];
-        pagination: { sortBy: string; descending: boolean; rowsPerPage: number };
+        pagination: {
+            sortBy: string;
+            descending: boolean;
+            rowsPerPage: number
+        };
 
         constructor() {
             super();
             this.isSmall = window.innerWidth < 600;
 
             this.headers = [
-                {text: 'Nombre', value: 'branch.name', align: 'left', sortable: true,},
+                {text: 'Nombre', value: 'branch.name', align: 'left', sortable: true},
                 {text: 'Horario', value: 'branch.schedule', sortable: false, class: 'text-xs-right'},
                 {text: 'Teléfono', value: 'branch.phone', sortable: false, class: 'text-xs-right'},
             ];
@@ -181,7 +185,7 @@
                 .replace(/ - /g, '-')
                 .replace(/\./, '<br />')
                 .replace(/(\d) (S|D)/g, '$1<br />$2')
-                .trim()
+                .trim();
         }
 
         public getPhone(branch: Branch) {
@@ -193,8 +197,6 @@
                 .replace(/\/.*/, '')
                 .replace(/y .*/, '')
                 .trim();
-
-            ;
 
         }
 

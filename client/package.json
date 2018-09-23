@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "prebuild": "npm run gen-licenses",
-    "serve": "vue-cli-service serve --open",
+    "preserve": "npm run gen-licenses",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "gen-licenses": "license-report --only=prod > ./src/licenses.json",
     "lint": "vue-cli-service lint"
@@ -13,7 +14,7 @@
     "moment": "^2.22.2",
     "prerender-spa-plugin": "^3.2.1",
     "register-service-worker": "^1.0.0",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-meta": "^1.5.0",
     "vue-property-decorator": "^6.0.0",

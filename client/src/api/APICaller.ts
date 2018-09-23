@@ -5,9 +5,8 @@ export class APICaller {
     }
 
     public static handleError(response: Response) {
-        if (response.status >= 200 && response.status < 300) {
+        if (response.status >= 200 && response.status < 300)
             return response;
-        }
 
 
         const error: any = new Error(response.statusText);
@@ -16,9 +15,8 @@ export class APICaller {
     }
 
     public static handleFirstError(err: any) {
-        if (err && err.message === 'Failed to fetch') {
+        if (err && err.message === 'Failed to fetch')
             this.goTo('no-back');
-        }
         throw err;
     }
 
@@ -27,6 +25,6 @@ export class APICaller {
         return fetch(`${process.env.VUE_APP_API}/${url}`)
             .then(this.handleError)
             .then(okResponse => okResponse.json())
-            .catch(err => this.handleFirstError(err))
+            .catch(err => this.handleFirstError(err));
     }
 }
