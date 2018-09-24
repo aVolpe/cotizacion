@@ -8,12 +8,17 @@ import "./registerServiceWorker";
 import { distanceInWords, format } from "date-fns";
 import es from "date-fns/locale/es";
 import Vue from "vue";
+import * as VueGoogleMaps from "vue2-google-maps";
 
 
 Vue.use(Meta, {
     keyName: "head"
 });
 
+Vue.use(VueGoogleMaps as any, {
+    load: {
+        key: "AIzaSyAcZVbIDdV7dM8nAiIPsCXnjUY51gXZPJI",
+    }
 });
 
 Vue.config.productionTip = false;

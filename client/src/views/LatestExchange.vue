@@ -1,5 +1,7 @@
 <template>
     <div>
+        <MapOfExchanges>
+        </MapOfExchanges>
         <v-card>
             <v-card-title class="title">
                 <v-layout justify-center align-center>
