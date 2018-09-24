@@ -174,7 +174,7 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {LicenseAPI} from '../api/LicenseAPI';
-    // import * as data from '../licenses.json';
+    import * as data from '../licenses.json';
     import {Meta} from '../decorators';
 
 
@@ -193,14 +193,20 @@
 
         constructor() {
             super();
+            console.log(data.default);
             this.tabModel = 0;
             this.baseUrl = process.env.BASE_URL;
             this.backend = [];
-            this.frontend = [];
+            this.frontend = data.default as any;
             this.other = [{
                 name: 'lukaszadam Free Illustrations',
                 author: 'Lukasz Dzikowski',
                 url: 'https://lukaszadam.com/illustrations',
+                license: 'MIT License'
+            }, {
+                name: 'github-corners',
+                author: 'Tim Holman',
+                url: 'https://github.com/tholman/github-corners/',
                 license: 'MIT License'
             }];
         }

@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import Vuex, {ActionTree, GetterTree, MutationTree} from 'vuex';
-import {Branch, ExchangeAPI, ExchangeData, QueryResponseDetail, Type} from '@/api/ExchangeAPI';
+import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex';
+import { Branch, ExchangeAPI, ExchangeData, QueryResponseDetail, Type } from '@/api/ExchangeAPI';
 
 Vue.use(Vuex);
 
 const getGmap = (branch: Branch) => {
 
-    if (branch.latitude)
+    if (branch && branch.latitude)
         return `https://www.google.com/maps/search/?api=1&query=${branch.latitude},${branch.longitude}`;
     else
         return null;
@@ -20,8 +20,11 @@ export interface Loaded<T> {
 
 export interface RootState {
     currencies: Loaded<string[]>;
+    branches: {
+        [k: string]: Loaded<Branch>;
+    },
     exchanges: {
-        [k: string]: Loaded<QueryResponseDetail[]>
+        [k: string]: Loaded<ExchangeData>
     };
 
     current: {
@@ -40,12 +43,13 @@ export default new Vuex.Store<RootState>({
 
     state: {
         exchanges: {},
-        currencies: {loading: false, loaded: false},
+        branches: {},
+        currencies: { loading: false, loaded: false },
         current: {
             currency: 'USD',
             amount: 1
         },
-        exchangeDialog: {loading: false, show: false}
+        exchangeDialog: { loading: false, show: false }
     },
 
     mutations: {
@@ -68,12 +72,42 @@ export default new Vuex.Store<RootState>({
             };
         },
 
-        exchangeResult(state, payload: { isoCode: string, data: QueryResponseDetail[] }) {
-            state.exchanges[payload.isoCode] = {
-                loading: false,
-                loaded: true,
-                data: payload.data
+        setAmount(state, amount: number) {
+            state.current = {
+                ...state.current,
+                amount
             };
+        },
+
+        setBankBranches(state, { bank, branches }) {
+            state.branches = {
+                ...state.branches,
+                [bank]: {
+                    loaded: true,
+                    loading: false,
+                    data: branches
+                }
+            }
+        },
+
+        exchangeLoading(state, isoCode) {
+            state.exchanges = {
+                ...state.exchanges,
+                [isoCode]: {
+                    loading: true,
+                    loaded: false
+                }
+            }
+        },
+        exchangeResult(state, payload: { isoCode: string, data: ExchangeData }) {
+            state.exchanges = {
+                ...state.exchanges,
+                [payload.isoCode]: {
+                    loading: false,
+                    loaded: true,
+                    data: payload.data
+                }
+            }
         },
 
         setExchangeData(state, payload: ExchangeData) {
@@ -84,7 +118,7 @@ export default new Vuex.Store<RootState>({
             };
         },
 
-        closeExchangeDialog(state) {
+        hideExchangeDialog(state) {
             state.exchangeDialog = {
                 loading: false,
                 show: false
@@ -96,11 +130,11 @@ export default new Vuex.Store<RootState>({
 
     actions: {
 
-        closeExchangeDialog({commit}) {
-            commit('closeExchangeDialog');
+        hideExchangeDialog({ commit }) {
+            commit('hideExchangeDialog');
         },
 
-        setDialogData({commit}, query: QueryResponseDetail) {
+        setDialogData({ commit }, query: QueryResponseDetail) {
             commit('setExchangeData', {
                 place: query.place,
                 branch: query.branch,
@@ -113,26 +147,50 @@ export default new Vuex.Store<RootState>({
             });
         },
 
-        showExchangeData: ({commit, dispatch}, query: QueryResponseDetail) => {
+        showExchangeData: ({ commit, dispatch, state }, query: QueryResponseDetail, force: boolean = false) => {
 
-            if (query.place.type === Type.Bank)
-                ExchangeAPI.getBranches(query.place.code).then(data => {
-                    data.forEach(d => d.gmaps = getGmap(d));
-                    query.place.branches = data;
+            if (query.place.type === Type.Bank) {
+
+                if (!force && state.branches[query.place.code] && state.branches[query.place.code].loaded) {
                     dispatch('setDialogData', {
                         ...query,
                         place: {
                             ...query.place,
-                            branches: data
+                            branches: state.branches[query.place.code].data
                         }
                     });
-                });
-            else
+                } else {
+                    ExchangeAPI.getBranches(query.place.code).then(data => {
+                        data.forEach(d => d.gmaps = getGmap(d));
+                        query.place.branches = data;
+                        commit('setBankBranches', {
+                            bank: query.place.code,
+                            branches: data
+                        });
+                        dispatch('setDialogData', {
+                            ...query,
+                            place: {
+                                ...query.place,
+                                branches: data
+                            }
+                        });
+                    });
+                }
+            } else
                 dispatch('setDialogData', query);
         },
 
+        setCurrentCurrency: ({ commit, dispatch }, currency: string) => {
+            commit('setCurrency', currency);
+            dispatch('fetchExchange', currency);
+        },
 
-        fetchCurrencies: ({commit, dispatch}) => {
+        setAmount: ({ commit }, newAmount: number) => {
+            commit('setAmount', newAmount);
+        },
+
+
+        fetchCurrencies: ({ commit, dispatch }) => {
             commit('beginLoadCurrencies');
             ExchangeAPI.getCurrencies().then(data => {
                 commit('currenciesResult', data);
@@ -147,18 +205,22 @@ export default new Vuex.Store<RootState>({
 
         },
 
-        fetchExchange: ({commit}, isoCode: string) => {
+        fetchExchange: ({ commit, state }, isoCode: string, force: boolean = false) => {
+            if (!force && state.exchanges[isoCode]) {
+                return;
+            }
             commit('exchangeLoading', isoCode);
-            ExchangeAPI.getTodayExchange(isoCode).then(result => {
+            ExchangeAPI.getTodayExchange(isoCode).then((result: ExchangeData) => {
 
                 if (result === null) return;
 
                 const toRet: QueryResponseDetail[] = [];
 
                 for (const row of result.data) {
-                    if (row.branch)
+                    if (row.branch) {
                         row.branch.place = row.place;
-                    row.branch.gmaps = getGmap(row.branch);
+                        row.branch.gmaps = getGmap(row.branch);
+                    }
 
                     toRet.push(row);
 
@@ -179,9 +241,9 @@ export default new Vuex.Store<RootState>({
 
     getters: {
 
-        current(state): Loaded<QueryResponseDetail[]> {
-            if (!state.current.currency)
-                return {loading: false, loaded: false};
+        currentCurrencyData(state): Loaded<ExchangeData> {
+            if (!state.current.currency || !state.exchanges[state.current.currency])
+                return { loading: false, loaded: false };
             return state.exchanges[state.current.currency];
         }
 

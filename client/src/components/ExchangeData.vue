@@ -1,14 +1,14 @@
 <template>
     <v-card v-if="data">
         <span v-if="data.place.type !== 'BANK'">
-            <v-card-media v-if="data.branch.image" :src="data.branch.image" height="200px"></v-card-media>
-            <v-card-media v-if="!data.branch.image"
+            <v-img v-if="data.branch.image" :src="data.branch.image" height="200px"></v-img>
+            <v-img v-if="!data.branch.image"
                           :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-card-media>
+                          height="200px"></v-img>
         </span>
         <span v-if="data.place.type === 'BANK'">
-            <v-card-media :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-card-media>
+            <v-img :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
+                          height="200px"></v-img>
         </span>
         <v-card-title primary-title v-if="data.place.type !== 'BANK'">
             <div>
