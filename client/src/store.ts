@@ -248,10 +248,7 @@ export default new Vuex.Store<RootState>({
             if (!state.current.currency || !state.exchanges[state.current.currency])
                 return { loading: false, loaded: false };
             return state.exchanges[state.current.currency];
-        },
-
         }
-
 
     } as GetterTree<RootState, RootState>
 });
