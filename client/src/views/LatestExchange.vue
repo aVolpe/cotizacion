@@ -7,17 +7,18 @@
                         Cambio de
                     </v-flex>
                     <v-flex text-xs-center xs12 md2>
-                        <v-text-field v-model="currentAmount"
+                        <v-text-field v-model="current.amount"
                                       label="Cantidad"
                                       align="rigth"
-                                      style="text-align:right"
-                                      class="amount-input text-xs-right"
+                                      reverse
+                                      class="text-xs-right"
                                       single-line></v-text-field>
                     </v-flex>
-                    <v-flex text-xs-center xs12 md2>
-                        <v-select :items="currencies"
-                                  v-model="currentCurrency"
-                                  v-on:change="changeCurrency"
+                    <v-flex text-xs-center xs12 md2 v-if="currencies.loaded">
+                        <v-select :items="currencies.data"
+                                  reverse
+                                  v-model="current.currency"
+                                  v-on:change="setCurrentCurrency"
                                   align="center"
                                   label="Moneda"
                                   single-line></v-select>
@@ -28,16 +29,15 @@
             <v-card-text class="main-table-wrapper">
                 <v-data-table
                         :headers="headers"
-                        :loading="loading"
+                        :loading="currentCurrencyData.loading"
                         v-bind:pagination.sync="pagination"
                         hide-actions
                         no-data-text=""
                         :must-sort="true"
                         item-key="id"
-                        :items="data && data.data"
-                        class="elevation-1 ">
+                        :items="currentCurrencyData.data && currentCurrencyData.data.data">
                     <template slot="no-data">
-                        <v-alert :value="true" color="warning" icon="warning" v-if="!loading">
+                        <v-alert :value="true" color="warning" icon="warning" v-if="currentCurrencyData.loaded">
                             No hay datos de hoy
                         </v-alert>
                     </template>
@@ -55,10 +55,10 @@
                                 <span v-if="props.item.place.type === 'BANK'">Ver sucursales</span>
                                 <span v-if="props.item.place.type !== 'BANK'">{{ props.item.branch.name }}</span>
                             </td>
-                            <td class="text-xs-right">{{ props.item.purchasePrice | multiply(currentAmount) | fn}}</td>
-                            <td class="text-xs-right">{{ props.item.salePrice | multiply(currentAmount) |fn}}</td>
+                            <td class="text-xs-right">{{ props.item.purchasePrice | multiply(current.amount) | fn}}</td>
+                            <td class="text-xs-right">{{ props.item.salePrice | multiply(current.amount) |fn}}</td>
                             <td class="text-xs-right" v-if="!isSmall">
-                                <a v-on:click="showDialog(props.item)">
+                                <a v-on:click="showExchangeData(props.item)">
                                     <v-icon dark color="primary" slot="activator">info</v-icon>
                                 </a>
                                 <a :href="props.item.branch.gmaps"
@@ -69,30 +69,33 @@
                         </tr>
                     </template>
                     <template slot="expand" slot-scope="props" v-if="isSmall">
-                        <v-btn v-on:click="showDialog(props.item)" flat>
+                        <v-btn v-on:click="showExchangeData(props.item)" flat>
                             Ver detalles
                             <v-icon>map</v-icon>
                         </v-btn>
                     </template>
                 </v-data-table>
-                <small v-if="data">
-                    <b>{{ data.count }}</b> cotizaciones consultadas
-                    <b> {{ data.firstQueryResult | mfn }}</b>.
+                <small v-if="currentCurrencyData.loaded">
+                    <b>{{ currentCurrencyData.data.count }}</b> cotizaciones consultadas
+                    <b> {{ currentCurrencyData.data.firstQueryResult | mfn }}</b>.
                 </small>
 
             </v-card-text>
         </v-card>
-        <v-dialog v-model="branchDialog" max-width="500px">
-            <ExchangeData v-on:ok="branchDialog = false" :data="currentBranch"></ExchangeData>
+        <v-dialog v-model="exchangeDialog.show" max-width="500px">
+            <ExchangeData v-on:ok="hideExchangeDialog" :data="exchangeDialog.data"></ExchangeData>
         </v-dialog>
+        
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {ExchangeAPI, QueryResponseDetail} from "../api/ExchangeAPI";
+    import {Component, Vue} from "vue-property-decorator";
     import ExchangeData from "@/components/ExchangeData.vue";
-    import {Meta} from "../decorators";
+    import {Meta} from "@/decorators";
+    import {Action, State, Getter} from "vuex-class";
+    import {Loaded} from "@/store";
+    import { QueryResponseDetail } from "@/api/ExchangeAPI";
 
     @Component({
         components: {
@@ -100,139 +103,45 @@
         }
     })
     @Meta({
-        title: 'Cotizaciones de hoy',
+        title: "Cotizaciones de hoy",
         titleTemplate: undefined
     })
     export default class LatestExchange extends Vue {
 
-        currencies: Array<string>;
-        currentCurrency: string;
-        currentAmount: number;
-        data: {
-            firstQueryResult: string;
-            lastQueryResult: string;
-            count: number;
-            data: any[];
-        };
+        @State currencies!: Loaded<string[]>;
+        @State current!: { currency: string, amount: number };
+        @State exchangeDialog!: {loading: boolean, show: boolean};
+
+        @Action showExchangeData!: () => void;
+        @Action fetchCurrencies!: () => void;
+        @Action setCurrentCurrency!: (isoCode: string) => void;
+        @Action hideExchangeDialog!: () => void;
+
+        @Getter currentCurrencyData!: Loaded<ExchangeData[]>;
+
         headers: any[];
-        loading = false;
         pagination: any;
         isSmall: boolean;
-
-        branchDialog: boolean = false;
-        currentBranch: any = null;
 
         constructor() {
             super();
 
-            this.currencies = ['USD', 'EUR'];
-            this.currentCurrency = this.currencies[0];
-            this.data = LatestExchange.buildEmptyData();
-
             this.isSmall = window.innerWidth < 600;
             this.headers = [
-                {text: '', align: 'left', sortable: true, value: 'placeName'},
-                {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
-                {text: 'Venta', value: 'salePrice', sortable: true, class: 'text-xs-right'}
+                {text: "", align: "left", sortable: true, value: "placeName"},
+                {text: "Compra", value: "purchasePrice", sortable: true, class: "text-xs-right"},
+                {text: "Venta", value: "salePrice", sortable: true, class: "text-xs-right"}
             ];
-            if (!this.isSmall) {
-                this.headers.push({text: ' ', value: '', sortable: false});
-            }
-            this.currentAmount = 1;
-            this.pagination = {'sortBy': 'purchasePrice', 'descending': true, 'rowsPerPage': -1};
-        }
+            if (!this.isSmall)
+                this.headers.push({text: " ", value: "", sortable: false});
 
-        static buildEmptyData() {
-            return {
-                data: [],
-                count: 0,
-                firstQueryResult: '',
-                lastQueryResult: ''
-            };
-        }
-
-        changeCurrency(newCur: string) {
-            this.currentCurrency = newCur;
-            this.load();
-        }
-
-        setDialogData(query: QueryResponseDetail) {
-
-            this.branchDialog = true;
-            this.currentBranch = {
-                place: query.place,
-                branch: query.branch,
-                exchange: {
-                    purchasePrice: query.purchasePrice,
-                    salePrice: query.salePrice,
-                    currency: this.currentCurrency,
-                    date: query.queryDate
-                }
-            };
-        }
-
-        private showDialog(query: QueryResponseDetail) {
-
-            if (query.place.type === 'BANK') {
-
-                ExchangeAPI.getBranches(query.place.code).then(data => {
-                    data.forEach(d => {
-                        if (d.latitude)
-                            d.gmaps = `https://www.google.com/maps/search/?api=1&query=${d.latitude},${d.longitude}`;
-                        else
-                            d.gmaps = null;
-                    });
-                    query.place.branches = data;
-                    this.setDialogData(query);
-                });
-
-            } else {
-                this.setDialogData(query);
-            }
-        }
-
-        private load() {
-            this.loading = true;
-            this.data = LatestExchange.buildEmptyData();
-            ExchangeAPI.getTodayExchange(this.currentCurrency).then((result) => {
-
-                if (result === null) return;
-
-                const toRet: Array<any> = [];
-
-                for (let row of result.data) {
-                    if (row.branch) {
-                        if (row.branch.latitude)
-                            row.branch.gmaps = `https://www.google.com/maps/search/?api=1&query=${row.branch.latitude},${row.branch.longitude}`;
-                        else
-                            row.branch.gmaps = null;
-
-                        row.branch.place = row.place;
-                    }
-
-                    toRet.push(row)
-
-                }
-                this.loading = false;
-                this.data = {
-                    ...result,
-                    lastQueryResult: result.lastQueryResult,
-                    firstQueryResult: result.firstQueryResult,
-                    count: result.count,
-                    data: toRet
-                };
-            });
+            this.pagination = {sortBy: "purchasePrice", descending: true, rowsPerPage: -1};
         }
 
         mounted() {
-            this.loading = true;
-            ExchangeAPI.getCurrencies().then((currencies: Array<string>) => {
-                this.currencies = currencies;
-                if (currencies.includes('USD')) this.currentCurrency = 'USD';
-                else this.currentCurrency = this.currencies[0];
-                this.load();
-            });
+            this.fetchCurrencies();
         }
+
     }
 </script>
 <style>

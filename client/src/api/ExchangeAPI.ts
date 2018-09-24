@@ -1,6 +1,6 @@
-import {APICaller} from '@/api/APICaller';
+import {APICaller} from "@/api/APICaller";
 
-export interface ExchangeData {
+export interface ExchangeDataDTO {
     firstQueryResult: string;
     lastQueryResult: string;
     count: number;
@@ -36,7 +36,7 @@ export interface Branch {
         salePrice: number,
         currency: string,
         date: string
-    }
+    };
 }
 
 export interface Place {
@@ -49,20 +49,33 @@ export interface Place {
 
 export enum Type {
     Bank = "BANK",
-    Bureau = "BUREAU",
+    Bureau = "BUREAU"
+
 }
+
+export interface SingleExchangeData {
+    place: Place;
+    branch: Branch;
+    exchange: {
+        purchasePrice: number;
+        salePrice: number;
+        currency: string;
+        date: Date;
+    };
+}
+
 
 export class ExchangeAPI {
 
-    public static getTodayExchange(isoCode: string): Promise<ExchangeData> {
+    public static getTodayExchange(isoCode: string): Promise<ExchangeDataDTO> {
         return APICaller.doGet(`exchange/${isoCode}`);
     }
 
-    public static getCurrencies() {
+    public static getCurrencies(): Promise<string[]> {
         return APICaller.doGet(`exchange/`);
     }
 
-    public static getBranches(code: string): Promise<Array<Branch>> {
+    public static getBranches(code: string): Promise<Branch[]> {
         return APICaller.doGet(`places/${code}/branches`);
     }
 }

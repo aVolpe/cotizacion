@@ -1,14 +1,14 @@
 <template>
     <v-card v-if="data">
         <span v-if="data.place.type !== 'BANK'">
-            <v-card-media v-if="data.branch.image" :src="data.branch.image" height="200px"></v-card-media>
-            <v-card-media v-if="!data.branch.image"
+            <v-img v-if="data.branch.image" :src="data.branch.image" height="200px"></v-img>
+            <v-img v-if="!data.branch.image"
                           :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-card-media>
+                          height="200px"></v-img>
         </span>
         <span v-if="data.place.type === 'BANK'">
-            <v-card-media :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-card-media>
+            <v-img :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
+                          height="200px"></v-img>
         </span>
         <v-card-title primary-title v-if="data.place.type !== 'BANK'">
             <div>
@@ -133,31 +133,35 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from "vue-property-decorator";
     import {Branch} from "../api/ExchangeAPI";
 
     @Component
     export default class ExchangeData extends Vue {
-        @Prop() private data: any;
+        @Prop() data: any;
         isSmall: boolean;
         headers: any[];
-        pagination: { sortBy: string; descending: boolean; rowsPerPage: number };
+        pagination: {
+            sortBy: string;
+            descending: boolean;
+            rowsPerPage: number
+        };
 
         constructor() {
             super();
             this.isSmall = window.innerWidth < 600;
 
             this.headers = [
-                {text: 'Nombre', value: 'branch.name', align: 'left', sortable: true,},
-                {text: 'Horario', value: 'branch.schedule', sortable: false, class: 'text-xs-right'},
-                {text: 'Teléfono', value: 'branch.phone', sortable: false, class: 'text-xs-right'},
+                {text: "Nombre", value: "branch.name", align: "left", sortable: true},
+                {text: "Horario", value: "branch.schedule", sortable: false, class: "text-xs-right"},
+                {text: "Teléfono", value: "branch.phone", sortable: false, class: "text-xs-right"},
             ];
 
-            this.pagination = {sortBy: 'name', descending: false, rowsPerPage: 3};
+            this.pagination = {sortBy: "name", descending: false, rowsPerPage: 3};
         }
 
-        getSchedule(branch: Branch) {
-            if (!branch || !branch.schedule) return '';
+        public getSchedule(branch: Branch) {
+            if (!branch || !branch.schedule) return "";
 
             return branch.schedule
                 .toLowerCase()
@@ -181,11 +185,11 @@
                 .replace(/ - /g, "-")
                 .replace(/\./, "<br />")
                 .replace(/(\d) (S|D)/g, "$1<br />$2")
-                .trim()
+                .trim();
         }
 
-        getPhone(branch: Branch) {
-            if (!branch || !branch.phoneNumber) return '';
+        public getPhone(branch: Branch) {
+            if (!branch || !branch.phoneNumber) return "";
 
             return branch.phoneNumber
                 .replace(/.*Cel.:/, "")
@@ -193,8 +197,6 @@
                 .replace(/\/.*/, "")
                 .replace(/y .*/, "")
                 .trim();
-
-            ;
 
         }
 

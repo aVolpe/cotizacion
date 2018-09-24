@@ -176,19 +176,19 @@ public class MaxiCambios implements Gatherer {
     @Data
     @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
     private static class ExchangeData {
-        String abreviatura;
-        String moneda;
-        String rutaBandera;
-        String chCompra;
-        String chCompraUp;
-        String chVenta;
-        String chVentaUp;
+        private String abreviatura;
+        private String moneda;
+        private String rutaBandera;
+        private String chCompra;
+        private String chCompraUp;
+        private String chVenta;
+        private String chVentaUp;
 
-        String img;
-        String compra;
-        boolean compraUp;
-        String venta;
-        boolean ventaUp;
+        private String img;
+        private String compra;
+        private boolean compraUp;
+        private String venta;
+        private boolean ventaUp;
     }
 
     private static Long parse(String value) {

@@ -1,13 +1,13 @@
-var SitemapPlugin = require("sitemap-webpack-plugin").default;
+const SitemapPlugin = require("sitemap-webpack-plugin").default;
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const path = require('path');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 
 
-var today = new Date().toISOString().replace(/T.*/, "");
+const today = new Date().toISOString().replace(/T.*/, "");
 
-var paths = [
+const paths = [
   {path: "/", lastMod: today, priority: "0.8", changeFreq: "hourly"},
   {path: "/#/licenses", lastMod: today, priority: "0.1", changeFreq: "monthly"},
   {path: "/#/swagger", lastMod: today, priority: "0.1", changeFreq: "monthly"}
@@ -30,4 +30,5 @@ module.exports = {
 
     ]
   }
-}
+};
+
