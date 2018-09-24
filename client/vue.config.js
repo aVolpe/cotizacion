@@ -1,6 +1,6 @@
 const SitemapPlugin = require("sitemap-webpack-plugin").default;
-const PrerenderSPAPlugin = require('prerender-spa-plugin');
-const path = require('path');
+const PrerenderSPAPlugin = require("prerender-spa-plugin");
+const path = require("path");
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 
@@ -18,17 +18,32 @@ module.exports = {
     plugins: [
       new SitemapPlugin("https://cotizaciones.volpe.com.py", paths),
       new PrerenderSPAPlugin({
-        staticDir: path.join(__dirname, 'dist'),
-        routes: [ '/' ],
+        staticDir: path.join(__dirname, "dist"),
+        routes: [ "/" ],
         server: {
           port: 8001
         },
         //renderer: new Renderer({
-          //renderAfterDocumentEvent: 'render-event'
+          //renderAfterDocumentEvent: "render-event"
         //})
       })
 
     ]
+  },
+  pwa: {
+    name: "Cotizacione del Paraguay",
+    themeColor: "#283593",
+    msTileColor: "#283593",
+    appleMobileWebAppCapable: "yes",
+    appleMobileWebAppStatusBarStyle: "black",
+ 
+    // configure the workbox plugin
+    workboxPluginMode: "InjectManifest",
+    workboxOptions: {
+      // swSrc is required in InjectManifest mode.
+      swSrc: "dev/sw.js",
+      // ...other Workbox options...
+    }
   }
 };
 
