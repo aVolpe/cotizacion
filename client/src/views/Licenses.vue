@@ -172,16 +172,17 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {LicenseAPI} from '../api/LicenseAPI';
-    import {Meta} from '../decorators';
+    import {Component, Vue} from "vue-property-decorator";
+    import {LicenseAPI} from "../api/LicenseAPI";
+    import {Meta} from "../decorators";
 
-    const data = require('../licenses.json');
+    // tslint:disable-next-line
+    const data = require("../licenses.json");
 
 
     @Component
     @Meta({
-        title: 'Licencias'
+        title: "Licencias"
     })
     export default class Licenses extends Vue {
         baseUrl: string | undefined;
@@ -200,15 +201,15 @@
             this.backend = [];
             this.frontend = data as any;
             this.other = [{
-                name: 'lukaszadam Free Illustrations',
-                author: 'Lukasz Dzikowski',
-                url: 'https://lukaszadam.com/illustrations',
-                license: 'MIT License'
+                name: "lukaszadam Free Illustrations",
+                author: "Lukasz Dzikowski",
+                url: "https://lukaszadam.com/illustrations",
+                license: "MIT License"
             }, {
-                name: 'github-corners',
-                author: 'Tim Holman',
-                url: 'https://github.com/tholman/github-corners/',
-                license: 'MIT License'
+                name: "github-corners",
+                author: "Tim Holman",
+                url: "https://github.com/tholman/github-corners/",
+                license: "MIT License"
             }];
         }
 

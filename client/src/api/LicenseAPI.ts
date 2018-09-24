@@ -1,4 +1,4 @@
-import {APICaller} from '@/api/APICaller';
+import {APICaller} from "@/api/APICaller";
 
 export class LicenseAPI {
 

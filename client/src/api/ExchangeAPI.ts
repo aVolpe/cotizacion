@@ -1,6 +1,6 @@
-import {APICaller} from '@/api/APICaller';
+import {APICaller} from "@/api/APICaller";
 
-export interface ExchangeData {
+export interface ExchangeDataDTO {
     firstQueryResult: string;
     lastQueryResult: string;
     count: number;
@@ -48,12 +48,12 @@ export interface Place {
 }
 
 export enum Type {
-    Bank = 'BANK',
-    Bureau = 'BUREAU'
+    Bank = "BANK",
+    Bureau = "BUREAU"
 
 }
 
-export interface ExchangeData {
+export interface SingleExchangeData {
     place: Place;
     branch: Branch;
     exchange: {
@@ -67,7 +67,7 @@ export interface ExchangeData {
 
 export class ExchangeAPI {
 
-    public static getTodayExchange(isoCode: string): Promise<ExchangeData> {
+    public static getTodayExchange(isoCode: string): Promise<ExchangeDataDTO> {
         return APICaller.doGet(`exchange/${isoCode}`);
     }
 

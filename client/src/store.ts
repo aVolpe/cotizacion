@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex';
-import { Branch, ExchangeAPI, ExchangeData, QueryResponseDetail, Type } from '@/api/ExchangeAPI';
+import Vue from "vue";
+import Vuex, { ActionTree, GetterTree, MutationTree } from "vuex";
+import { Branch, ExchangeAPI, ExchangeDataDTO, QueryResponseDetail, Type, SingleExchangeData } from "@/api/ExchangeAPI";
 
 Vue.use(Vuex);
 
@@ -26,7 +26,7 @@ export interface RootState {
     };
 
     exchanges: {
-        [k: string]: Loaded<ExchangeData>
+        [k: string]: Loaded<ExchangeDataDTO>
     };
 
     current: {
@@ -37,7 +37,7 @@ export interface RootState {
     exchangeDialog: {
         loading: boolean,
         show: boolean,
-        data?: ExchangeData;
+        data?: SingleExchangeData;
     };
 }
 
@@ -48,7 +48,7 @@ export default new Vuex.Store<RootState>({
         branches: {},
         currencies: { loading: false, loaded: false },
         current: {
-            currency: 'USD',
+            currency: "USD",
             amount: 1
         },
         exchangeDialog: { loading: false, show: false }
@@ -101,7 +101,7 @@ export default new Vuex.Store<RootState>({
                 }
             };
         },
-        exchangeResult(state, payload: { isoCode: string, data: ExchangeData }) {
+        exchangeResult(state, payload: { isoCode: string, data: ExchangeDataDTO }) {
             state.exchanges = {
                 ...state.exchanges,
                 [payload.isoCode]: {
@@ -112,7 +112,7 @@ export default new Vuex.Store<RootState>({
             };
         },
 
-        setExchangeData(state, payload: ExchangeData) {
+        setExchangeData(state, payload: SingleExchangeData) {
             state.exchangeDialog = {
                 show: true,
                 loading: false,
@@ -133,11 +133,11 @@ export default new Vuex.Store<RootState>({
     actions: {
 
         hideExchangeDialog({ commit }) {
-            commit('hideExchangeDialog');
+            commit("hideExchangeDialog");
         },
 
         setDialogData({ commit }, query: QueryResponseDetail) {
-            commit('setExchangeData', {
+            commit("setExchangeData", {
                 place: query.place,
                 branch: query.branch,
                 exchange: {
@@ -152,12 +152,12 @@ export default new Vuex.Store<RootState>({
         showExchangeData: ({ commit, dispatch, state }, query: QueryResponseDetail, force: boolean = false) => {
 
             if (query.place.type !== Type.Bank) {
-                dispatch('setDialogData', query);
+                dispatch("setDialogData", query);
                 return;
             }
 
             if (!force && state.branches[query.place.code] && state.branches[query.place.code].loaded) {
-                dispatch('setDialogData', {
+                dispatch("setDialogData", {
                     ...query,
                     place: {
                         ...query.place,
@@ -168,11 +168,11 @@ export default new Vuex.Store<RootState>({
                 ExchangeAPI.getBranches(query.place.code).then(data => {
                     data.forEach(d => d.gmaps = getGmap(d));
                     query.place.branches = data;
-                    commit('setBankBranches', {
+                    commit("setBankBranches", {
                         bank: query.place.code,
                         branches: data
                     });
-                    dispatch('setDialogData', {
+                    dispatch("setDialogData", {
                         ...query,
                         place: {
                             ...query.place,
@@ -184,26 +184,26 @@ export default new Vuex.Store<RootState>({
         },
 
         setCurrentCurrency: ({ commit, dispatch }, currency: string) => {
-            commit('setCurrency', currency);
-            dispatch('fetchExchange', currency);
+            commit("setCurrency", currency);
+            dispatch("fetchExchange", currency);
         },
 
         setAmount: ({ commit }, newAmount: number) => {
-            commit('setAmount', newAmount);
+            commit("setAmount", newAmount);
         },
 
 
         fetchCurrencies: ({ commit, dispatch }) => {
-            commit('beginLoadCurrencies');
+            commit("beginLoadCurrencies");
             ExchangeAPI.getCurrencies().then(data => {
-                commit('currenciesResult', data);
+                commit("currenciesResult", data);
 
                 let currency = data[0];
-                if (data.includes('USD'))
-                    currency = 'USD';
+                if (data.includes("USD"))
+                    currency = "USD";
 
-                commit('setCurrency', currency);
-                dispatch('fetchExchange', currency);
+                commit("setCurrency", currency);
+                dispatch("fetchExchange", currency);
             });
 
         },
@@ -212,8 +212,8 @@ export default new Vuex.Store<RootState>({
             if (!force && state.exchanges[isoCode]) {
                 return;
             }
-            commit('exchangeLoading', isoCode);
-            ExchangeAPI.getTodayExchange(isoCode).then((result: ExchangeData) => {
+            commit("exchangeLoading", isoCode);
+            ExchangeAPI.getTodayExchange(isoCode).then((result: ExchangeDataDTO) => {
 
                 if (result === null) return;
 
@@ -228,7 +228,7 @@ export default new Vuex.Store<RootState>({
                     toRet.push(row);
 
                 }
-                commit('exchangeResult', {
+                commit("exchangeResult", {
                     isoCode,
                     data: {
                         ...result,
@@ -244,10 +244,12 @@ export default new Vuex.Store<RootState>({
 
     getters: {
 
-        currentCurrencyData(state): Loaded<ExchangeData> {
+        currentCurrencyData(state): Loaded<ExchangeDataDTO> {
             if (!state.current.currency || !state.exchanges[state.current.currency])
                 return { loading: false, loaded: false };
             return state.exchanges[state.current.currency];
+        },
+
         }
 
 

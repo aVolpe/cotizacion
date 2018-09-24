@@ -14,7 +14,7 @@ export class APICaller {
     }
 
     public static handleFirstError(err: any) {
-        if (err && err.message === 'Failed to fetch') this.goTo('no-back');
+        if (err && err.message === "Failed to fetch") this.goTo("no-back");
         throw err;
     }
 

@@ -133,8 +133,8 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {Branch} from '../api/ExchangeAPI';
+    import {Component, Prop, Vue} from "vue-property-decorator";
+    import {Branch} from "../api/ExchangeAPI";
 
     @Component
     export default class ExchangeData extends Vue {
@@ -152,50 +152,50 @@
             this.isSmall = window.innerWidth < 600;
 
             this.headers = [
-                {text: 'Nombre', value: 'branch.name', align: 'left', sortable: true},
-                {text: 'Horario', value: 'branch.schedule', sortable: false, class: 'text-xs-right'},
-                {text: 'Teléfono', value: 'branch.phone', sortable: false, class: 'text-xs-right'},
+                {text: "Nombre", value: "branch.name", align: "left", sortable: true},
+                {text: "Horario", value: "branch.schedule", sortable: false, class: "text-xs-right"},
+                {text: "Teléfono", value: "branch.phone", sortable: false, class: "text-xs-right"},
             ];
 
-            this.pagination = {sortBy: 'name', descending: false, rowsPerPage: 3};
+            this.pagination = {sortBy: "name", descending: false, rowsPerPage: 3};
         }
 
         public getSchedule(branch: Branch) {
-            if (!branch || !branch.schedule) return '';
+            if (!branch || !branch.schedule) return "";
 
             return branch.schedule
                 .toLowerCase()
-                .replace(/\n/g, ' ')
-                .replace(/lunes/, 'L')
-                .replace(/martes/, 'Ma')
-                .replace(/miercoles/, 'Mi')
-                .replace(/jueves/, 'J')
-                .replace(/viernes/, 'V')
-                .replace(/sabado/, 'S')
-                .replace(/sábado/, 'S')
-                .replace(/domingo/, 'D')
+                .replace(/\n/g, " ")
+                .replace(/lunes/, "L")
+                .replace(/martes/, "Ma")
+                .replace(/miercoles/, "Mi")
+                .replace(/jueves/, "J")
+                .replace(/viernes/, "V")
+                .replace(/sabado/, "S")
+                .replace(/sábado/, "S")
+                .replace(/domingo/, "D")
 
 
-                .replace(/lunes_viernes/, 'L a V')
-                .replace(/sbado/, 'S')
-                .replace(/domingo/, 'D')
-                .replace(/hs /, '')
+                .replace(/lunes_viernes/, "L a V")
+                .replace(/sbado/, "S")
+                .replace(/domingo/, "D")
+                .replace(/hs /, "")
 
-                .replace(/0 a /, '0-')
-                .replace(/ - /g, '-')
-                .replace(/\./, '<br />')
-                .replace(/(\d) (S|D)/g, '$1<br />$2')
+                .replace(/0 a /, "0-")
+                .replace(/ - /g, "-")
+                .replace(/\./, "<br />")
+                .replace(/(\d) (S|D)/g, "$1<br />$2")
                 .trim();
         }
 
         public getPhone(branch: Branch) {
-            if (!branch || !branch.phoneNumber) return '';
+            if (!branch || !branch.phoneNumber) return "";
 
             return branch.phoneNumber
-                .replace(/.*Cel.:/, '')
-                .replace(/\(RA\)/, '')
-                .replace(/\/.*/, '')
-                .replace(/y .*/, '')
+                .replace(/.*Cel.:/, "")
+                .replace(/\(RA\)/, "")
+                .replace(/\/.*/, "")
+                .replace(/y .*/, "")
                 .trim();
 
         }

@@ -90,20 +90,22 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import ExchangeData from '@/components/ExchangeData.vue';
-    import {Meta} from '@/decorators';
-    import {Action, State, Getter} from 'vuex-class';
-    import {Loaded} from '@/store';
-    import { QueryResponseDetail } from '@/api/ExchangeAPI';
+    import {Component, Vue} from "vue-property-decorator";
+    import ExchangeData from "@/components/ExchangeData.vue";
+    import MapOfExchanges from "@/components/MapOfExchanges.vue";
+    import {Meta} from "@/decorators";
+    import {Action, State, Getter} from "vuex-class";
+    import {Loaded} from "@/store";
+    import { QueryResponseDetail } from "@/api/ExchangeAPI";
 
     @Component({
         components: {
-            ExchangeData
+            ExchangeData,
+            MapOfExchanges
         }
     })
     @Meta({
-        title: 'Cotizaciones de hoy',
+        title: "Cotizaciones de hoy",
         titleTemplate: undefined
     })
     export default class LatestExchange extends Vue {
@@ -128,14 +130,14 @@
 
             this.isSmall = window.innerWidth < 600;
             this.headers = [
-                {text: '', align: 'left', sortable: true, value: 'placeName'},
-                {text: 'Compra', value: 'purchasePrice', sortable: true, class: 'text-xs-right'},
-                {text: 'Venta', value: 'salePrice', sortable: true, class: 'text-xs-right'}
+                {text: "", align: "left", sortable: true, value: "placeName"},
+                {text: "Compra", value: "purchasePrice", sortable: true, class: "text-xs-right"},
+                {text: "Venta", value: "salePrice", sortable: true, class: "text-xs-right"}
             ];
             if (!this.isSmall)
-                this.headers.push({text: ' ', value: '', sortable: false});
+                this.headers.push({text: " ", value: "", sortable: false});
 
-            this.pagination = {sortBy: 'purchasePrice', descending: true, rowsPerPage: -1};
+            this.pagination = {sortBy: "purchasePrice", descending: true, rowsPerPage: -1};
         }
 
         mounted() {

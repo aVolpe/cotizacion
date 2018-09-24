@@ -54,57 +54,57 @@
 </template>
 <script lang="ts">
 
-    import {Component, Vue} from 'vue-property-decorator';
-    import 'vuetify/dist/vuetify.min.css';
-    import {Meta} from './decorators';
-    import theme from './theme';
+    import {Component, Vue} from "vue-property-decorator";
+    import "vuetify/dist/vuetify.min.css";
+    import {Meta} from "./decorators";
+    import theme from "./theme";
 
 
     @Component({
         components: {},
     })
     @Meta({
-        title: ' ',
-        titleTemplate: '%s | Cotizaciones',
+        title: " ",
+        titleTemplate: "%s | Cotizaciones",
         meta: [
-            {'http-equiv': 'Content-Type', 'content': 'text/html; charset=utf-8'} as any,
-            {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+            {"http-equiv": "Content-Type", "content": "text/html; charset=utf-8"} as any,
+            {name: "viewport", content: "width=device-width, initial-scale=1"},
             {
-                name: 'description',
-                content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
+                name: "description",
+                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
             },
-            {name: 'theme-color', content: theme.primary},
+            {name: "theme-color", content: theme.primary},
 
-            {property: 'og:title', content: 'Cotizaciones del paraguay'},
-            {property: 'og:site_name', content: 'Cotizaciones del Paraguay'},
+            {property: "og:title", content: "Cotizaciones del paraguay"},
+            {property: "og:site_name", content: "Cotizaciones del Paraguay"},
             // The list of types is available here: http://ogp.me/#types
-            {property: 'og:type', content: 'website'},
+            {property: "og:type", content: "website"},
             // Should the the same as your canonical link, see below.
-            {property: 'og:url', content: 'https://cotizaciones.volpe.com.py/'},
-            {property: 'og:image', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'},
+            {property: "og:url", content: "https://cotizaciones.volpe.com.py/"},
+            {property: "og:image", content: "https://blog.volpe.com.py/static/img/avatar.jpg"},
 
             // Often the same as your meta description, but not always.
             {
-                property: 'og:description',
-                content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
+                property: "og:description",
+                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
             },
 
             // Twitter card
-            {name: 'twitter:card', content: 'Cotizaciones del paraguay'},
-            {name: 'twitter:site', content: 'https://cotizaciones.volpe.com.py/'},
-            {name: 'twitter:title', content: 'Cotizaciones'},
+            {name: "twitter:card", content: "Cotizaciones del paraguay"},
+            {name: "twitter:site", content: "https://cotizaciones.volpe.com.py/"},
+            {name: "twitter:title", content: "Cotizaciones"},
             {
-                name: 'twitter:description',
-                content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
+                name: "twitter:description",
+                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
             },
             // Your twitter handle, if you have one.
-            {name: 'twitter:creator', content: '@cochoVolpe'},
-            {name: 'twitter:image:src', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'},
+            {name: "twitter:creator", content: "@cochoVolpe"},
+            {name: "twitter:image:src", content: "https://blog.volpe.com.py/static/img/avatar.jpg"},
 
             // Google / Schema.org markup:
-            {itemprop: 'name', content: 'Cotizaciones del paraguay'},
-            {itemprop: 'description', content: 'Cotizaciones del paraguay'},
-            {itemprop: 'image', content: 'https://blog.volpe.com.py/static/img/avatar.jpg'}
+            {itemprop: "name", content: "Cotizaciones del paraguay"},
+            {itemprop: "description", content: "Cotizaciones del paraguay"},
+            {itemprop: "image", content: "https://blog.volpe.com.py/static/img/avatar.jpg"}
         ]
     })
     export default class App extends Vue {
@@ -123,23 +123,23 @@
 
             this.routes = [
                 {
-                    name: 'Inicio',
-                    to: '/',
-                    icon: 'home'
+                    name: "Inicio",
+                    to: "/",
+                    icon: "home"
                 }, {
-                    name: 'Librerías OpenSource',
-                    to: '/licenses',
-                    icon: 'gavel'
+                    name: "Librerías OpenSource",
+                    to: "/licenses",
+                    icon: "gavel"
                 }, {
-                    name: 'Explorar API',
-                    to: '/swagger',
-                    icon: 'scanner'
+                    name: "Explorar API",
+                    to: "/swagger",
+                    icon: "scanner"
                 }
             ];
         }
 
         goHome() {
-            this.$router.push('/');
+            this.$router.push("/");
         }
 
     }
