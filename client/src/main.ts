@@ -14,8 +14,6 @@ Vue.use(Meta, {
     keyName: "head"
 });
 
-});
-
 Vue.config.productionTip = false;
 
 Vue.filter("multiply", (value: number, multiplier: number = 1) => {
