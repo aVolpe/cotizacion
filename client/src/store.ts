@@ -20,9 +20,11 @@ export interface Loaded<T> {
 
 export interface RootState {
     currencies: Loaded<string[]>;
+
     branches: {
         [k: string]: Loaded<Branch>;
-    },
+    };
+
     exchanges: {
         [k: string]: Loaded<ExchangeData>
     };
@@ -87,7 +89,7 @@ export default new Vuex.Store<RootState>({
                     loading: false,
                     data: branches
                 }
-            }
+            };
         },
 
         exchangeLoading(state, isoCode) {
@@ -97,7 +99,7 @@ export default new Vuex.Store<RootState>({
                     loading: true,
                     loaded: false
                 }
-            }
+            };
         },
         exchangeResult(state, payload: { isoCode: string, data: ExchangeData }) {
             state.exchanges = {
@@ -107,7 +109,7 @@ export default new Vuex.Store<RootState>({
                     loaded: true,
                     data: payload.data
                 }
-            }
+            };
         },
 
         setExchangeData(state, payload: ExchangeData) {
@@ -149,35 +151,36 @@ export default new Vuex.Store<RootState>({
 
         showExchangeData: ({ commit, dispatch, state }, query: QueryResponseDetail, force: boolean = false) => {
 
-            if (query.place.type === Type.Bank) {
+            if (query.place.type !== Type.Bank) {
+                dispatch('setDialogData', query);
+                return;
+            }
 
-                if (!force && state.branches[query.place.code] && state.branches[query.place.code].loaded) {
+            if (!force && state.branches[query.place.code] && state.branches[query.place.code].loaded) {
+                dispatch('setDialogData', {
+                    ...query,
+                    place: {
+                        ...query.place,
+                        branches: state.branches[query.place.code].data
+                    }
+                });
+            } else {
+                ExchangeAPI.getBranches(query.place.code).then(data => {
+                    data.forEach(d => d.gmaps = getGmap(d));
+                    query.place.branches = data;
+                    commit('setBankBranches', {
+                        bank: query.place.code,
+                        branches: data
+                    });
                     dispatch('setDialogData', {
                         ...query,
                         place: {
                             ...query.place,
-                            branches: state.branches[query.place.code].data
+                            branches: data
                         }
                     });
-                } else {
-                    ExchangeAPI.getBranches(query.place.code).then(data => {
-                        data.forEach(d => d.gmaps = getGmap(d));
-                        query.place.branches = data;
-                        commit('setBankBranches', {
-                            bank: query.place.code,
-                            branches: data
-                        });
-                        dispatch('setDialogData', {
-                            ...query,
-                            place: {
-                                ...query.place,
-                                branches: data
-                            }
-                        });
-                    });
-                }
-            } else
-                dispatch('setDialogData', query);
+                });
+            }
         },
 
         setCurrentCurrency: ({ commit, dispatch }, currency: string) => {

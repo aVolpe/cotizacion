@@ -5,7 +5,8 @@
   ],
   "linterOptions": {
     "exclude": [
-      "node_modules/**"
+      "node_modules/**",
+      "**/*.json"
     ]
   },
   "rules": {
@@ -25,10 +26,7 @@
     "no-consecutive-blank-lines": false,
     "arrow-parens": false,
     "member-access": false,
-    "curly": [
-      true,
-      "as-needed"
-    ],
+    "curly": false,
     "no-console": false
   }
 }

@@ -1,38 +1,41 @@
-import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import Vuetify from 'vuetify';
 import Meta from 'vue-meta';
-import moment from 'moment';
+// import moment from 'moment';
 import store from './store';
+import './initVuetify';
 import './registerServiceWorker';
-import theme from './theme';
+import {distanceInWords, format} from 'date-fns';
+import es from 'date-fns/locale/es';
+import Vue from 'vue';
 
-
-Vue.config.productionTip = false;
-Vue.use(Vuetify, {theme});
 Vue.use(Meta, {
     keyName: 'head'
 });
+
+Vue.config.productionTip = false;
 
 Vue.filter('multiply', (value: number, multiplier: number = 1) => {
     if (!multiplier || multiplier < 1 || isNaN(multiplier)) return value;
     return value * multiplier;
 });
 
-Vue.filter('fn', (value: number | null) => {
+Vue.filter('fn', (value: any) => {
     if (typeof value !== 'number') return value;
     return value.toLocaleString('es-PY');
 });
 
-Vue.filter('fd', (value: string, format: string) => {
+Vue.filter('fd', (value: any, desiredFormat: string | null) => {
 
-    const finalFormat = format ? format : 'MM/DD/YYYY hh:mm';
-    if (value) return moment(String(value)).format(finalFormat);
+    const finalFormat = desiredFormat ? desiredFormat : 'MM/DD/YYYY hh:mm';
+    if (value) return format(value, finalFormat);
+    return '';
+    // if (value) return format(String(value)).format(finalFormat);
 });
 
 Vue.filter('mfn', (value: string) => {
-    if (value) return moment(String(value)).locale('es').fromNow();
+    if (value) return distanceInWords(value, new Date(), {locale: es});
+    return '';
 });
 
 /**
