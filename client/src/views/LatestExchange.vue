@@ -92,7 +92,6 @@
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
     import ExchangeData from "@/components/ExchangeData.vue";
-    import MapOfExchanges from "@/components/MapOfExchanges.vue";
     import {Meta} from "@/decorators";
     import {Action, State, Getter} from "vuex-class";
     import {Loaded} from "@/store";
@@ -100,8 +99,7 @@
 
     @Component({
         components: {
-            ExchangeData,
-            MapOfExchanges
+            ExchangeData
         }
     })
     @Meta({
