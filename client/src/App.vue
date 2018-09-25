@@ -33,7 +33,7 @@
             <v-spacer></v-spacer>
             <span>
                 <a href="https://www.github.com/avolpe/cotizacion" target="_blank">
-                    &copy; 2018
+                    &copy; Arturo Volpe 2018
                 </a>
             </span>
             <v-spacer></v-spacer>
@@ -53,145 +53,162 @@
     </v-app>
 </template>
 <script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import "vuetify/dist/vuetify.min.css";
+import { Meta } from "./decorators";
+import theme from "./theme";
 
-    import {Component, Vue} from "vue-property-decorator";
-    import "vuetify/dist/vuetify.min.css";
-    import {Meta} from "./decorators";
-    import theme from "./theme";
+@Component({
+  components: {}
+})
+@Meta({
+  title: " ",
+  titleTemplate: "%s | Cotizaciones",
+  meta: [
+    {
+      "http-equiv": "Content-Type",
+      "content": "text/html; charset=utf-8"
+    } as any,
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    {
+      name: "description",
+      content:
+        "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
+    },
+    { name: "theme-color", content: theme.primary },
 
+    { property: "og:title", content: "Cotizaciones del paraguay" },
+    { property: "og:site_name", content: "Cotizaciones del Paraguay" },
+    // The list of types is available here: http://ogp.me/#types
+    { property: "og:type", content: "website" },
+    // Should the the same as your canonical link, see below.
+    { property: "og:url", content: "https://cotizaciones.volpe.com.py/" },
+    {
+      property: "og:image",
+      content: "https://blog.volpe.com.py/static/img/avatar.jpg"
+    },
 
-    @Component({
-        components: {},
-    })
-    @Meta({
-        title: " ",
-        titleTemplate: "%s | Cotizaciones",
-        meta: [
-            {"http-equiv": "Content-Type", "content": "text/html; charset=utf-8"} as any,
-            {name: "viewport", content: "width=device-width, initial-scale=1"},
-            {
-                name: "description",
-                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
-            },
-            {name: "theme-color", content: theme.primary},
+    // Often the same as your meta description, but not always.
+    {
+      property: "og:description",
+      content:
+        "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
+    },
 
-            {property: "og:title", content: "Cotizaciones del paraguay"},
-            {property: "og:site_name", content: "Cotizaciones del Paraguay"},
-            // The list of types is available here: http://ogp.me/#types
-            {property: "og:type", content: "website"},
-            // Should the the same as your canonical link, see below.
-            {property: "og:url", content: "https://cotizaciones.volpe.com.py/"},
-            {property: "og:image", content: "https://blog.volpe.com.py/static/img/avatar.jpg"},
+    // Twitter card
+    { name: "twitter:card", content: "Cotizaciones del paraguay" },
+    { name: "twitter:site", content: "https://cotizaciones.volpe.com.py/" },
+    { name: "twitter:title", content: "Cotizaciones" },
+    {
+      name: "twitter:description",
+      content:
+        "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
+    },
+    // Your twitter handle, if you have one.
+    { name: "twitter:creator", content: "@cochoVolpe" },
+    {
+      name: "twitter:image:src",
+      content: "https://blog.volpe.com.py/static/img/avatar.jpg"
+    },
 
-            // Often the same as your meta description, but not always.
-            {
-                property: "og:description",
-                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
-            },
-
-            // Twitter card
-            {name: "twitter:card", content: "Cotizaciones del paraguay"},
-            {name: "twitter:site", content: "https://cotizaciones.volpe.com.py/"},
-            {name: "twitter:title", content: "Cotizaciones"},
-            {
-                name: "twitter:description",
-                content: "Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos."
-            },
-            // Your twitter handle, if you have one.
-            {name: "twitter:creator", content: "@cochoVolpe"},
-            {name: "twitter:image:src", content: "https://blog.volpe.com.py/static/img/avatar.jpg"},
-
-            // Google / Schema.org markup:
-            {itemprop: "name", content: "Cotizaciones del paraguay"},
-            {itemprop: "description", content: "Cotizaciones del paraguay"},
-            {itemprop: "image", content: "https://blog.volpe.com.py/static/img/avatar.jpg"}
-        ]
-    })
-    export default class App extends Vue {
-
-        drawer: boolean = false;
-        public routes: Array<{
-            name: string,
-            icon: string,
-            to: string
-        }>;
-
-
-        constructor() {
-            super();
-            // console.log(this.$router);
-
-            this.routes = [
-                {
-                    name: "Inicio",
-                    to: "/",
-                    icon: "home"
-                }, {
-                    name: "Librerías OpenSource",
-                    to: "/licenses",
-                    icon: "gavel"
-                }, {
-                    name: "Explorar API",
-                    to: "/swagger",
-                    icon: "scanner"
-                }
-            ];
-        }
-
-        goHome() {
-            this.$router.push("/");
-        }
-
+    // Google / Schema.org markup:
+    { itemprop: "name", content: "Cotizaciones del paraguay" },
+    { itemprop: "description", content: "Cotizaciones del paraguay" },
+    {
+      itemprop: "image",
+      content: "https://blog.volpe.com.py/static/img/avatar.jpg"
     }
+  ]
+})
+export default class App extends Vue {
+  drawer: boolean = false;
+  public routes: Array<{
+    name: string;
+    icon: string;
+    to: string;
+  }>;
+
+  constructor() {
+    super();
+
+    this.routes = [
+      {
+        name: "Inicio",
+        to: "/",
+        icon: "home"
+      },
+      {
+          name: "Mapa",
+          to: "/map",
+          icon: "map"
+      },
+      {
+        name: "Librerías OpenSource",
+        to: "/licenses",
+        icon: "gavel"
+      },
+      {
+        name: "Explorar API",
+        to: "/swagger",
+        icon: "scanner"
+      }
+    ];
+  }
+
+  goHome() {
+    this.$router.push("/");
+  }
+}
 </script>
 
 
 <style>
+#github-logo {
+  fill: #283593;
+  color: #fff;
+  position: absolute;
+  bottom: 0%;
+  border: 0;
+  right: 0;
+  transform: scale(1, -1);
+}
 
-    #github-logo {
-        fill: #283593;
-        color: #fff;
-        position: absolute;
-        bottom: 0%;
-        border: 0;
-        right: 0;
-        transform: scale(1, -1);
-    }
+#github-logo:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
 
-    #github-logo:hover .octo-arm {
-        animation: octocat-wave 560ms ease-in-out;
-    }
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
 
-    @keyframes octocat-wave {
-        0%, 100% {
-            transform: rotate(0);
-        }
-        20%, 60% {
-            transform: rotate(-25deg);
-        }
-        40%, 80% {
-            transform: rotate(10deg);
-        }
-    }
+@media (max-width: 500px) {
+  #github-logo:hover .octo-arm {
+    animation: none;
+  }
 
-    @media (max-width: 500px) {
-        #github-logo:hover .octo-arm {
-            animation: none
-        }
+  #github-logo .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
 
-        #github-logo .octo-arm {
-            animation: octocat-wave 560ms ease-in-out
-        }
-    }
+@media (max-width: 599px) {
+  .main-container {
+    padding: 10px !important;
+  }
+}
 
-    @media (max-width: 599px) {
-        .main-container {
-            padding: 10px !important;
-        }
-    }
-
-    .title {
-        cursor: pointer
-    }
-
+.title {
+  cursor: pointer;
+}
 </style>

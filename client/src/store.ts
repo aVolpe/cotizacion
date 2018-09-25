@@ -248,6 +248,22 @@ export default new Vuex.Store<RootState>({
             if (!state.current.currency || !state.exchanges[state.current.currency])
                 return { loading: false, loaded: false };
             return state.exchanges[state.current.currency];
+        },
+
+        branchesWithLocation(state): Loaded<ExchangeDataDTO> {
+            if (!state.current.currency || !state.exchanges[state.current.currency])
+                return { loading: false, loaded: false };
+            const baseData = state.exchanges[state.current.currency];
+            if (!baseData.loaded) {
+                return baseData;
+            }
+            return {
+                ...baseData,
+                data: {
+                    ...baseData.data!,
+                    data: baseData.data!.data.filter(qr => qr.branch && qr.branch.gmaps)
+                }
+            };
         }
 
     } as GetterTree<RootState, RootState>
