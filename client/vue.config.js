@@ -1,7 +1,7 @@
 const SitemapPlugin = require("sitemap-webpack-plugin").default;
 const PrerenderSPAPlugin = require("prerender-spa-plugin");
 const path = require("path");
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 
 
