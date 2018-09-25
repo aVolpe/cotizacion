@@ -5,10 +5,6 @@
             <ExchangeData v-on:ok="hideExchangeDialog" :data="exchangeDialog.data"></ExchangeData>
         </v-dialog>
     </div>
-
-
-        
-        
 </template>
 
 <script lang="ts">

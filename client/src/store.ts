@@ -266,6 +266,5 @@ export default new Vuex.Store<RootState>({
             };
         }
 
-
     } as GetterTree<RootState, RootState>
 });
