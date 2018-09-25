@@ -1,11 +1,13 @@
 <template>
-<div class="elevation-4">
-      <v-card style="margin: 2px">
+<div>
+      <v-card>
         <GmapMap
-          :center="{lat:-25.2868696, lng:-57.6257072}"
-          :zoom="13"
+          :center="{lat:-25.2868696, lng:-57.5757072}"
+          :zoom="10"
+          ref="mapRef"
+          :options="{gestureHandling: 'greedy'}"
           v-if="branchesWithLocation.loaded"
-          style="width: 100%; height: 800px"
+          :style="'width: 100%; height: ' + height + 'px'"
         >
         <GmapInfoWindow
             :key="'giw' + qr.id"
@@ -41,6 +43,13 @@
             :clickable="true"
             :draggable="false"
           />
+        <div slot="visible">
+          <div style="top: 0px; right: 0px;  position: absolute; z-index: 100">
+              <v-icon style="padding: 7px; margin: 10px; margin-top: 56px; background-color: white;" v-on:click="searchLocation">
+                location_searching
+              </v-icon>
+          </div>
+        </div>
         </GmapMap>
       </v-card>
 
@@ -59,6 +68,9 @@ export default class MapOfExchanges extends Vue {
   @Getter branchesWithLocation!: Loaded<ExchangeDataDTO[]>;
   @State current!: { currency: string; amount: number };
   @Action showExchangeData!: () => void;
+  height: number = window.innerWidth < 600
+    ? window.innerHeight - 46 - 56 - 20
+    : 800;
 
   infoWindowOptions = {
     pixelOffset: {
@@ -68,5 +80,28 @@ export default class MapOfExchanges extends Vue {
   };
 
   selected: string = "";
+
+  searchLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          const map = (this.$refs.mapRef as any).$mapObject;
+          map.panTo(pos);
+          map.setZoom(14);
+        },
+        (err) => {
+          alert(`Error (${err.code}): ${err.message}`);
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      alert("Imposible usar ubicación");
+    }
+  }
 }
 </script>

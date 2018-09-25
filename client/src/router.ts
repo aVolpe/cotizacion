@@ -5,6 +5,7 @@ import LatestExchange from "./views/LatestExchange.vue";
 import BackendDown from "./views/BackendDown.vue";
 import Licenses from "./views/Licenses.vue";
 import Swagger from "./views/Swagger.vue";
+import Map from "./views/Map.vue";
 
 Vue.use(Router);
 
@@ -19,6 +20,11 @@ export default new Router({
             path: "/about",
             name: "about",
             component: About
+        },
+        {
+            path: "/map",
+            name: "map",
+            component: Map
         },
         {
             path: "/licenses",
