@@ -31,7 +31,7 @@ module.exports = {
     ]
   },
   pwa: {
-    name: "Cotizacione del Paraguay",
+    name: "Cotizaciones del Paraguay",
     themeColor: "#283593",
     msTileColor: "#283593",
     appleMobileWebAppCapable: "yes",
