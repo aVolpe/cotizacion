@@ -49,6 +49,11 @@ public class Alberdi implements Gatherer {
             QueryResponse qr = new QueryResponse(branch);
             List<ExchangeData> exchanges = result.get(branch.getRemoteCode());
 
+            if (exchanges == null) {
+                log.warn("No data for branch {} in {}", branch.getRemoteCode(), getCode());
+                return qr;
+            }
+
             exchanges.forEach(exchange -> {
 
                 String iso = mapToISO(exchange);
