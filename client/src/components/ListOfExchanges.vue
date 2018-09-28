@@ -119,12 +119,12 @@
         @Action fetchCurrencies!: () => void;
         @Action setCurrentCurrency!: (isoCode: string) => void;
         @Action setCurrentPlace!: (place: Place) => void;
-        @Action clearCurrentPlace: () => void;
+        @Action clearCurrentPlace!: () => void;
 
         @Getter filteredCurrencies!: Loaded<ExchangeData[]>;
         @Getter currentPlaces!: Place[];
 
-        placesWithEmpty: Place[];
+        placesWithEmpty: Place[] = [];
 
         headers: Array<{
             text?: string;
@@ -171,23 +171,12 @@
             };
         }
 
-        clearPlace() {
-            console.log(arguments);
-            this.clearCurrentPlace();
-            setTimeout(() => {
-                (this.$refs.selectPlace as any).isMenuActive = false
-
-            }, 50);
-
-        }
-
         @Watch("currentPlaces", {immediate: true})
         setLocalPlace(places: Place[]) {
             this.placesWithEmpty = [{
                 name: "Todos",
                 id: -1
-            } as Place].concat(places)
-
+            } as Place].concat(places);
         }
     }
 </script>
