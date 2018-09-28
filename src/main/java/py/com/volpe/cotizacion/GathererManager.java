@@ -2,7 +2,6 @@ package py.com.volpe.cotizacion;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.domain.Execution;
@@ -56,7 +55,6 @@ public class GathererManager {
      * @param code the code of the place (in case we want to only query one place)
      * @return the list of places with new data
      */
-    @CacheEvict(cacheNames = {"byIso", "isoList"}, allEntries = true)
     public Set<String> doQuery(String code) {
 
         Execution e = executionRepository.save(new Execution());
