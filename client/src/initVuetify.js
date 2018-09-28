@@ -25,6 +25,7 @@ import VTabs from 'vuetify/es5/components/VTabs';
 import VTextField from 'vuetify/es5/components/VTextField';
 import VToolbar from 'vuetify/es5/components/VToolbar';
 import VDivider from 'vuetify/es5/components/VDivider';
+import VAlert from 'vuetify/es5/components/VAlert';
 
 
 Vue.use(Vuetify, {
@@ -48,7 +49,8 @@ Vue.use(Vuetify, {
         VTextField,
         VToolbar,
         VImg,
-        VDivider
+        VDivider,
+        VAlert
     },
     theme
 });

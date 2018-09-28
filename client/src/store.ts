@@ -1,6 +1,14 @@
 import Vue from "vue";
-import Vuex, { ActionTree, GetterTree, MutationTree } from "vuex";
-import { Branch, ExchangeAPI, ExchangeDataDTO, QueryResponseDetail, Type, SingleExchangeData } from "@/api/ExchangeAPI";
+import Vuex, {ActionTree, GetterTree, MutationTree} from "vuex";
+import {
+    Branch,
+    ExchangeAPI,
+    ExchangeDataDTO,
+    Place,
+    QueryResponseDetail,
+    SingleExchangeData,
+    Type
+} from "@/api/ExchangeAPI";
 
 Vue.use(Vuex);
 
@@ -32,6 +40,7 @@ export interface RootState {
     current: {
         currency: string;
         amount: number;
+        place?: number;
     };
 
     exchangeDialog: {
@@ -46,12 +55,12 @@ export default new Vuex.Store<RootState>({
     state: {
         exchanges: {},
         branches: {},
-        currencies: { loading: false, loaded: false },
+        currencies: {loading: false, loaded: false},
         current: {
             currency: "USD",
-            amount: 1
+            amount: 1,
         },
-        exchangeDialog: { loading: false, show: false }
+        exchangeDialog: {loading: false, show: false}
     },
 
     mutations: {
@@ -81,7 +90,7 @@ export default new Vuex.Store<RootState>({
             };
         },
 
-        setBankBranches(state, { bank, branches }) {
+        setBankBranches(state, {bank, branches}) {
             state.branches = {
                 ...state.branches,
                 [bank]: {
@@ -89,6 +98,13 @@ export default new Vuex.Store<RootState>({
                     loading: false,
                     data: branches
                 }
+            };
+        },
+
+        setCurrentPlace(state, placeId?: number) {
+            state.current = {
+                ...state.current,
+                place: placeId ? placeId : undefined
             };
         },
 
@@ -132,11 +148,11 @@ export default new Vuex.Store<RootState>({
 
     actions: {
 
-        hideExchangeDialog({ commit }) {
+        hideExchangeDialog({commit}) {
             commit("hideExchangeDialog");
         },
 
-        setDialogData({ commit }, query: QueryResponseDetail) {
+        setDialogData({commit}, query: QueryResponseDetail) {
             commit("setExchangeData", {
                 place: query.place,
                 branch: query.branch,
@@ -149,7 +165,7 @@ export default new Vuex.Store<RootState>({
             });
         },
 
-        showExchangeData: ({ commit, dispatch, state }, query: QueryResponseDetail, force: boolean = false) => {
+        showExchangeData: ({commit, dispatch, state}, query: QueryResponseDetail, force: boolean = false) => {
 
             if (query.place.type !== Type.Bank) {
                 dispatch("setDialogData", query);
@@ -183,17 +199,26 @@ export default new Vuex.Store<RootState>({
             }
         },
 
-        setCurrentCurrency: ({ commit, dispatch }, currency: string) => {
+        setCurrentCurrency: ({commit, dispatch}, currency: string) => {
             commit("setCurrency", currency);
             dispatch("fetchExchange", currency);
         },
 
-        setAmount: ({ commit }, newAmount: number) => {
+        setAmount: ({commit}, newAmount: number) => {
             commit("setAmount", newAmount);
         },
 
+        setCurrentPlace: ({commit}, placeId: number) => {
+            console.log(placeId);
+            commit("setCurrentPlace", placeId > 0 ? placeId : undefined);
+        },
 
-        fetchCurrencies: ({ commit, dispatch }) => {
+        clearCurrentPlace: ({commit}) => {
+            commit("setCurrentPlace");
+        },
+
+
+        fetchCurrencies: ({commit, dispatch}) => {
             commit("beginLoadCurrencies");
             ExchangeAPI.getCurrencies().then(data => {
                 commit("currenciesResult", data);
@@ -208,7 +233,7 @@ export default new Vuex.Store<RootState>({
 
         },
 
-        fetchExchange: ({ commit, state }, isoCode: string, force: boolean = false) => {
+        fetchExchange: ({commit, state, dispatch}, isoCode: string, force: boolean = false) => {
             if (!force && state.exchanges[isoCode]) {
                 return;
             }
@@ -228,6 +253,13 @@ export default new Vuex.Store<RootState>({
                     toRet.push(row);
 
                 }
+                if (state.current.place) {
+
+                    const countOfCurrentPlace = toRet.filter(tr => tr.place.id === state.current.place).length;
+                    if (countOfCurrentPlace === 0) {
+                        dispatch("clearCurrentPlace");
+                    }
+                }
                 commit("exchangeResult", {
                     isoCode,
                     data: {
@@ -246,13 +278,49 @@ export default new Vuex.Store<RootState>({
 
         currentCurrencyData(state): Loaded<ExchangeDataDTO> {
             if (!state.current.currency || !state.exchanges[state.current.currency])
-                return { loading: false, loaded: false };
+                return {loading: false, loaded: false};
             return state.exchanges[state.current.currency];
+        },
+
+        filteredCurrencies(state): Loaded<ExchangeDataDTO> {
+
+            console.log("filteredCurrencies");
+            if (!state.current.currency || !state.exchanges[state.current.currency])
+                return {loading: false, loaded: false};
+            const resource = state.exchanges[state.current.currency];
+
+            const filteredPlace = state.current.place;
+            if (!filteredPlace || !resource.data)
+                return resource;
+
+            return {
+                ...resource,
+                data: {
+                    ...resource.data,
+                    data: resource.data.data.filter((l: QueryResponseDetail) => l.place.id === filteredPlace)
+                }
+            };
+        },
+
+        currentPlaces(state): Place[] {
+            if (!state.current.currency || !state.exchanges[state.current.currency])
+                return [];
+            const resource = state.exchanges[state.current.currency];
+
+            if (!resource.data)
+                return [];
+
+            const uniq: { [k: number]: Place } = {};
+            resource.data.data.map(l => l.place)
+                .forEach(l => uniq[l.id] = l);
+            return Object.values(uniq)
+                .sort((i1, i2) => i1.name.localeCompare(i2.name));
+
         },
 
         branchesWithLocation(state): Loaded<ExchangeDataDTO> {
             if (!state.current.currency || !state.exchanges[state.current.currency])
-                return { loading: false, loaded: false };
+                return {loading: false, loaded: false};
             const baseData = state.exchanges[state.current.currency];
             if (!baseData.loaded) {
                 return baseData;
