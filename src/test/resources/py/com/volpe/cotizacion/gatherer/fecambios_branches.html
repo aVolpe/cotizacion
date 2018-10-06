@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html lang="es-ES">
+<head>
+<title>Fe cambios - Sucursales</title>
+<meta name="description" content="Sucursales de fe cambios" />
+<meta name="keywords" content="GRALKEYWORDS,sucursales, direccion, sucursal, asunción, pedro juan caballero, cuidad del este" />
+<meta charset="utf-8" />
+<meta name="googlebot" content="Index, Follow" />
+<meta name="robots" content="all" />
+<meta name="author" content="Puntopy Interactive Agency" />
+
+<meta property="og:site_name" content="Fe cambios" />
+<meta property="og:description" content="Fe cambios - excelencia en cambios" />
+<meta property="og:image" content="images/colinas.png" />
+<!--<meta property="og:url" content="" />-->
+<link rel="shortcut icon" href="images/ico-fecambios.png" />
+<link rel="image_src" href="images/fecambios.png" />
+
+<link href="css/fe.css" rel="stylesheet" type="text/css" />
+<link href="css/flexslider.css" rel="stylesheet" type="text/css" />
+<link href="css/prog.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
+<script type="text/javascript" src="js/modernizr-2.5.3.js"></script>
+<script type="text/javascript" src="js/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="js/application.js"></script>
+<!--[if (gte IE 6)&(lte IE 8)]>
+	<script type="text/javascript" src="js/selectivizr-min.js"></script>
+<![endif]-->
+<script src="lib/sweet-alert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/sweet-alert.css">
+</head>
+
+<body id="sucursales">
+<script type="text/javascript" src="js/reloj.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#reloj').jTime();
+});
+</script>
+<header>
+	<div id="nav">
+		<div class="wrap">
+			<ul class="">
+				<li><a href="./" title="inicio">inicio</a></li>
+				<li><a href="empresa.php" title="la empresa">la empresa</a></li>
+				<li><a href="sucursales.php" title="sucursales">sucursales</a></li>
+				<li><a href="servicios.php" title="servicios">servicios</a></li>
+				<li><a href="cumplimiento.php" title="cumplimiento">cumplimiento</a></li>
+				<li><a href="agentes.php" title="agentes autorizados">agentes autorizados</a></li>
+				<li><a href="contacto.php" title="contactos">contactos</a></li>
+			</ul>
+			<!-- <div class="idiomas">
+				<a href="javascript:;" id="btn_esp" onclick="carga_idioma('ESP')"><img src="images/spanish.jpg" alt="" title=""></a>
+				<a href="javascript:;" id="btn_eng" onclick="carga_idioma('ENG')"><img src="images/english.jpg" alt="" title=""></a>
+				<a href="javascript:;" id="btn_por" onclick="carga_idioma('POR')"><img src="images/portugues.jpg" alt="" title=""></a>
+			</div> -->
+		</div>
+		<script type="text/javascript">
+			/*function carga_idioma(idioma){
+				$.post('inc/carga_idioma.php',{idioma:idioma});
+				setTimeout('location.reload(true)',1000);
+			}*/
+		</script>
+	</div>
+	<div id="topdatos">
+		<div class="wrap">
+			<a href="./" title="logo" class="left"><img src="images/logo.png" alt=""></a>
+			<div class="colright right">
+				<div class="temperatura">
+					<p class="left mr10 padding5 s280 alignright datos_actuales" style="color:#fff; text-shadow: 2px 2px 8px #000">05 de Octubre de 2018 - <b id="reloj"></b></p>
+									
+					<div class="p0 clima">
+		                <div id="TT_RyhEE1EE1aaB8FeUKfqDDjDDDWu1aUa">Pronóstico de Tutiempo.net</div>
+		                <script type="text/javascript" src="http://www.tutiempo.net/widget/eltiempo_RyhEE1EE1aaB8FeUKfqDDjDDDWu1aUa"></script>
+		            </div><!-- clima -->
+					<!--<img src="" alt="" class="right">
+					<span class="left"> 
+						°
+					</span>-->
+				</div>
+				<div class="actualizacion clear mt10">
+					<p class="left mr10 padding5 s280 alignright" style="color:#fff; text-shadow: 2px 2px 8px #000">Ultima actualización</p>
+					<img src="images/reloj.png" alt="" class="left">
+					<span style="color:#fff;text-shadow: 2px 2px 8px #000">
+					10:09</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<section id="section-banner-internas"></section>
+<script>
+  $(document).ready(function(){
+  dropmenu();
+  dropmenu2();
+    cargaCot(9);
+    cargaArb(9);
+    $("#sucursales").change(function(){
+        var d = $("#sucursales option:selected").val();
+        cargaCot(d);
+        cargaArb(d);
+    });
+
+});
+</script>
+<!--<section id="sec-cotizacion" class="pt20 pb40" style="height:300px;">-->
+<section id="sec-cotizacion" class="pt20" style="height:150px;">
+	<div class="wrap">
+		<div class="busc">
+			<div class="disin">
+				<h2>Seleccione una Sucursal:</h2>
+				<select name="sucursales" id="sucursales">
+                    					    <option value="9">Casa Matriz  - Palma - Asunción</option>
+                					    <option value="8">Sucursal - Pedro Juan Caballero - Pedro Juan Caballero</option>
+                					    <option value="10">Villa Morra - Asuncion</option>
+                					    <option value="11">Sucursal Monseñor Rodriguez - Ciudad del Este</option>
+                					    <option value="13">Ag. San Lorenzo - San Lorenzo</option>
+                				</select>
+			</div>
+		</div>
+
+
+		<div class="cotizacionesgral  left" id="cotCont">
+
+
+		</div>
+
+		<div class="arbitraje left" id="arbCont">
+
+		</div>
+	</div>
+</section>
+<section class="content">
+	<div class="wrap">
+		<div id="btn-desplegar"></div>
+		<section class="contenido mt30">
+			<div class="left s580 mr50">
+					<h1 class="titulo_inn_lista">Sucursales</h1>
+										<article class="s580 left mr50 mb20 articlelista">
+						<div class="left">
+							<figure><img src="upload/sucursales/1435688259.jpg" alt="Casa Matriz  - Palma"></figure>
+						</div>
+						<div class="right s300">
+							<h2>Asunción - Casa Matriz  - Palma</h2>
+							<p>Palma Nº 519 casi 14 de Mayo</p>
+							<p>+595-21-451300 RA</p>
+							<p>jose.gonzalez@fecambios.com.py</p>
+							<p>Lunes a Viernes 08:00-17:00 Sábados 08:30-12:00</p>
+						</div>
+						<div class="clear"></div>
+						<div class="mapita">
+							<iframe width="550" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.es/maps?q=-25.281095,-57.636751&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.es/maps?q=-25.281095,-57.636751&amp;output=embed" style="color:#0000FF;text-align:left">Ver mapa más grande</a></small>
+						</div>
+					</article>
+										<article class="s580 left mr50 mb20 articlelista">
+						<div class="left">
+							<figure><img src="upload/sucursales/1435688899.jpg" alt="Sucursal - Pedro Juan Caballero"></figure>
+						</div>
+						<div class="right s300">
+							<h2>Pedro Juan Caballero - Sucursal - Pedro Juan Caballero</h2>
+							<p>Mcal. Lopez esq. Julia Miranda Cueto de Estigarribia</p>
+							<p>+595-336-273625/8</p>
+							<p>julio@fecambios.com.py</p>
+							<p>Lunes a Viernes 08:00-17:00 - Sábados 08:00 - 12:00</p>
+						</div>
+						<div class="clear"></div>
+						<div class="mapita">
+							<iframe width="550" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.es/maps?q=-22.536887, -55.733518&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.es/maps?q=-22.536887, -55.733518&amp;output=embed" style="color:#0000FF;text-align:left">Ver mapa más grande</a></small>
+						</div>
+					</article>
+										<article class="s580 left mr50 mb20 articlelista">
+						<div class="left">
+							<figure><img src="upload/sucursales/1435688771.jpg" alt="Villa Morra"></figure>
+						</div>
+						<div class="right s300">
+							<h2>Asuncion - Villa Morra</h2>
+							<p>Charles de Gaulle entre Mcal. Lopez y Quesada</p>
+							<p>+595-21-613181 RA</p>
+							<p>jose.valdez@fecambios.com.py</p>
+							<p>Lunes a Viernes 08:00-17:00 - Sábados 08:30 - 12:00</p>
+						</div>
+						<div class="clear"></div>
+						<div class="mapita">
+							<iframe width="550" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.es/maps?q=-25.294490,-57.580157&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.es/maps?q=-25.294490,-57.580157&amp;output=embed" style="color:#0000FF;text-align:left">Ver mapa más grande</a></small>
+						</div>
+					</article>
+										<article class="s580 left mr50 mb20 articlelista">
+						<div class="left">
+							<figure><img src="upload/sucursales/1435688836.jpg" alt="Sucursal Monseñor Rodriguez"></figure>
+						</div>
+						<div class="right s300">
+							<h2>Ciudad del Este - Sucursal Monseñor Rodriguez</h2>
+							<p>Monseñor Rodriguez entre Boqueron y Abay</p>
+							<p>+595-61-510731</p>
+							<p>carlos_a@fecambios.com.py</p>
+							<p>Lunes a Viernes 07:00-15:00 - Sábados 07:30 - 11:30</p>
+						</div>
+						<div class="clear"></div>
+						<div class="mapita">
+							<iframe width="550" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.es/maps?q=-25.509539,-54.611197&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.es/maps?q=-25.509539,-54.611197&amp;output=embed" style="color:#0000FF;text-align:left">Ver mapa más grande</a></small>
+						</div>
+					</article>
+										<article class="s580 left mr50 mb20 articlelista">
+						<div class="left">
+							<figure><img src="upload/sucursales/1435687858.jpg" alt="Ag. San Lorenzo"></figure>
+						</div>
+						<div class="right s300">
+							<h2>San Lorenzo - Ag. San Lorenzo</h2>
+							<p>Mcal. Estigarribia e/España y Coronel Romero Nº 2254</p>
+							<p>+595-21-590232</p>
+							<p>nidia@fecambios.com.py</p>
+							<p>Lunes a Viernes 08:00-17:00 - Sábados 08:30 - 12:00</p>
+						</div>
+						<div class="clear"></div>
+						<div class="mapita">
+							<iframe width="550" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.es/maps?q=-25.345210,-57.507757&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.es/maps?q=-25.345210,-57.507757&amp;output=embed" style="color:#0000FF;text-align:left">Ver mapa más grande</a></small>
+						</div>
+					</article>
+					
+			</div>
+			<aside class="right">
+				<script type="text/javascript" src="js/jquery.validate.js"></script>
+<article class="conversor right">
+			<h2><img src="images/ico-conversor.jpg" alt="">Conversor de divisas</h2>
+			<form action="" id="conversor_form" method="post">
+  			<div class="radio">
+  				<input type="radio" name="tipo_opera" id="radio" value="compra" checked="checked" class="ml30" />
+    			<span>Comprar</span>
+    		</div>
+    		<div class="radio">
+    			<input type="radio" name="tipo_opera" id="radio" value="venta" class="ml20" />
+    			<span>Vender</span>
+    		</div>
+  		  <div class="clear"></div>
+  		  <label for="">Monto:</label>
+  		  <input type="text" name="monto_moneda" id="monto_moneda">
+  		  <div class="clear"></div>
+
+        <label for="">Convertir de:</label>
+
+        <select name="moneda_origen" id="moneda_origen">
+    			<option value="0">Guaranies</option>
+                      <option value="16">Dolar Canadiense</option>
+                      <option value="2">Dolar Cheque</option>
+                      <option value="1">Dolar Efectivo</option>
+                      <option value="4">Euro Cheque</option>
+                      <option value="3">Euro Efectivo</option>
+                      <option value="15">Franco Suizo</option>
+                      <option value="14">Libra Esterlina</option>
+                      <option value="11">Peso Argentino</option>
+                      <option value="18">Peso Chileno</option>
+                      <option value="17">Peso Uruguayo</option>
+                      <option value="12">Real Efectivo</option>
+                      <option value="13">Yen</option>
+              		</select>
+
+        <div class="clear"></div>
+
+  		  <label for="">A :</label>
+
+        <select name="moneda_destino" id="moneda_destino">
+            		      <option value="16">Dolar Canadiense</option>
+            		      <option value="2">Dolar Cheque</option>
+            		      <option value="1">Dolar Efectivo</option>
+            		      <option value="4">Euro Cheque</option>
+            		      <option value="3">Euro Efectivo</option>
+            		      <option value="15">Franco Suizo</option>
+            		      <option value="14">Libra Esterlina</option>
+            		      <option value="11">Peso Argentino</option>
+            		      <option value="18">Peso Chileno</option>
+            		      <option value="17">Peso Uruguayo</option>
+            		      <option value="12">Real Efectivo</option>
+            		      <option value="13">Yen</option>
+                    <option value="0">Guaranies</option>
+  		  </select>
+
+  		  <div class="clear"></div>
+  		  <input type="button" value="Convertir" id="convertir">
+        <input type="hidden" value="ZJJwX+YNy9DkHknaW0tItyLfGMfJWXDtIrL5gguCAfo=" name="token" id="token">
+  		  <p id="result_opera"></p>
+		</form>
+  <script type="text/javascript">
+    $("#convertir").click(function(){
+        $.ajax({
+            beforeSend: function(objeto) {
+              $('#result_opera').html('Calculando...');
+            },
+            type: "POST",
+            url: "ajax/conversor_form.php",
+            contentType: "application/x-www-form-urlencoded",
+            processData: false,
+            data: $("#conversor_form").serialize(),
+            dataType: "json",
+            success: function(json,convert){
+
+              $('#result_opera').css('text-align:center');
+              $('#result_opera').html(json.convert);
+            }
+          });
+    })
+  </script>
+
+</article>
+
+
+<div class="wrapsucursal right mt40">
+    <h2 class="aligncenter">NUESTRAS SUCURSALES</h2>
+    <a href="sucursales.php">
+      <div class="sucursal aligncenter">
+        <img src="images/img-sucursal.jpg" alt="" class="mb10">
+        <p>Encuentre nuestra sucursal más cercana <b>haciendo click aquí</b></p>
+      </div>
+    </a>
+</div>			</aside>
+		</section>
+	</div>
+</section>
+
+<footer>
+	<div class="foot1">
+		<div class="wrap">
+			<a href="./" title="logo-footer"><img src="images/logo-footer.jpg" alt=""></a>
+			<div class="direcciones left ml30 mt10">
+				<p>Casa Matriz - Asunción <br>
+				Palma Nª 519 entre 14 de Mayo y 15 de Agosto - Tel.: (021)451-300</p>
+				<a href="#">info@fecambios.com.py </a>
+			</div>
+			<a href="contacto.php" title="ubicacion-footer"><img src="images/btn-ubicacion.jpg" alt=""></a>
+		</div> 
+	</div>
+	<div class="foot2">
+		<div class="wrap"> 
+			<p> © 2015 FE Cambios S.A.</p>
+			<ul>
+				<li><a href="./" title="inicio-f">Inicio</a></li>
+				<li><a href="empresa.php" title="empresa-f">La empresa</a></li>
+				<li><a href="sucursales.php" title="sucursales-f"> Sucursales</a></li>
+				<li><a href="servicios.php" title="servicios-f">Servicios</a></li>
+				<li><a href="cumplimiento.php" title="cumplimiento-f">Cumplimiento</a></li>
+				<li><a href="agentes.php" title="agentes-f">Agentes autorizados</a></li>
+				<li><a href="contacto.php" title="contacto-f">Contactos</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="foot3">
+		<div class="wrap">
+			<div class="social">
+				<p>Encuéntrenos también en:</p>
+				<a href="#" title="facebook"><img src="images/facebook.png" alt=""></a>
+				<a href="#" title="twitter"><img src="images/twitter.png" alt=""></a>
+			</div>
+			<div id="suscr">
+				<form action="" class="formsus">
+					<label for="">Recibí<br>Cotizaciones</label>
+					<select id="sucursales-footer" name="sucursales-footer">
+             					    <option value="Casa Matriz  - Palma">Casa Matriz  - Palma - Asunción</option>
+                					    <option value="Sucursal - Pedro Juan Caballero">Sucursal - Pedro Juan Caballero - Pedro Juan Caballero</option>
+                					    <option value="Villa Morra">Villa Morra - Asuncion</option>
+                					    <option value="Sucursal Monseñor Rodriguez">Sucursal Monseñor Rodriguez - Ciudad del Este</option>
+                					    <option value="Ag. San Lorenzo">Ag. San Lorenzo - San Lorenzo</option>
+                					</select>
+					<fieldset>
+						<input type="text" name="suscrip" id="suscrip" placeholder="usuario@gmail.com">
+						<input type="button" onclick="suscribe()" name="" id="" value="OK">
+					</fieldset>
+				</form>
+			</div>
+			<a href="http://www.puntopy.com" title="puntopy" target="_blank"><img src="images/puntopy.jpg" alt=""></a>
+		</div>
+	</div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-66423422-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
