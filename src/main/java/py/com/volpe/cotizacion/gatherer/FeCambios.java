@@ -112,7 +112,7 @@ public class FeCambios implements Gatherer {
 		return "FeCambios";
 	}
 
-	Pair<Double, Double> extractLatLng(String gmapsLink) {
+	protected Pair<Double, Double> extractLatLng(String gmapsLink) {
 
 		String data = gmapsLink.substring(gmapsLink.indexOf("q=") + 2);
 
@@ -126,7 +126,7 @@ public class FeCambios implements Gatherer {
 
 	}
 
-	Long parseAmount(String amount) {
+	protected Long parseAmount(String amount) {
 		return Long.parseLong(amount.substring(0, amount.indexOf(','))
 				.replace(".", ""));
 
