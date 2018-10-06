@@ -1,6 +1,7 @@
 package py.com.volpe.cotizacion;
 
 import com.google.common.collect.ImmutableMap;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -29,23 +30,27 @@ public class HTTPHelper {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 
-			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
 
 
-			int status = con.getResponseCode();
-			if (status != 200)
-				throw new AppException(status, "Invalid status returned querying URL " + uri);
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuilder content = new StringBuilder();
-			while ((inputLine = in.readLine()) != null) {
-				content.append(inputLine);
-			}
-			in.close();
-			return content.toString();
+			return handleResponse(uri, con);
 		} catch (IOException e) {
 			throw new AppException(500, "Invalid response", e);
 		}
+	}
+
+	private String handleResponse(String uri, HttpURLConnection con) throws IOException {
+		int status = con.getResponseCode();
+		if (status != 200)
+			throw new AppException(status, "Invalid status returned querying URL " + uri);
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuilder content = new StringBuilder();
+		while ((inputLine = in.readLine()) != null) {
+			content.append(inputLine);
+		}
+		in.close();
+		return content.toString();
 	}
 
 	public String doPost(String uri, ImmutableMap<String, String> data) {
@@ -54,7 +59,6 @@ public class HTTPHelper {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 
-			con.setRequestProperty("Content-Type", "application/json");
 			con.setDoOutput(true);
 
 
@@ -66,23 +70,13 @@ public class HTTPHelper {
 			int length = out.length;
 
 			con.setFixedLengthStreamingMode(length);
-			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
 			con.connect();
 			try (OutputStream os = con.getOutputStream()) {
 				os.write(out);
 			}
 
-			int status = con.getResponseCode();
-			if (status != 200)
-				throw new AppException(status, "Invalid status returned querying URL " + uri);
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuilder content = new StringBuilder();
-			while ((inputLine = in.readLine()) != null) {
-				content.append(inputLine);
-			}
-			in.close();
-			return content.toString();
+			return handleResponse(uri, con);
 		} catch (IOException e) {
 			throw new AppException(500, "Invalid response", e);
 		}
