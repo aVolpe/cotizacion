@@ -1,0 +1,84 @@
+package py.com.volpe.cotizacion.gatherer;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import py.com.volpe.cotizacion.HTTPHelper;
+import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.QueryResponse;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+/**
+ * @author Arturo Volpe
+ * @since 10/7/18
+ */
+@RunWith(MockitoJUnitRunner.class)
+public class MyDTest {
+
+	@Mock
+	private HTTPHelper wsHelper;
+
+	@InjectMocks
+	private MyD gatherer;
+
+	@Test
+	public void doQuery() throws IOException {
+
+		String data = IOUtils.toString(getClass().getResourceAsStream("myd_data.html"), "UTF-8");
+
+		Mockito.when(wsHelper.doGet(Mockito.any())).thenReturn(data);
+		Place p = gatherer.build();
+
+		List<QueryResponse> result = gatherer.doQuery(p, p.getBranches());
+
+		assertEquals(2, result.size());
+
+		QueryResponse as = result.get(0);
+		QueryResponse cde = result.get(1);
+
+		assertEquals(0, cde.getDetails().size());
+		assertEquals(11, as.getDetails().size());
+
+		assertEquals(5850, as.getDetails().get(0).getPurchasePrice());
+		assertEquals(5870, as.getDetails().get(0).getSalePrice());
+		assertEquals("USD", as.getDetails().get(0).getIsoCode());
+
+		assertEquals(1465, as.getDetails().get(1).getPurchasePrice());
+		assertEquals(1485, as.getDetails().get(1).getSalePrice());
+		assertEquals("BRL", as.getDetails().get(1).getIsoCode());
+
+		assertEquals(170, as.getDetails().get(10).getPurchasePrice());
+		assertEquals(260, as.getDetails().get(10).getSalePrice());
+		assertEquals("UYU", as.getDetails().get(10).getIsoCode());
+	}
+
+	@Test
+	public void build() {
+
+		Place p = gatherer.build();
+
+		assertNotNull(p);
+		assertEquals("MyD", p.getCode());
+		assertNotNull(p.getBranches());
+		assertEquals(3, p.getBranches().size());
+
+	}
+
+	@Test
+	public void getCurrencyName() {
+		assertEquals("ar", MyD.getCurrencyName("https://www.mydcambios.com.py/uploads/ar.png"));
+		assertEquals("descarga", MyD.getCurrencyName("https://www.mydcambios.com.py/uploads/descarga.png"));
+		assertEquals("us-1", MyD.getCurrencyName("https://www.mydcambios.com.py/uploads/us-1.png"));
+
+
+	}
+}
