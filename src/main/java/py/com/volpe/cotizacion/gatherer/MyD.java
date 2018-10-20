@@ -15,10 +15,7 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,8 +28,8 @@ import java.util.stream.Collectors;
 public class MyD implements Gatherer {
 
 	private static final String CODE = "MyD";
-	private static final String ASU_CODE = "2";
-	private static final String CDE_CODE = "4";
+	private static final List<String> ASU_CODE = Arrays.asList("2", "3");
+	private static final List<String> CDE_CODE = Collections.singletonList("4");
 	private static final String URL = "https://www.mydcambios.com.py/";
 
 	private final HTTPHelper helper;
@@ -44,13 +41,12 @@ public class MyD implements Gatherer {
 
 		return branches.stream().map(branch -> {
 
-			if (!branch.getRemoteCode().equals(ASU_CODE) && !branch.getRemoteCode().equals(CDE_CODE)) {
-				return null;
-			}
 
 			QueryResponse qr = new QueryResponse(branch);
 
-			List<ExchangeData> fullTable = getData(query, branch.getRemoteCode().equals(ASU_CODE) ? 0 : 1);
+			int dataIndex = ASU_CODE.contains(branch.getRemoteCode()) ? 0 : 1;
+
+			List<ExchangeData> fullTable = getData(query, dataIndex);
 
 			fullTable.forEach(data -> {
 

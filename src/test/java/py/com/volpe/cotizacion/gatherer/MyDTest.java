@@ -40,12 +40,14 @@ public class MyDTest {
 
 		List<QueryResponse> result = gatherer.doQuery(p, p.getBranches());
 
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 
 		QueryResponse as = result.get(0);
-		QueryResponse cde = result.get(1);
+		QueryResponse vm = result.get(1);
+		QueryResponse cde = result.get(2);
 
 		assertEquals(0, cde.getDetails().size());
+		assertEquals(11, vm.getDetails().size());
 		assertEquals(11, as.getDetails().size());
 
 		assertEquals(5850, as.getDetails().get(0).getPurchasePrice());
@@ -59,6 +61,18 @@ public class MyDTest {
 		assertEquals(170, as.getDetails().get(10).getPurchasePrice());
 		assertEquals(260, as.getDetails().get(10).getSalePrice());
 		assertEquals("UYU", as.getDetails().get(10).getIsoCode());
+
+		assertEquals(5850, vm.getDetails().get(0).getPurchasePrice());
+		assertEquals(5870, vm.getDetails().get(0).getSalePrice());
+		assertEquals("USD", vm.getDetails().get(0).getIsoCode());
+
+		assertEquals(1465, vm.getDetails().get(1).getPurchasePrice());
+		assertEquals(1485, vm.getDetails().get(1).getSalePrice());
+		assertEquals("BRL", vm.getDetails().get(1).getIsoCode());
+
+		assertEquals(170, vm.getDetails().get(10).getPurchasePrice());
+		assertEquals(260, vm.getDetails().get(10).getSalePrice());
+		assertEquals("UYU", vm.getDetails().get(10).getIsoCode());
 	}
 
 	@Test
