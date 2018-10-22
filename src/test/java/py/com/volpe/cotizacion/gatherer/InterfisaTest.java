@@ -56,7 +56,7 @@ public class InterfisaTest {
     @Test
     public void doQuery() throws IOException {
 
-        String data = IOUtils.toString(getClass().getResourceAsStream("interfisa_data.html"), "UTF-8");
+        String data = IOUtils.toString(getClass().getResourceAsStream("interfisa_data.json"), "UTF-8");
         when(wsHelper.doGet(anyString())).thenReturn(data);
 
         Place p = new Place("TEST", "TEST");
@@ -76,17 +76,17 @@ public class InterfisaTest {
         assertEquals(1, response.size());
 
 
-        assertEquals(5750, getDetail(response.get(0), "USD").getPurchasePrice());
-        assertEquals(5830, getDetail(response.get(0), "USD").getSalePrice());
+        assertEquals(5910, getDetail(response.get(0), "USD").getPurchasePrice());
+        assertEquals(6030, getDetail(response.get(0), "USD").getSalePrice());
 
-        assertEquals(1300, getDetail(response.get(0), "BRL").getPurchasePrice());
-        assertEquals(1450, getDetail(response.get(0), "BRL").getSalePrice());
+        assertEquals(1500, getDetail(response.get(0), "BRL").getPurchasePrice());
+        assertEquals(1600, getDetail(response.get(0), "BRL").getSalePrice());
 
-        assertEquals(6500, getDetail(response.get(0), "EUR").getPurchasePrice());
-        assertEquals(7000, getDetail(response.get(0), "EUR").getSalePrice());
+        assertEquals(6400, getDetail(response.get(0), "EUR").getPurchasePrice());
+        assertEquals(6900, getDetail(response.get(0), "EUR").getSalePrice());
 
-        assertEquals(150, getDetail(response.get(0), "ARS").getPurchasePrice());
-        assertEquals(190, getDetail(response.get(0), "ARS").getSalePrice());
+        assertEquals(130, getDetail(response.get(0), "ARS").getPurchasePrice());
+        assertEquals(170, getDetail(response.get(0), "ARS").getSalePrice());
     }
 
     private QueryResponseDetail getDetail(QueryResponse response, String iso) {
