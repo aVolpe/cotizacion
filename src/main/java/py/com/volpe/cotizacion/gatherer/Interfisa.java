@@ -35,7 +35,7 @@ public class Interfisa implements Gatherer {
 
 	private final HTTPHelper helper;
 	private static final String WS_BRANCHES = "https://www.interfisa.com.py/sucursales.php";
-	private static final String WS_EXCHANGE = "https://www.interfisa.com.py/";
+	private static final String WS_EXCHANGE = "https://seguro.interfisa.com.py/rest/cotizaciones";
 
 	@Override
 	public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
