@@ -9,6 +9,8 @@ const today = new Date().toISOString().replace(/T.*/, "");
 
 const paths = [
   {path: "/", lastMod: today, priority: "0.8", changeFreq: "hourly"},
+  {path: "/#/?moneda=USD", lastMod: today, priority: "0.8", changeFreq: "hourly"},
+  {path: "/#/?moneda=EUR", lastMod: today, priority: "0.8", changeFreq: "hourly"},
   {path: "/#/licenses", lastMod: today, priority: "0.1", changeFreq: "monthly"},
   {path: "/#/swagger", lastMod: today, priority: "0.1", changeFreq: "monthly"}
 ];

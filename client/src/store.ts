@@ -9,6 +9,7 @@ import {
     SingleExchangeData,
     Type
 } from "@/api/ExchangeAPI";
+import router from './router';
 
 Vue.use(Vuex);
 
@@ -200,6 +201,11 @@ export default new Vuex.Store<RootState>({
         },
 
         setCurrentCurrency: ({commit, dispatch}, currency: string) => {
+            router.replace({
+                query: {
+                    moneda: currency
+                }
+            });
             commit("setCurrency", currency);
             dispatch("fetchExchange", currency);
         },
@@ -209,7 +215,6 @@ export default new Vuex.Store<RootState>({
         },
 
         setCurrentPlace: ({commit}, placeId: number) => {
-            console.log(placeId);
             commit("setCurrentPlace", placeId > 0 ? placeId : undefined);
         },
 
@@ -218,13 +223,13 @@ export default new Vuex.Store<RootState>({
         },
 
 
-        fetchCurrencies: ({commit, dispatch}) => {
+        fetchCurrencies: ({commit, dispatch}, defIsoCode: string = "USD") => {
             commit("beginLoadCurrencies");
             ExchangeAPI.getCurrencies().then(data => {
                 commit("currenciesResult", data);
 
-                let currency = data[0];
-                if (data.includes("USD"))
+                let currency = defIsoCode;
+                if (!data.includes(currency))
                     currency = "USD";
 
                 commit("setCurrency", currency);
@@ -284,7 +289,6 @@ export default new Vuex.Store<RootState>({
 
         filteredCurrencies(state): Loaded<ExchangeDataDTO> {
 
-            console.log("filteredCurrencies");
             if (!state.current.currency || !state.exchanges[state.current.currency])
                 return {loading: false, loaded: false};
             const resource = state.exchanges[state.current.currency];

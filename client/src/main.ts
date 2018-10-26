@@ -5,7 +5,7 @@ import Meta from "vue-meta";
 import store from "./store";
 import "./initVuetify";
 import "./registerServiceWorker";
-import { distanceInWords, format } from "date-fns";
+import {distanceInWords, format} from "date-fns";
 import es from "date-fns/locale/es";
 import Vue from "vue";
 import * as VueGoogleMaps from "vue2-google-maps";
@@ -42,7 +42,7 @@ Vue.filter("fd", (value: any, desiredFormat: string | null) => {
 });
 
 Vue.filter("mfn", (value: string) => {
-    if (value) return distanceInWords(value, new Date(), { locale: es });
+    if (value) return distanceInWords(value, new Date(), {locale: es});
     return "";
 });
 
@@ -64,11 +64,11 @@ Vue.filter("mfn", (value: string) => {
 let whereToMount = "app";
 if (!document.getElementById(whereToMount)) whereToMount = "inspire";
 
-const app = new Vue({
+// tslint:disable-next-line
+new Vue({
     render: (h: any) => h(App),
     router,
     store,
     el: "#" + whereToMount
 } as any);
 
-console.log("loaded", app);

@@ -12,7 +12,7 @@ import { Component, Vue } from "vue-property-decorator";
 import ExchangeData from "@/components/ExchangeData.vue";
 import MapOfExchanges from "@/components/MapOfExchanges.vue";
 import ListOfExchanges from "@/components/ListOfExchanges.vue";
-import { Meta } from "@/decorators";
+import { Meta, MetaMethod } from "@/decorators";
 import { Action, State } from "vuex-class";
 
 @Component({
@@ -22,14 +22,11 @@ import { Action, State } from "vuex-class";
     ListOfExchanges
   }
 })
-@Meta({
-  title: "Cotizaciones de hoy",
-  titleTemplate: undefined
-})
 export default class LatestExchange extends Vue {
-  @Action fetchCurrencies!: () => void;
+  @Action fetchCurrencies!: (isoCode: string) => void;
   @Action hideExchangeDialog!: () => void;
   @State exchangeDialog!: { loading: boolean; show: boolean };
+  @State current!: any;
   tabModel: number = 0;
   isSmall: boolean;
 
@@ -38,8 +35,17 @@ export default class LatestExchange extends Vue {
     this.isSmall = window.innerWidth < 600;
   }
 
+    @MetaMethod
+    meta() {
+        return {
+            title: `Cotización de ${this.current.currency}`,
+            titleTemplate: undefined
+        };
+    }
+
   mounted() {
-    this.fetchCurrencies();
+    this.fetchCurrencies(this.$route.query.moneda);
   }
+
 }
 </script>

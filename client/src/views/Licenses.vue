@@ -195,7 +195,6 @@
 
         constructor() {
             super();
-            console.log(data);
             this.tabModel = 0;
             this.baseUrl = process.env.BASE_URL;
             this.backend = [];
