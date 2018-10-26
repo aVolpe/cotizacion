@@ -41,6 +41,7 @@
     "stylus-loader": "^3.0.2",
     "ts-import-plugin": "^1.5.5",
     "typescript": "^3.0.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "deep-extend": ">=0.5.1"
   }
 }
