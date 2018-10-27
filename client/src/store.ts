@@ -9,7 +9,7 @@ import {
     SingleExchangeData,
     Type
 } from "@/api/ExchangeAPI";
-import router from './router';
+import router from "./router";
 
 Vue.use(Vuex);
 
