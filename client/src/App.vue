@@ -208,6 +208,7 @@ export default class App extends Vue {
   }
 }
 
+
 .title {
   cursor: pointer;
 }
