@@ -7,8 +7,9 @@ typedef OnClickCallback = void Function(String selected);
 class ExchangeList extends StatelessWidget {
   final List<Data> exchanges;
   final OnClickCallback onSelected;
+  final int multiplier;
 
-  ExchangeList({this.exchanges, this.onSelected});
+  ExchangeList({this.exchanges, this.onSelected, this.multiplier});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +19,23 @@ class ExchangeList extends StatelessWidget {
           return ExchangeRow(
             onSelected: this.onSelected,
             exchange: this.exchanges[index],
+            multiplier: this.multiplier,
           );
         }, childCount: this.exchanges.length));
   }
 }
 
 class ExchangeRow extends StatelessWidget {
+  @required
   final Data exchange;
+
+  @required
   final OnClickCallback onSelected;
 
-  ExchangeRow({this.exchange, this.onSelected});
+  @required
+  final int multiplier;
+
+  ExchangeRow({this.exchange, this.onSelected, this.multiplier});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,6 @@ class ExchangeRow extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-//      color: Colors.lightBlue[100],
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         child: Row(
@@ -64,8 +71,8 @@ class ExchangeRow extends StatelessWidget {
                 Text(subTitle)
               ],
             ),
-            Text('${formatMoney(d.salePrice)}'),
-            Text('${formatMoney(d.purchasePrice)}')
+            Text('${formatMoney(d.salePrice * this.multiplier)}'),
+            Text('${formatMoney(d.purchasePrice * this.multiplier)}')
           ],
         ),
       ),
