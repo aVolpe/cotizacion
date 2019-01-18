@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @EnableScheduling
 @EnableCaching
+@EnableAdminServer
 public class Cotizacion {
 
     public static void main(String[] args) {
