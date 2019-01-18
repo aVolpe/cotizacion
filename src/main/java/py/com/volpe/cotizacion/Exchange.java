@@ -14,11 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @EnableScheduling
 @EnableCaching
-@EnableAdminServer
-public class Cotizacion {
+public class Exchange {
 
     public static void main(String[] args) {
-        SpringApplication.run(Cotizacion.class, args);
+        SpringApplication.run(Exchange.class, args);
     }
 
     @Bean
