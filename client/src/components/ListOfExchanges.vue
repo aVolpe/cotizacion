@@ -42,7 +42,8 @@
                 </template>
                 <template slot="progress">
                     <br/>
-                    <v-progress-circular color="blue" :size="70" :width="7" indeterminate></v-progress-circular>
+                    <img :src="`${baseUrl}imgs/loading.svg`"
+                         style="margin: auto; width: 200px; height: 200px; max-width: 20vw; max-height: 20vw">
                 </template>
                 <template slot="headerCell" slot-scope="props">
                 <span v-if="props.header.value === 'placeName'">
@@ -136,10 +137,12 @@
         }>;
         pagination: any;
         isSmall: boolean;
+        private baseUrl: string | undefined;
 
         constructor() {
             super();
 
+            this.baseUrl = process.env.BASE_URL;
             this.isSmall = window.innerWidth < 600;
             this.headers = [
                 {
