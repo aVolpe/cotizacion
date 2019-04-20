@@ -18,7 +18,7 @@ public class PlaceControllerTest {
     public void testCalls() {
 
         GathererManager manager = Mockito.mock(GathererManager.class);
-        DeveloperController pc = new DeveloperController(manager);
+        ScrapController pc = new ScrapController(manager);
 
         Mockito.when(manager.doQuery(Mockito.anyString())).thenReturn(singleton("a"));
         Mockito.when(manager.init(Mockito.anyString())).thenReturn(singleton("a"));
