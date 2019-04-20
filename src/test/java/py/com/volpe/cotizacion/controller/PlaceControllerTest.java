@@ -18,14 +18,14 @@ public class PlaceControllerTest {
     public void testCalls() {
 
         GathererManager manager = Mockito.mock(GathererManager.class);
-        ScrapController pc = new ScrapController(manager);
+        ScrapController pc = new ScrapController(manager, "a");
 
         Mockito.when(manager.doQuery(Mockito.anyString())).thenReturn(singleton("a"));
         Mockito.when(manager.init(Mockito.anyString())).thenReturn(singleton("a"));
 
 
-        assertThat(pc.doQuery("a"), hasItem("a"));
-        assertThat(pc.init("a"), hasItem("a"));
+        assertThat(pc.doQuery("a", "a"), hasItem("a"));
+        assertThat(pc.init("a", "a"), hasItem("a"));
 
 
     }
