@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,15 @@ import java.util.concurrent.TimeUnit;
 public class Scheduler {
 
     private final GathererManager manager;
+
+    @PostConstruct
+    public void init() {
+        try {
+            this.triggerQuery();
+        } catch (ExecutionException e) {
+            // we don't care
+        }
+    }
 
     @Scheduled(cron = "0 */10 7-20 * * MON-SAT", zone = "America/Asuncion")
     public void triggerQuery() throws ExecutionException {
