@@ -222,6 +222,11 @@ export default new Vuex.Store<RootState>({
             commit("setCurrentPlace");
         },
 
+        init: ({commit, dispatch}) => {
+            dispatch("fetchCurrencies");
+            dispatch("fetchExchange", "USD");
+            commit("currenciesResult", ["USD"]);
+        },
 
         fetchCurrencies: ({commit, dispatch}, defIsoCode: string = "USD") => {
             commit("beginLoadCurrencies");
