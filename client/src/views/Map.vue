@@ -29,7 +29,7 @@ import { Action, State } from "vuex-class";
   titleTemplate: undefined
 })
 export default class LatestExchange extends Vue {
-  @Action fetchCurrencies!: () => void;
+  @Action init!: () => void;
   @Action hideExchangeDialog!: () => void;
   @State exchangeDialog!: { loading: boolean; show: boolean };
   isSmall: boolean;
@@ -40,7 +40,7 @@ export default class LatestExchange extends Vue {
   }
 
   mounted() {
-    this.fetchCurrencies();
+    this.init();
   }
 }
 </script>

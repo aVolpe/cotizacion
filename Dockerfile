@@ -36,6 +36,6 @@ RUN mvn -B -q install -Ppostgres -DskipTests
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
-COPY --from=builder /app/target/cotizaciones-1.1.0.jar app.jar
+COPY --from=builder /app/target/cotizaciones-1.2.0.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 

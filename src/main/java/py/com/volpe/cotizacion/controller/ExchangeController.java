@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository;
 import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository.ByIsoCodeResult;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.LongSummaryStatistics;
@@ -41,7 +42,12 @@ public class ExchangeController {
 
     @GetMapping(value = "/api/exchange/", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<String> getAvailableCurrencies() {
-        return detailRepository.getAvailableISO();
+        return Arrays.asList(
+                "ARS", "EUR", "BRL", "USD", "UYU",
+                "GBP", "CAD", "CHF", "JPY", "CLP",
+                "AUD", "BOB", "MXN", "PEN", "COP",
+                "DKK", "SEK", "CNY", "NOK", "ILS",
+                "KWD", "RUB", "SGD", "TWD", "ZAR");
     }
 
     @Value
