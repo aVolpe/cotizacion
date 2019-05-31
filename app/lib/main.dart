@@ -1,7 +1,6 @@
 import 'package:app/api.dart';
 import 'package:app/src/screens/exchange_list_page.dart';
 import 'package:flutter/material.dart';
-import "package:intl/intl.dart";
 
 void main() => runApp(ExchangeApp());
 

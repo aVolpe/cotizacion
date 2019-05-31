@@ -2,7 +2,7 @@ import 'package:app/model.dart';
 import 'package:app/src/util.dart';
 import 'package:flutter/material.dart';
 
-typedef OnClickCallback = void Function(String selected);
+typedef OnClickCallback = void Function(Data selected);
 
 class ExchangeList extends StatelessWidget {
   final List<Data> exchanges;
@@ -45,37 +45,59 @@ class ExchangeRow extends StatelessWidget {
     var isBureau = place.type == 'BUREAU';
 
     var subTitle = isBureau ? branch.name : 'Ver sucursales';
-    subTitle = limitStringToSize(subTitle, 15);
-    var image = branch != null && branch.image != null
-        ? branch.image
-        : 'https://dummyimage.com/700x400/3F51B5/fff.png?text=${getFirstLetters(place.name)}';
 
-    return Container(
+    var body = Container(
       alignment: Alignment.center,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+        padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            CircleAvatar(
-              backgroundImage: NetworkImage(image),
+            Flexible(
+              flex: 1,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(getImage(branch, place)),
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  d.place.name,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(subTitle)
-              ],
+            Expanded(
+              flex: 6,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    d.place.name,
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    subTitle,
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                  ),
+                ],
+              ),
             ),
-            Text('${formatMoney(d.salePrice * this.multiplier)}'),
-            Text('${formatMoney(d.purchasePrice * this.multiplier)}')
+            Flexible(
+              flex: 2,
+              child: Text('${formatMoney(d.salePrice * this.multiplier)}'),
+            ),
+            Flexible(
+              flex: 2,
+              child: Text('${formatMoney(d.purchasePrice * this.multiplier)}'),
+            )
           ],
         ),
       ),
     );
+
+    return GestureDetector(
+        child: body,
+        onTap: () {
+          this.onSelected(this.exchange);
+        });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:app/api.dart';
 import 'package:app/model.dart';
+import 'package:app/src/screens/exchange_page.dart';
 import 'package:app/src/widgets/exchange_list.dart';
 import 'package:app/src/widgets/exchange_selector.dart';
 import 'package:flutter/material.dart';
@@ -128,12 +129,72 @@ class _ExchangeListPage extends State<ExchangeListPage> {
             }
             return ExchangeList(
               exchanges: snapshot.data.data,
-              onSelected: (e) => print(e),
+              onSelected: (e) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExchangePage(
+                              exchange: e,
+                              isoCode: this._currentExchange,
+                            )),
+                  ),
               multiplier: quantity,
             );
         }
       },
     );
+
+    var scrollTitle = this._currentExchange == null
+        ? ''
+        : 'Cambio de $quantity ${this._currentExchange}';
+
+    var scrollTitleComponent = Padding(
+      padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(
+            flex: 1,
+            child: Text('              '),
+          ),
+          Expanded(
+            flex: 6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  scrollTitle,
+                  textAlign: TextAlign.justify,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Text(
+              'Venta',
+              textAlign: TextAlign.right,
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Text(
+              'Compra',
+              textAlign: TextAlign.right,
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          )
+        ],
+      ),
+    );
+
     return Scaffold(
       key: this._scaffoldKey,
       body: CustomScrollView(
@@ -144,19 +205,11 @@ class _ExchangeListPage extends State<ExchangeListPage> {
             bottom: PreferredSize(
                 preferredSize: Size(110, 50),
                 child: Opacity(
-                  opacity: _titleOpacity,
-                  child: Padding(
+                    opacity: _titleOpacity,
+                    child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        this._currentExchange == null
-                            ? ''
-                            : 'Cambio de $quantity ${this._currentExchange}',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      )),
-                )),
+                      child: scrollTitleComponent,
+                    ))),
             floating: true,
 //            snap: true,
             pinned: true,
@@ -165,6 +218,7 @@ class _ExchangeListPage extends State<ExchangeListPage> {
             expandedHeight: kExpandedHeight,
             flexibleSpace: FlexibleSpaceBar(
               background: pickerRow,
+              collapseMode: CollapseMode.parallax,
             ),
           ),
           exchanges,

@@ -1,6 +1,8 @@
 import 'package:app/model.dart';
+import 'package:app/src/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:intl/intl.dart';
 
 typedef PickerConfirmCallback = void Function(String selected);
 typedef QuantityChangeCallback = void Function(String newQuantity);
@@ -47,6 +49,7 @@ class ExchangeSelector extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     var data = Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +58,7 @@ class ExchangeSelector extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Cotizaciones en el Paraguay',
+              'Cotizaciones del Paraguay',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -69,8 +72,8 @@ class ExchangeSelector extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Container();
               }
-              var row1 = 'Se muestran las ${snapshot.data.count} cotizaciones';
-              var row2 = 'Consultadas el ${snapshot.data.firstQueryResult}';
+              var row1 = 'Se muestran ${snapshot.data.count} cotizaciones';
+              var row2 = 'consultadas el ${format(snapshot.data.firstQueryResult)}';
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -98,7 +101,7 @@ class ExchangeSelector extends StatelessWidget {
                   fontSize: 17.0,
                 )),
             Container(
-              width: 5 + 9.5 * (this.quantity.toString().length),
+              width: 10 + 9.5 * (this.quantity.toString().length),
               child: TextFormField(
                 controller: this._quantityController,
                 textAlign: TextAlign.end,
