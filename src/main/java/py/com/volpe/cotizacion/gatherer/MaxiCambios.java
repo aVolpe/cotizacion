@@ -193,8 +193,8 @@ public class MaxiCambios implements Gatherer {
             case "Suiza":
                 return "CHF";
             default:
-                if (data.nombre.equals("Libra")) return "GBP";
-                if (data.pais.startsWith("Canad")) return "CAD";
+                if ("Libra".equals(data.getNombre())) return "GBP";
+                if (data.getPais() != null && data.getPais().startsWith("Canad")) return "CAD";
                 return null;
         }
     }
