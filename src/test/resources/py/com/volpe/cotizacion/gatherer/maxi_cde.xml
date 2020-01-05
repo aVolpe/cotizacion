@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<cotizaciones>
+ <moneda><tipo>EFECTIVO</tipo><pais>EEUU</pais><nombre>Dólar</nombre><bandera>us.png</bandera><compra>6310</compra><compra_tendencia/><venta>6380</venta><venta_tendencia/></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Argentina</pais><nombre>Peso </nombre><bandera>ar.png</bandera><compra>72</compra><compra_tendencia/><venta>85</venta><venta_tendencia/></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Brasil</pais><nombre>Real</nombre><bandera>br.png</bandera><compra>1500</compra><compra_tendencia/><venta>1545</venta><venta_tendencia/></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Euro</pais><nombre>Euro </nombre><bandera>eu.png</bandera><compra>6750</compra><compra_tendencia/><venta>7175</venta><venta_tendencia/></moneda>
+ <actualizacion>04/01/2020 - 20:40</actualizacion>
+</cotizaciones>

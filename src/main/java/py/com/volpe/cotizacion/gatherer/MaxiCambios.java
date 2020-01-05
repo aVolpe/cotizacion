@@ -1,14 +1,13 @@
 package py.com.volpe.cotizacion.gatherer;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.springframework.stereotype.Service;
-import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
@@ -16,8 +15,8 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +33,8 @@ import java.util.stream.Collectors;
 public class MaxiCambios implements Gatherer {
 
     private static final String CODE = "MaxiCambios";
-    private static final String WS_URL_AS = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s";
-    private static final String WS_URL_CDE = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/CotizacionesCDE?fecha=%s";
+    private static final String WS_URL_AS = "http://cotizext.maxicambios.com.py/maxicambios4.xml";
+    private static final String WS_URL_CDE = "http://cotizext.maxicambios.com.py/cotiza_cde.xml";
 
     private final HTTPHelper helper;
 
@@ -67,10 +66,10 @@ public class MaxiCambios implements Gatherer {
     private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
         QueryResponseDetail qrd = new QueryResponseDetail();
         qrd.setIsoCode(iso);
-        qrd.setSalePrice(parse(detail.getVenta()));
-        qrd.setSaleTrend(detail.isVentaUp() ? 1 : -1);
-        qrd.setPurchasePrice(parse(detail.getCompra()));
-        qrd.setPurchaseTrend(detail.isCompraUp() ? 1 : -1);
+        qrd.setSalePrice(detail.getVenta());
+        qrd.setSaleTrend("up.png".equals(detail.getVentaTendencia()) ? 1 : -1);
+        qrd.setPurchasePrice(detail.getCompra());
+        qrd.setPurchaseTrend("up.png".equals(detail.getCompraTendencia()) ? 1 : -1);
         return qrd;
     }
 
@@ -121,18 +120,29 @@ public class MaxiCambios implements Gatherer {
 
     }
 
-    private ObjectMapper buildMapper() {
-        return new ObjectMapper();
-    }
-
     private List<ExchangeData> getParsedData(String wsUrl) {
 
-        try {
-            return buildMapper().readValue(getData(wsUrl), new TypeReference<List<ExchangeData>>() {
-            });
-        } catch (IOException e) {
-            throw new AppException(500, "Can't get data from " + CODE, e);
+        String xml = getData(wsUrl);
+        Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
+        List<ExchangeData> toRet = new ArrayList<>();
+        for (Element e : doc.select("cotizaciones > moneda")) {
+            ExchangeData ed = new ExchangeData();
+            ed.setPais(e.getElementsByTag("pais").text());
+            ed.setTipo(e.getElementsByTag("tipo").text());
+            if (!ed.getTipo().equals("EFECTIVO")) {
+                continue;
+            }
+            ed.setNombre(e.getElementsByTag("nombre").text());
+            ed.setBandera(e.getElementsByTag("bandera").text());
+            ed.setCompra(parse(e.getElementsByTag("compra").text()));
+            ed.setCompraTendencia(e.getElementsByTag("compra_tendencia").text());
+            ed.setVenta(parse(e.getElementsByTag("venta").text()));
+            ed.setVentaTendencia(e.getElementsByTag("venta_tendencia").text());
+            System.out.println(ed);
+
+            toRet.add(ed);
         }
+        return toRet;
     }
 
     private String getData(String wsUrl) {
@@ -143,52 +153,79 @@ public class MaxiCambios implements Gatherer {
     }
 
     private static String mapToISO(ExchangeData data) {
-        switch (data.moneda) {
-            case "1":
+        if (!"EFECTIVO".equals(data.tipo)) {
+            return null;
+        }
+        switch (data.pais) {
+            case "EEUU":
                 return "USD";
-            case "2":
+            case "Argentina":
                 return "ARS";
-            case "3":
+            case "Brasil":
                 return "BRL";
-            case "4": //URU
+            case "Uruguay": //URU
                 return "UYU";
-            case "5": //EURO
+            case "EU": //EURO
+            case "Euro": //EURO
                 return "EUR";
-            case "6": //Mexico
+            case "Mejico": //Mexico
                 return "MXN";
-            case "7": //Libra
+            case "Gran Bretaña": //Libra
                 return "GBP";
-            case "8": //Japon
+            case "Japon": //Japon
                 return "JPY";
-            case "9": //Chile
+            case "Chile":
                 return "CLP";
-            case "18": //Bolivia
+            case "Bolivia":
                 return "BOB";
-            case "19": //COlombia
+            case "Colombia":
                 return "COP";
-            case "20": //Peru
+            case "Peruano": //Peru
                 return "PEN";
+            case "Suecia":
+                return "SEK";
+            case "Dinamarca":
+                return "DKK";
+            case "Canadá":
+                return "CAD";
+            case "Australia":
+                return "AUD";
+            case "Suiza":
+                return "CHF";
             default:
-                return data.abreviatura;
+                if (data.nombre.equals("Libra")) return "GBP";
+                if (data.pais.startsWith("Canad")) return "CAD";
+                return null;
         }
     }
 
+    /**
+     * <pre>
+     *     <cotizaciones>
+     *      <moneda>
+     *       <tipo>EFECTIVO</tipo>
+     *       <pais>EEUU</pais>
+     *       <nombre>Dólar</nombre>
+     *       <bandera>us.png</bandera>
+     *       <compra>6300</compra>
+     *       <compra_tendencia>up.png</compra_tendencia>
+     *       <venta>6380</venta>
+     *       <venta_tendencia>up.png</venta_tendencia>
+     *      </moneda>
+     *      <actualizacion>04/01/2020 - 20:40</actualizacion>
+     *     </cotizaciones>
+     * </pre>
+     */
     @Data
-    @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
     private static class ExchangeData {
-        private String abreviatura;
-        private String moneda;
-        private String rutaBandera;
-        private String chCompra;
-        private String chCompraUp;
-        private String chVenta;
-        private String chVentaUp;
-
-        private String img;
-        private String compra;
-        private boolean compraUp;
-        private String venta;
-        private boolean ventaUp;
+        private String tipo;
+        private String pais;
+        private String nombre;
+        private String bandera;
+        private long compra;
+        private String compraTendencia;
+        private long venta;
+        private String ventaTendencia;
     }
 
     private static Long parse(String value) {
@@ -196,3 +233,4 @@ public class MaxiCambios implements Gatherer {
     }
 
 }
+
