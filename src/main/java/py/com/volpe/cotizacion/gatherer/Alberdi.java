@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class Alberdi implements Gatherer {
 
     private static final String CODE = "ALBERDI";
-    private static final String WS_URL = "http://cambiosalberdi.com/ws/getCotizaciones.json";
+    private static final String WS_URL = "https://cambiosalberdi.com/ws/getCotizaciones.json";
     private final HTTPHelper helper;
 
     @Override
