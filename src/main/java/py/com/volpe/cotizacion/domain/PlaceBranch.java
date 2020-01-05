@@ -39,5 +39,9 @@ public class PlaceBranch {
     @ManyToOne
     private Place place;
 
+    public PlaceBranch(long id, String remoteCode) {
+        this.id = id;
+        this.remoteCode = remoteCode;
+    }
 
 }

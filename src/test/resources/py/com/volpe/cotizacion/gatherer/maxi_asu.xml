@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<cotizaciones>
+ <moneda><tipo>EFECTIVO</tipo><pais>EEUU</pais><nombre>Dólar</nombre><bandera>us.png</bandera><compra>6300</compra><compra_tendencia>up.png</compra_tendencia><venta>6380</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Argentina</pais><nombre>Peso </nombre><bandera>ar.png</bandera><compra>70</compra><compra_tendencia>down.png</compra_tendencia><venta>90</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Brasil</pais><nombre>Real</nombre><bandera>br.png</bandera><compra>1515</compra><compra_tendencia>down.png</compra_tendencia><venta>1600</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Uruguay</pais><nombre>Peso </nombre><bandera>ur.png</bandera><compra>150</compra><compra_tendencia>down.png</compra_tendencia><venta>240</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>EU</pais><nombre>Euro</nombre><bandera>eu.png</bandera><compra>6850</compra><compra_tendencia>down.png</compra_tendencia><venta>7100</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Gran Bretaña</pais><nombre>Libra</nombre><bandera>gbp.png</bandera><compra>8000</compra><compra_tendencia>down.png</compra_tendencia><venta>8900</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Japon</pais><nombre>Yen</nombre><bandera>yen.png</bandera><compra>50</compra><compra_tendencia>down.png</compra_tendencia><venta>63</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Chile</pais><nombre>Peso </nombre><bandera>ch.png</bandera><compra>5</compra><compra_tendencia>down.png</compra_tendencia><venta>11</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Suecia</pais><nombre>Corona </nombre><bandera>cs.png</bandera><compra>200</compra><compra_tendencia>down.png</compra_tendencia><venta>500</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Dinamarca</pais><nombre>Corona </nombre><bandera>cd.png</bandera><compra>200</compra><compra_tendencia>down.png</compra_tendencia><venta>950</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Canadá</pais><nombre>Dólar </nombre><bandera>dc.png</bandera><compra>4500</compra><compra_tendencia>down.png</compra_tendencia><venta>5500</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Australia</pais><nombre>Dólar </nombre><bandera>da.png</bandera><compra>4000</compra><compra_tendencia>down.png</compra_tendencia><venta>5500</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Suiza</pais><nombre>Franco </nombre><bandera>fs.png</bandera><compra>5500</compra><compra_tendencia>down.png</compra_tendencia><venta>6600</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Mejico</pais><nombre>Peso</nombre><bandera>pm.png</bandera><compra>350</compra><compra_tendencia>down.png</compra_tendencia><venta>450</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Peruano</pais><nombre>Sol </nombre><bandera>sp.png</bandera><compra>1950</compra><compra_tendencia>down.png</compra_tendencia><venta>2500</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Bolivia</pais><nombre>Peso   </nombre><bandera>pb.png</bandera><compra>850</compra><compra_tendencia>down.png</compra_tendencia><venta>1000</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>EFECTIVO</tipo><pais>Colombia</pais><nombre>Peso   </nombre><bandera>pc.png</bandera><compra>1.00</compra><compra_tendencia>down.png</compra_tendencia><venta>4.00</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>CH Y TRF</tipo><pais>EEUU</pais><nombre>Dólar</nombre><bandera>us.png</bandera><compra>6290</compra><compra_tendencia>up.png</compra_tendencia><venta>6510</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>CH Y TRF</tipo><pais>EU</pais><nombre>Euro</nombre><bandera>eu.png</bandera><compra>6300</compra><compra_tendencia>up.png</compra_tendencia><venta>7400</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>CH Y TRF</tipo><pais>Gran Bretaña</pais><nombre>Libra</nombre><bandera>gbp.png</bandera><compra>6500</compra><compra_tendencia>up.png</compra_tendencia><venta>8500</venta><venta_tendencia>up.png</venta_tendencia></moneda>
+ <moneda><tipo>CH Y TRF </tipo><pais>Suiza</pais><nombre>Franco</nombre><bandera>fs.png</bandera><compra/><compra_tendencia>up.png</compra_tendencia><venta/><venta_tendencia>up.png</venta_tendencia></moneda>
+ <actualizacion>04/01/2020 - 20:40</actualizacion>
+</cotizaciones>
