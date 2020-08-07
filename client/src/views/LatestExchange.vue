@@ -12,7 +12,7 @@
                                   v-on:change="changeCurrency"
                                   class="bx-5"
                                   label="Moneda"
-                                  single-line/>
+                                  single-line></v-select>
                     </v-flex>
                 </v-layout>
             </v-card-title>
@@ -31,7 +31,7 @@
                             No hay datos de hoy
                         </v-alert>
                     </template>
-                    <v-progress-linear slot="progress" color="blue" indeterminate/>
+                    <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left">
