@@ -7,7 +7,7 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 
 env:
   IMAGE_NAME: cotizacion
@@ -16,10 +16,16 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: List files
-        run: ls -la
+        run: |
+          ls -la
 
-      - name: Build image
+      - name: Build project
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           docker build . --tag $IMAGE_NAME --build-arg BRANCH_NAME=$VERSION --build-arg SONAR_TOKEN=${SONAR_TOKEN}
@@ -43,10 +49,4 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-
-
-
-
-
-
 
