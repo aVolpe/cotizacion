@@ -1,3 +1,4 @@
+name: Sonar check
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request. 
@@ -6,7 +7,6 @@ on:
       - master
   pull_request:
       types: [opened, synchronize, reopened]
-name: Sonar check
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
