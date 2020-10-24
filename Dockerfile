@@ -24,7 +24,13 @@ COPY utils /app/utils
 COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
 RUN ./mvnw clean
 RUN sh ./utils/gen_licenses.sh
-RUN sh mvnw package
+RUN sh mvnw -B -q \
+        package \
+        sonar:sonar \
+        -Dsonar.organization=avolpe-github \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login="$SONAR_TOKEN" \
+        -Dsonar.branch.name="$BRANCH_NAME"
 RUN sh mvnw -B -q install -Ppostgres -DskipTests
 
 

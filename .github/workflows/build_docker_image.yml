@@ -16,8 +16,13 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
+      - name: List files
+        run: ls -la
+
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          docker build . --tag $IMAGE_NAME --build-arg BRANCH_NAME=$VERSION --build-arg SONAR_TOKEN=${SONAR_TOKEN}
 
       - name: Tag and push image
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'

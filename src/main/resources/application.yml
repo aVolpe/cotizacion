@@ -14,3 +14,7 @@ spring:
       ddl-auto: update
 
 
+
+logging:
+  level:
+    web: debug
