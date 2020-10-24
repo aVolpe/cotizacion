@@ -7,7 +7,7 @@ spring:
     url: jdbc:h2:./data/db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
 
   profiles:
-   active: develop
+    active: develop
 
   jpa:
     hibernate:

@@ -1,7 +1,7 @@
 package py.com.volpe.cotizacion.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
@@ -20,15 +20,16 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LicenseController {
 
-	private final ResourceLoader loader;
+    private final ResourceLoader loader;
 
-	@GetMapping(value = "/api/licenses", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getLicenses() throws IOException {
-		Resource data = loader.getResource("classpath:licenses.json");
+    @GetMapping(value = "/api/licenses", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getLicenses() throws IOException {
+        Resource data = loader.getResource("classpath:licenses.json");
 
-		if (!data.exists())
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!data.exists())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-		return new ResponseEntity<>(IOUtils.toByteArray(data.getInputStream()), HttpStatus.OK);
-	}
+        InputStreamResource inputStreamResource = new InputStreamResource(data.getInputStream());
+        return new ResponseEntity<>(inputStreamResource, HttpStatus.OK);
+    }
 }

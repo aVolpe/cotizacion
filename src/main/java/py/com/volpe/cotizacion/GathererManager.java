@@ -67,7 +67,7 @@ public class GathererManager {
     /**
      * Do an action on a Gatherer, the action is safe.
      * <p>
-     * Safe in this context means that if the action throws an exception, the this method will
+     * Safe in this context means that if the action throws an exception, then this method will
      * handle and log the error, allowing subsequent invocations to work.
      *
      * @param name   the name of this operation, for logging purposes

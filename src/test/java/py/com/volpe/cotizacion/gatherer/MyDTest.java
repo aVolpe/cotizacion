@@ -12,6 +12,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -33,7 +34,7 @@ public class MyDTest {
 	@Test
 	public void doQuery() throws IOException {
 
-		String data = IOUtils.toString(getClass().getResourceAsStream("myd_data.html"), "UTF-8");
+		String data = IOUtils.toString(getClass().getResourceAsStream("myd_data.html"), StandardCharsets.UTF_8);
 
 		Mockito.when(wsHelper.doGet(Mockito.any())).thenReturn(data);
 		Place p = gatherer.build();

@@ -1,13 +1,16 @@
 package py.com.volpe.cotizacion.controller;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Arturo Volpe
@@ -45,7 +48,8 @@ public class LicenseControllerTest {
 
         ResponseEntity<Object> re = lc.getLicenses();
         Assert.assertEquals(200, re.getStatusCodeValue());
-        Assert.assertEquals("test", new String((byte[]) re.getBody()));
+        String body = IOUtils.toString(((InputStreamResource) re.getBody()).getInputStream(), StandardCharsets.UTF_8);
+        Assert.assertEquals("test", body);
     }
 
 }
