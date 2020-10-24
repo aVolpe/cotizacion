@@ -107,7 +107,7 @@ public class VisionBanco implements Gatherer {
         StringBuilder schedule = new StringBuilder();
         if (!CollectionUtils.isEmpty(item.getHours())) {
             for (VisionBancoModel.Hour hour : item.getHours()) {
-                schedule.append(hour.getDays().toValue())
+                schedule.append(hour.getDays())
                         .append(": ")
                         .append(hour.getOpen())
                         .append(" - ")
@@ -133,8 +133,8 @@ public class VisionBanco implements Gatherer {
         }
 
         for (VisionBancoModel.Service service : item.getServices()) {
-            if (service.getIcon() == VisionBancoModel.Icon.TIMER
-                    || service.getIcon() == VisionBancoModel.Icon.SAC) {
+            if ("timer".equals(service.getIcon())
+                    || "sac".equals(service.getIcon())) {
                 return true;
             }
         }
