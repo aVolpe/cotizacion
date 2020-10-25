@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +34,26 @@ public class HTTPHelper {
 
 
             return handleResponse(uri, con);
+        } catch (IOException e) {
+            throw new AppException(500, "Invalid response", e);
+        }
+    }
+
+    public String doGet(String uri, int timeout) throws SocketTimeoutException {
+
+        try {
+            URL url = new URL(uri);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setConnectTimeout(timeout);
+            con.setReadTimeout(timeout);
+
+            con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
+
+
+            return handleResponse(uri, con);
+        } catch (java.net.SocketTimeoutException e) {
+            throw e;
         } catch (IOException e) {
             throw new AppException(500, "Invalid response", e);
         }

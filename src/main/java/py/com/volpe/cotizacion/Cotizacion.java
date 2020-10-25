@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -29,7 +30,18 @@ public class Cotizacion {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**");
             }
+
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/swagger-ui/")
+                        .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/index.html")
+                        .resourceChain(false);
+                if (!registry.hasMappingForPattern("/**")) {
+                    registry.addResourceHandler("/**").addResourceLocations("classpath:/public/");
+                }
+            }
         };
+
     }
 
     @Bean
