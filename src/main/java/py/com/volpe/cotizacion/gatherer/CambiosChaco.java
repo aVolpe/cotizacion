@@ -15,7 +15,9 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -27,8 +29,8 @@ import java.util.stream.Collectors;
 @Log4j2
 public class CambiosChaco implements Gatherer {
 
-    private static final String URL_CHANGE = "http://www.cambioschaco.com.py/api/branch_office/%s/exchange";
-    private static final String URL_BRANCH = "http://www.cambioschaco.com.py/api/branch_office/";
+    private static final String URL_CHANGE = "https://www.cambioschaco.com.py/api/branch_office/%s/exchange";
+    private static final String URL_BRANCH = "https://www.cambioschaco.com.py/api/branch_office/";
     public static final String CODE = "CAMBIOS_CHACO";
 
     private final HTTPHelper httpHelper;
@@ -36,13 +38,18 @@ public class CambiosChaco implements Gatherer {
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
+        log.info("Calling a total of {} branches", branches.size());
+        return branches.stream()
+                .map(this::queryBranch)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private QueryResponse queryBranch(PlaceBranch branch) {
         try {
 
-            String query = httpHelper.doGet(String.format(URL_CHANGE, branch.getRemoteCode()));
+            log.info("Calling branch {}", branch.getRemoteCode());
+            String query = httpHelper.doGet(String.format(URL_CHANGE, branch.getRemoteCode()), 5000);
 
             QueryResponse qr = new QueryResponse(branch);
 
@@ -58,7 +65,10 @@ public class CambiosChaco implements Gatherer {
             }
 
             return qr;
-
+        } catch (SocketTimeoutException se) {
+            log.warn("calling the branch {} (remote {}) resulted in a timeout after 5000 milliseconds",
+                    branch.getId(), branch.getRemoteCode());
+            return null;
         } catch (IOException e) {
             throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
         }
