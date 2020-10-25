@@ -26,7 +26,7 @@ import java.util.List;
 @Log4j2
 public class Amambay implements Gatherer {
 
-    private static final String URL_CHANGE = "https://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange";
+    private static final String URL_CHANGE = "https://www.bancobasa.com.py/ebanking_ext/api/data/currency_exchange";
     private static final String CODE = "AMAMBAY";
 
     private final HTTPHelper httpHelper;
