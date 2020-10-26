@@ -27,7 +27,7 @@ jobs:
           docker build . --tag $IMAGE_NAME --build-arg BRANCH_NAME=$VERSION --build-arg SONAR_TOKEN=${SONAR_TOKEN}
 
       - name: Tag and push image
-        if: github.event.pull_request.base.ref == 'master'
+        if: github.event.pull_request.base.ref == 'master' || github.ref == 'refs/heads/master'
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
