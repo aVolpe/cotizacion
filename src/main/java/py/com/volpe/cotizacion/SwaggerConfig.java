@@ -9,14 +9,13 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enableUrlTemplating(false)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
@@ -28,7 +27,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .license("MIT")
                 .title("Cotizaciones")
-                .version("1.0.1")
+                .version("2.0.0")
                 .contact(new Contact("Arturo Volpe",
                         "https://www.volpe.com.py",
                         "arturovolpe@gmail.com"))

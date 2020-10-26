@@ -60,7 +60,7 @@ export interface SingleExchangeData {
         purchasePrice: number;
         salePrice: number;
         currency: string;
-        date: Date;
+        date: string;
     };
 }
 

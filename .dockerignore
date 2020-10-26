@@ -1,3 +1,6 @@
-./client/node_modules/
-./client/dist/
-./target/
+client/node_modules/
+client/dist/
+target/
+data/
+app/
+.git

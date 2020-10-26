@@ -6,7 +6,7 @@ import py.com.volpe.cotizacion.GathererManager;
 
 import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Arturo Volpe

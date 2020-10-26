@@ -51,13 +51,20 @@ export interface RootState {
     };
 }
 
+const ssr: any = (window as any).ssr || {
+    exchanges: undefined,
+    branches: undefined,
+    currencies: undefined,
+    current: undefined
+};
+
 export default new Vuex.Store<RootState>({
 
     state: {
-        exchanges: {},
-        branches: {},
-        currencies: {loading: false, loaded: false},
-        current: {
+        exchanges: ssr.exchanges || {},
+        branches: ssr.branches || {},
+        currencies: ssr.currencies || {loading: false, loaded: false},
+        current: ssr.current || {
             currency: "USD",
             amount: 1,
         },
@@ -118,6 +125,7 @@ export default new Vuex.Store<RootState>({
                 }
             };
         },
+
         exchangeResult(state, payload: { isoCode: string, data: ExchangeDataDTO }) {
             state.exchanges = {
                 ...state.exchanges,
@@ -153,14 +161,14 @@ export default new Vuex.Store<RootState>({
             commit("hideExchangeDialog");
         },
 
-        setDialogData({commit}, query: QueryResponseDetail) {
+        setDialogData({commit, state}, query: QueryResponseDetail) {
             commit("setExchangeData", {
                 place: query.place,
                 branch: query.branch,
                 exchange: {
                     purchasePrice: query.purchasePrice,
                     salePrice: query.salePrice,
-                    currency: this.currentCurrency,
+                    currency: state.current.currency,
                     date: query.queryDate
                 }
             });
@@ -228,20 +236,31 @@ export default new Vuex.Store<RootState>({
             commit("currenciesResult", ["USD"]);
         },
 
-        fetchCurrencies: ({commit, dispatch}, defIsoCode: string = "USD") => {
+        fetchCurrencies: ({commit, dispatch}) => {
             commit("beginLoadCurrencies");
             ExchangeAPI.getCurrencies().then(data => {
                 commit("currenciesResult", data);
-
-                let currency = defIsoCode;
-                if (!data.includes(currency))
-                    currency = "USD";
-
-                commit("setCurrency", currency);
-                dispatch("fetchExchange", currency);
             });
 
         },
+
+        fetchCurrencyData: ({commit, dispatch, state}, currency: string = "USD") => {
+            if (state.current.currency === currency) {
+                commit("setCurrency", currency);
+            }
+            const exchanges = (state as RootState).exchanges;
+
+            if (currency in exchanges  // if the exchange was queried
+                && exchanges[currency].loaded  // if the exchange was loaded
+                && new Date(exchanges[currency].data!.lastQueryResult) > addMinutes(new Date(), -15) //
+            ) {
+                console.debug("Don't reload date because is was fetched recently");
+            } else {
+                dispatch("fetchExchange", currency);
+            }
+
+        },
+
 
         fetchExchange: ({commit, state, dispatch}, isoCode: string, force: boolean = false) => {
             if (!force && state.exchanges[isoCode]) {
@@ -345,3 +364,7 @@ export default new Vuex.Store<RootState>({
 
     } as GetterTree<RootState, RootState>
 });
+
+function addMinutes(date: Date, minutes: number): Date {
+    return new Date(date.getTime() + minutes * 60000);
+}

@@ -38,6 +38,14 @@ module.exports = {
     msTileColor: "#283593",
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "black",
-  }
+  },
+  chainWebpack: config => {
+  config
+    .plugin('html')
+    .tap(args => {
+      args[0].ssr = '{\n        exchanges: [(${exchanges})],\n        branches: [(${branches})],\n        currencies: [(${currencies})],\n        current: [(${current})]\n      }';
+      return args;
+    })
+}
 };
 

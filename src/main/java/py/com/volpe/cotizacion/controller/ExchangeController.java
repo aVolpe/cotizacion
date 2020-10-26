@@ -52,9 +52,9 @@ public class ExchangeController {
 
     @Value
     public static class ResultData {
-        private Date firstQueryResult;
-        private Date lastQueryResult;
-        private long count;
-        private List<ByIsoCodeResult> data;
+        Date firstQueryResult;
+        Date lastQueryResult;
+        long count;
+        List<ByIsoCodeResult> data;
     }
 }
