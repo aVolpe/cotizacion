@@ -14,7 +14,13 @@ spring:
       ddl-auto: update
 
 
+  thymeleaf:
+    cache: false
+    prefix: classpath:/public/
+#    suffix: html
+
 
 logging:
   level:
     web: debug
+

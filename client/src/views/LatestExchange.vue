@@ -18,7 +18,7 @@
     import ListOfExchanges from "@/components/ListOfExchanges.vue";
     import {MetaMethod} from "@/decorators";
     import {Action, State} from "vuex-class";
-    import {Loaded} from '@/store';
+    import {Loaded} from "@/store";
 
     @Component({
         components: {
@@ -28,7 +28,8 @@
         }
     })
     export default class LatestExchange extends Vue {
-        @Action fetchCurrencies!: (isoCode: string) => void;
+        @Action fetchCurrencyData!: (isoCode: string) => void;
+        @Action fetchCurrencies!: () => void;
         @Action hideExchangeDialog!: () => void;
         @State exchangeDialog!: { loading: boolean; show: boolean };
         @State current!: any;
@@ -52,7 +53,12 @@
         }
 
         mounted() {
-            this.fetchCurrencies(this.$route.query.moneda);
+            let finalCurrency: string = "USD";
+            const str = this.$route.query.moneda;
+            if (Array.isArray(str)) finalCurrency = str[0] || "USD";
+            if (typeof str === "string") finalCurrency = str;
+            this.fetchCurrencyData(finalCurrency);
+            this.fetchCurrencies();
         }
 
     }

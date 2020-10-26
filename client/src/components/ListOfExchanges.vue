@@ -94,7 +94,7 @@
                 </template>
             </v-data-table>
             <small v-if="filteredCurrencies.loaded">
-                <b>{{ filteredCurrencies.data.count }}</b> cotizaciones consultadas
+                <b>{{ filteredCurrencies.data.count }}</b> cotizaciones consultadas hace
                 <b> {{ filteredCurrencies.data.firstQueryResult | mfn }}</b>.
             </small>
 
@@ -117,7 +117,6 @@
         @State current!: { currency: string; amount: number };
 
         @Action showExchangeData!: () => void;
-        @Action fetchCurrencies!: () => void;
         @Action setCurrentCurrency!: (isoCode: string) => void;
         @Action setCurrentPlace!: (place: Place) => void;
         @Action clearCurrentPlace!: () => void;
