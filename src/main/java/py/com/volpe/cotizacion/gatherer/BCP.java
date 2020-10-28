@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.Place.Type;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
@@ -80,6 +81,7 @@ public class BCP implements Gatherer {
 
         return Place.builder()
                 .name("Banco Central del Paraguay (Cotización referencial)")
+                .type(Type.BANK)
                 .branch(PlaceBranch.builder()
                         .name("Central")
                         .latitude(-25.2781319)
