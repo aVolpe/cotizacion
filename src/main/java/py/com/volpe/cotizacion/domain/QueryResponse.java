@@ -51,8 +51,9 @@ public class QueryResponse {
 		this.branch = pb;
 	}
 
-	public void addDetail(QueryResponseDetail detail) {
+	public QueryResponse addDetail(QueryResponseDetail detail) {
 		this.getDetails().add(detail);
 		detail.setQueryResponse(this);
+		return this;
 	}
 }
