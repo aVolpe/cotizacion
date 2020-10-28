@@ -12,6 +12,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -39,7 +40,7 @@ public class HTTPHelper {
         }
     }
 
-    public String doGet(String uri, int timeout) throws SocketTimeoutException {
+    public String doGet(String uri, int timeout, Map<String, String> headers) throws SocketTimeoutException {
 
         try {
             URL url = new URL(uri);
@@ -49,7 +50,7 @@ public class HTTPHelper {
             con.setReadTimeout(timeout);
 
             con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
-
+            headers.forEach(con::setRequestProperty);
 
             return handleResponse(uri, con);
         } catch (java.net.SocketTimeoutException e) {
@@ -57,6 +58,10 @@ public class HTTPHelper {
         } catch (IOException e) {
             throw new AppException(500, "Invalid response", e);
         }
+    }
+
+    public String doGet(String uri, int timeout) throws SocketTimeoutException {
+        return this.doGet(uri, timeout, Collections.emptyMap());
     }
 
     private String handleResponse(String uri, HttpURLConnection con) throws IOException {
@@ -101,4 +106,5 @@ public class HTTPHelper {
             throw new AppException(500, "Invalid response", e);
         }
     }
+
 }
