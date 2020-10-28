@@ -34,7 +34,7 @@ public class BCPTest {
     public void doQuery() throws Exception {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("bcp.html"), StandardCharsets.UTF_8);
-        when(wsHelper.doGet(anyString(), anyInt(), any())).thenReturn(data);
+        when(wsHelper.doGet(anyString(), anyInt(), any(), anyBoolean())).thenReturn(data);
 
         Place p = bcp.build();
         assertNotNull(p);
