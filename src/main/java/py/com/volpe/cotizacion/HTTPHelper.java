@@ -3,6 +3,7 @@ package py.com.volpe.cotizacion;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +13,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -22,7 +27,6 @@ import java.util.StringJoiner;
  */
 @Service
 public class HTTPHelper {
-
 
     public String doGet(String uri) {
 
@@ -40,11 +44,20 @@ public class HTTPHelper {
         }
     }
 
-    public String doGet(String uri, int timeout, Map<String, String> headers) throws SocketTimeoutException {
+    public String doGet(String uri, int timeout,
+                        Map<String, String> headers,
+                        boolean ignoreSSL) throws SocketTimeoutException {
 
         try {
             URL url = new URL(uri);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            HttpURLConnection con = null;
+            if (ignoreSSL) {
+                HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+                https.setSSLSocketFactory(buildIgnoreCertSocketFactory());
+                con = https;
+            } else {
+                con = (HttpURLConnection) url.openConnection();
+            }
             con.setRequestMethod("GET");
             con.setConnectTimeout(timeout);
             con.setReadTimeout(timeout);
@@ -61,7 +74,7 @@ public class HTTPHelper {
     }
 
     public String doGet(String uri, int timeout) throws SocketTimeoutException {
-        return this.doGet(uri, timeout, Collections.emptyMap());
+        return this.doGet(uri, timeout, Collections.emptyMap(), false);
     }
 
     private String handleResponse(String uri, HttpURLConnection con) throws IOException {
@@ -107,4 +120,37 @@ public class HTTPHelper {
         }
     }
 
+
+    SSLSocketFactory buildIgnoreCertSocketFactory() {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[]{};
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                    }
+                }
+        };
+
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException e) {
+            // ignore this case
+        }
+        try {
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        } catch (KeyManagementException e) {
+            // ignore this case
+        }
+        return sc.getSocketFactory();
+    }
 }

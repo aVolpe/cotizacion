@@ -45,7 +45,7 @@ public class BCP implements Gatherer {
         QueryResponse toRet = new QueryResponse(main);
 
         try {
-            String response = helper.doGet(BRANCH_DATA_URL, 20000, Collections.singletonMap(HttpHeaders.USER_AGENT, "Chrome"));
+            String response = helper.doGet(BRANCH_DATA_URL, 20000, Collections.singletonMap(HttpHeaders.USER_AGENT, "Chrome"), true);
 
             Document root = Jsoup.parse(response);
             Elements exchangeDat = root.select("tbody tr");
