@@ -36,7 +36,7 @@
     "deep-extend": ">=0.5.1",
     "license-report": "^2.1.1",
     "prerender-spa-plugin": "^3.4.0",
-    "puppeteer": "^1.4.0",
+    "puppeteer": "^1.13.0",
     "sitemap-webpack-plugin": "^0.6.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
