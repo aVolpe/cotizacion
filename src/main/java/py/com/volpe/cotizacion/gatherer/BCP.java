@@ -78,22 +78,26 @@ public class BCP implements Gatherer {
 
     @Override
     public Place build() {
-
-        return Place.builder()
+        Place p = Place.builder()
                 .name("Banco Central del Paraguay (Cotización referencial)")
                 .type(Type.BANK)
-                .branch(PlaceBranch.builder()
-                        .name("Central")
-                        .latitude(-25.2781319)
-                        .longitude(-57.5765498)
-                        .phoneNumber("+59521608011")
-                        .email("nfo@bcp.gov.py ")
-                        .remoteCode("01")
-                        .schedule("")
-                        .image("https://www.bcp.gov.py/userfiles/images/banners/slider-background-01.jpg")
-                        .build())
                 .code(getCode())
                 .build();
+
+        PlaceBranch pb = PlaceBranch.builder()
+                .name("Central")
+                .latitude(-25.2781319)
+                .longitude(-57.5765498)
+                .phoneNumber("+59521608011")
+                .email("nfo@bcp.gov.py ")
+                .remoteCode("01")
+                .schedule("")
+                .image("https://www.bcp.gov.py/userfiles/images/banners/slider-background-01.jpg")
+                .place(p)
+                .build();
+
+        p.setBranches(Collections.singletonList(pb));
+        return p;
     }
 
     @Override

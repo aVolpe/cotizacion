@@ -123,7 +123,7 @@
                 <v-layout row>
                     <v-spacer></v-spacer>
                     <small class="footnote">
-                        Consultado el {{ data.exchange.date | fd("DD/MM/YYYY [a las] HH:mm") }}
+                        Consultado el {{ data.exchange.date | fd("dd/MM/yyyy 'a las' HH:mm") }}
                     </small>
                     <v-spacer></v-spacer>
                 </v-layout>
