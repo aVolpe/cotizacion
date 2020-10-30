@@ -35,7 +35,7 @@ Vue.filter("fn", (value: any) => {
 
 Vue.filter("fd", (value: any, desiredFormat: string | null) => {
 
-    const finalFormat = desiredFormat ? desiredFormat : "MM/DD/YYYY hh:mm";
+    const finalFormat = desiredFormat ? desiredFormat : "dd/MM/yyyy hh:mm";
     if (value) return format(value, finalFormat);
     return "";
     // if (value) return format(String(value)).format(finalFormat);
