@@ -68,7 +68,8 @@ public class Mundial implements Gatherer {
                     if (title.isEmpty() || exchanges.size() != 2) continue;
                     String buy = exchanges.get(0).text();
                     String sell = exchanges.get(1).text();
-                    qr.addDetail(new QueryResponseDetail(parse(buy), parse(sell), title));
+                    if (parse(buy) > 0 && parse(sell) > 0)
+                        qr.addDetail(new QueryResponseDetail(parse(buy), parse(sell), title));
                 }
                 return qr;
             }
@@ -114,7 +115,7 @@ public class Mundial implements Gatherer {
                 throw new IllegalStateException("Invalid url for parsing: " + href);
 
             }
-            String remoteId = href.substring(href.indexOf('='));
+            String remoteId = href.substring(href.indexOf('=') + 1);
 
             log.info("{} calling {} to get info of branch", getCode(), href);
             Document branchDoc = Jsoup.parse(helper.doGet(href));

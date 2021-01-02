@@ -18,6 +18,7 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,19 +41,25 @@ public class FeCambios implements Gatherer {
 
         return branches.stream().map(branch -> {
 
-            String data = helper.doPost(BRANCH_EXCHANGE_DATA_URL, Collections.singletonMap("sucu", branch.getRemoteCode()));
+            try {
+                String data = helper.doPost(BRANCH_EXCHANGE_DATA_URL, Collections.singletonMap("sucu", branch.getRemoteCode()));
 
-            Document root = Jsoup.parse("<html><body>" + data + "</body></html>");
-            Elements exchangeDat = root.select(".divcotizacion");
+                Document root = Jsoup.parse("<html><body>" + data + "</body></html>");
+                Elements exchangeDat = root.select(".divcotizacion");
 
-            QueryResponse toRet = new QueryResponse(branch);
-            exchangeDat.stream()
-                    .map(this::scrapeData)
-                    .forEach(toRet::addDetail);
+                QueryResponse toRet = new QueryResponse(branch);
+                exchangeDat.stream()
+                        .map(this::scrapeData)
+                        .forEach(toRet::addDetail);
 
-            return toRet;
+                return toRet;
+            } catch (Exception e) {
+                log.warn("Can't get data from branch {}", branch.getRemoteCode(), e);
+                return null;
+            }
 
-        }).collect(Collectors.toList());
+        }) .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private QueryResponseDetail scrapeData(Element e) {
