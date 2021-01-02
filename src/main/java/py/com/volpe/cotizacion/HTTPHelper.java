@@ -80,7 +80,7 @@ public class HTTPHelper {
     private String handleResponse(String uri, HttpURLConnection con) throws IOException {
         int status = con.getResponseCode();
         if (status != 200)
-            throw new AppException(status, "Invalid status returned querying URL " + uri);
+            throw new AppException(status, "Invalid status returned querying URL " + uri + " (the status is: " + status + ")");
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
         String inputLine;
         StringBuilder content = new StringBuilder();
