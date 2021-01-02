@@ -10,7 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
@@ -28,7 +27,6 @@ import java.util.regex.Pattern;
  * @since 8/31/18
  */
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Log4j2
 public class Interfisa implements Gatherer {
