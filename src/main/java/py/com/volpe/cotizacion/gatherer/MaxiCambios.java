@@ -138,7 +138,6 @@ public class MaxiCambios implements Gatherer {
             ed.setCompraTendencia(e.getElementsByTag("compra_tendencia").text());
             ed.setVenta(parse(e.getElementsByTag("venta").text()));
             ed.setVentaTendencia(e.getElementsByTag("venta_tendencia").text());
-            System.out.println(ed);
 
             toRet.add(ed);
         }

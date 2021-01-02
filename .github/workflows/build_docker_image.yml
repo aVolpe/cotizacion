@@ -49,3 +49,5 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
+          [ "$VERSION" == "latest" ] && curl "${{ secrets.HOOK_URL }}"
+          echo "Succeed"
