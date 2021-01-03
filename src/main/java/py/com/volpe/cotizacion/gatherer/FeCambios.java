@@ -32,9 +32,9 @@ public class FeCambios implements Gatherer {
 
     private final HTTPHelper helper;
 
-    private static final String BASE_IMAGE_PATH = "http://www.fecambios.com.py/";
-    private static final String BRANCH_DATA_URL = "http://www.fecambios.com.py/sucursales.php";
-    private static final String BRANCH_EXCHANGE_DATA_URL = "http://www.fecambios.com.py/inc/getCotizaciones.php";
+    private static final String BASE_IMAGE_PATH = "https://www.fecambios.com.py/";
+    private static final String BRANCH_DATA_URL = "https://www.fecambios.com.py/sucursales.php";
+    private static final String BRANCH_EXCHANGE_DATA_URL = "https://www.fecambios.com.py/inc/getCotizaciones.php";
 
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
