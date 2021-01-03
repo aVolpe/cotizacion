@@ -52,9 +52,9 @@ public class EuroCambios implements Gatherer {
 
             QueryResponse qr = new QueryResponse(branch);
             if (branch.getName().contains("Sucursal")) {
-                qr.setDetails(new ArrayList<>(secondary));
+                qr.setDetails(secondary.stream().map(QueryResponseDetail::dup).collect(Collectors.toList()));
             } else {
-                qr.setDetails(new ArrayList<>(main));
+                qr.setDetails(main.stream().map(QueryResponseDetail::dup).collect(Collectors.toList()));
             }
             if (qr.getDetails().isEmpty()) return null;
             return qr;
