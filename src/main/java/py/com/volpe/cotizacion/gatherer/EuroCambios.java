@@ -209,7 +209,15 @@ public class EuroCambios implements Gatherer {
         if (iframe == null) return null;
         String href = iframe.attr("src");
         if (href == null) return null;
-        return Pair.of(1D, 2D);
+        String query = href.substring(href.indexOf("?"));
+        String[] parts = query.split("!");
+        double longitude = 0D;
+        double latitude = 0D;
+        for (String part : parts) {
+            if (part.startsWith("3d")) longitude = Double.parseDouble(part.substring(2));
+            if (part.startsWith("2d")) latitude = Double.parseDouble(part.substring(2));
+        }
+        return Pair.of(longitude, latitude);
     }
 
     @Override
