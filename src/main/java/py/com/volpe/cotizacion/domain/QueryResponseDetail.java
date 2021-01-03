@@ -42,4 +42,11 @@ public class QueryResponseDetail {
         this.salePrice = salePrice;
         this.isoCode = isoCode;
     }
+
+    public QueryResponseDetail dup() {
+        QueryResponseDetail toRet = new QueryResponseDetail(this.purchasePrice, this.salePrice, this.isoCode);
+        toRet.setPurchaseTrend(this.purchaseTrend);
+        toRet.setSaleTrend(this.saleTrend);
+        return toRet;
+    }
 }

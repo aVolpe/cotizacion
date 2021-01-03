@@ -107,6 +107,7 @@ public class HTTPHelper {
             byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
             int length = out.length;
 
+            con.setInstanceFollowRedirects(true);
             con.setFixedLengthStreamingMode(length);
             con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
             con.connect();
