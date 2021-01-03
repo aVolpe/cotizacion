@@ -24,7 +24,13 @@ public class QueryResponseDetail {
     private long id;
     private long purchasePrice;
     private long salePrice;
+    /**
+     * >1 if is increasing
+     */
     private long purchaseTrend;
+    /**
+     * >1 if is increasing
+     */
     private long saleTrend;
     private String isoCode;
 
