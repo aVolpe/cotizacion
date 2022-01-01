@@ -1,6 +1,6 @@
 package py.com.volpe.cotizacion.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import py.com.volpe.cotizacion.GathererManager;
 

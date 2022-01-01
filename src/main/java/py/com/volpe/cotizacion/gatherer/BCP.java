@@ -1,7 +1,6 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +24,6 @@ import java.util.Objects;
  * @author Arturo Volpe
  * @since 10/28/20
  */
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class BCP implements Gatherer {
@@ -69,7 +67,7 @@ public class BCP implements Gatherer {
         // this is the header
         if (columns.isEmpty()) return null;
 
-        String name = columns.first().text();
+        // String name = columns.first().text();
         String currency = columns.get(1).text();
         String rate = columns.get(3).text();
 

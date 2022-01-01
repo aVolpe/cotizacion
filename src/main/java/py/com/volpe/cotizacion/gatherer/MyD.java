@@ -29,7 +29,7 @@ public class MyD implements Gatherer {
 
 	private static final String CODE = "MyD";
 	private static final List<String> ASU_CODE = Arrays.asList("2", "3");
-	private static final List<String> CDE_CODE = Collections.singletonList("4");
+	// private static final List<String> CDE_CODE = Collections.singletonList("4");
 	private static final String URL = "https://www.mydcambios.com.py/";
 
 	private final HTTPHelper helper;
