@@ -7,27 +7,7 @@
     "image" : null,
     "name" : "CDE KM 4",
     "schedule" : "07:00 horas a 17:00 horas de Lunes a Viernes, 07:00 horas a 12:00 horas Sábados",
-    "remoteCode" : "cde2"
-  },
-  "sanlo" : {
-    "latitude" : -25.3459184,
-    "longitude" : -57.5151255,
-    "phoneNumber" : "(021) 571.215 / (021) 571.216",
-    "email" : null,
-    "image" : "https://lh5.googleusercontent.com/p/AF1QipM0yx3fvWQArt0kY6EwyaaAsgX1jYRy3OuIobjr=w408-h725-k-no",
-    "name" : "San Lorenzo",
-    "schedule" : "08:00 horas a 17:00 horas de Lunes a Viernes, 08:00 horas a 12:00 horas Sábados",
-    "remoteCode" : "sanlo"
-  },
-  "asuncion" : {
-    "latitude" : -25.281411,
-    "longitude" : -57.6375917,
-    "phoneNumber" : "(021) 447.003 / (021) 447.004",
-    "email" : "matriz@cambiosalberdi.com",
-    "image" : "https://lh5.googleusercontent.com/p/AF1QipMxA2Nv-mtjAzqti1pUgd_Bt3z8nfbBBizklGEw=w408-h244-k-no",
-    "name" : "Asunción",
-    "schedule" : "07:45 horas a 17:00 horas de Lunes a Viernes, 07:45 horas a 12:00 horas Sábados",
-    "remoteCode" : "asuncion"
+    "remoteCode" : "km4"
   },
   "villamorra" : {
     "latitude" : -25.2962143,
@@ -47,7 +27,7 @@
     "image" : null,
     "name" : "Sucursal 1 CDE",
     "schedule" : "07:00 horas a 17:00 horas de Lunes a Viernes, 07:00 horas a 12:00 horas Sábados",
-    "remoteCode" : "cde"
+    "remoteCode" : "ciudaddeleste"
   },
   "salto" : {
     "latitude" : -24.055276,
@@ -57,7 +37,7 @@
     "image" : null,
     "name" : "Salto del Guairá",
     "schedule" : "08:00 horas a 16:00 horas de Lunes a Viernes, 07:30 horas a 11:30 horas Sábados",
-    "remoteCode" : "salto"
+    "remoteCode" : "saltodelguaira"
   },
   "enc" : {
     "latitude" : -27.3314553,
@@ -67,6 +47,6 @@
     "image" : "https://lh5.googleusercontent.com/p/AF1QipOAtjZef_kGv14qJ4h68Rt4CKOxxwYXPJW30BUY=w408-h306-k-no",
     "name" : "Encarnación",
     "schedule" : "07:45 horas a 17:00 horas de Lunes a Viernes, 07:45 horas a 12:00 horas Sábados",
-    "remoteCode" : "enc"
+    "remoteCode" : "encarnacion"
   }
 }

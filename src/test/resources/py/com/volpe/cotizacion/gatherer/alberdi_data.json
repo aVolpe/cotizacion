@@ -1,352 +1,525 @@
 {
-  "asuncion": [
-    {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.510",
-      "venta": "5.535"
-    },
-    {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.490",
-      "venta": "1.525"
-    },
-    {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.910",
-      "venta": "7.045"
-    },
-    {
-      "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "219",
-      "venta": "235"
-    },
-    {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,635",
-      "venta": "3,693"
-    },
-    {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,500",
-      "venta": "25,200"
-    },
-    {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,253",
-      "venta": "1,272"
-    },
-    {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
-      "compra": "0",
-      "venta": "0"
-    }
-  ],
   "villamorra": [
     {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.515",
-      "venta": "5.535"
+      "id": "dolar_estadounidense",
+      "bcp": "USD",
+      "moneda": "Dólar Americano",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "6.800",
+      "venta": "6.890"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.495",
-      "venta": "1.520"
+      "id": "real_brasileno",
+      "bcp": "BRL",
+      "moneda": "Real Brasileño",
+      "imagen": "real_brasileno.png",
+      "imaweb": "real_brasileno.png",
+      "compra": "1.185",
+      "venta": "1.245"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.900",
-      "venta": "7.050"
+      "id": "euro",
+      "bcp": "EUR",
+      "moneda": "EURO",
+      "imagen": "euro.png",
+      "imaweb": "euro.png",
+      "compra": "7.455",
+      "venta": "7.890"
     },
     {
+      "id": "peso_argentino",
+      "bcp": "ARS",
       "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "220",
-      "venta": "235"
+      "imagen": "peso_argentino.png",
+      "imaweb": "peso_argentino.png",
+      "compra": "32",
+      "venta": "36"
     },
     {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,635",
-      "venta": "3,695"
+      "id": "dolar_real",
+      "bcp": "USD -> BRL",
+      "moneda": "Dólar Americano x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,560",
+      "venta": "5,720"
     },
     {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,700",
-      "venta": "25,200"
+      "id": "dolar_euro",
+      "bcp": "USD -> EUR",
+      "moneda": "Dólar Americano x EURO",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_euro.png",
+      "compra": "1,097",
+      "venta": "1,144"
     },
     {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,254",
-      "venta": "1,272"
+      "id": "dolar_peso",
+      "bcp": "USD -> ARS",
+      "moneda": "Dólar Americano x Peso Argentino",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_peso_argentino.png",
+      "compra": "191,000",
+      "venta": "213,000"
     },
     {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
+      "id": "dolar_cheque",
+      "bcp": "USD CHE",
+      "moneda": "Dólar Cheque",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
       "compra": "0",
       "venta": "0"
+    },
+    {
+      "id": "dolar_real_cheque",
+      "bcp": "USD CHE -> BRL",
+      "moneda": "Dólar Cheque x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "0,000",
+      "venta": "0,000"
+    },
+    {
+      "id": "yen_japones",
+      "bcp": "JPY",
+      "moneda": "Yen Japones",
+      "imagen": "yen_japones.png",
+      "imaweb": "yen_japones.png",
+      "compra": "35,00",
+      "venta": "61,00"
+    },
+    {
+      "id": "libra_esterlina",
+      "bcp": "GBP",
+      "moneda": "Libra Esterlina",
+      "imagen": "libra_esterlina.png",
+      "imaweb": "libra_esterlina.png",
+      "compra": "8.255",
+      "venta": "9.585"
+    },
+    {
+      "id": "dolar_canadiense",
+      "bcp": "CAD",
+      "moneda": "Dólar Canadiense",
+      "imagen": "dolar_canadiense.png",
+      "imaweb": "dolar_canadiense.png",
+      "compra": "3.200",
+      "venta": "5.475"
+    },
+    {
+      "id": "peso_chileno",
+      "bcp": "CLP",
+      "moneda": "Peso Chileno",
+      "imagen": "peso_chileno.png",
+      "imaweb": "peso_chileno.png",
+      "compra": "5,00",
+      "venta": "9,00"
+    },
+    {
+      "id": "peso_uruguayo",
+      "bcp": "UYU",
+      "moneda": "Peso Uruguayo",
+      "imagen": "peso_uruguayo.png",
+      "imaweb": "peso_uruguayo.png",
+      "compra": "140",
+      "venta": "250"
+    },
+    {
+      "id": "franco_suizo",
+      "bcp": "CHF",
+      "moneda": "Franco Suizo",
+      "imagen": "franco_suizo.png",
+      "imaweb": "franco_suizo.png",
+      "compra": "4.465",
+      "venta": "7.560"
+    },
+    {
+      "id": "dolar_australiano",
+      "bcp": "AUD",
+      "moneda": "Dólar Australiano",
+      "imagen": "dolar_australiano.png",
+      "imaweb": "dolar_australiano.png",
+      "compra": "0",
+      "venta": "0"
+    },
+    {
+      "id": "timer",
+      "bcp": "",
+      "moneda": "Última Actualización",
+      "img": "timer.png",
+      "imaweb": "timer.png",
+      "compra": "01/01/2022",
+      "venta": "15:30:01"
     }
   ],
-  "cde": [
+  "ciudaddeleste": [
     {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.510",
-      "venta": "5.535"
+      "id": "dolar_estadounidense",
+      "bcp": "USD",
+      "moneda": "Dólar Americano",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "6.810",
+      "venta": "6.865"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.495",
-      "venta": "1.520"
+      "id": "real_brasileno",
+      "bcp": "BRL",
+      "moneda": "Real Brasileño",
+      "imagen": "real_brasileno.png",
+      "imaweb": "real_brasileno.png",
+      "compra": "1.190",
+      "venta": "1.225"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.900",
-      "venta": "7.030"
+      "id": "euro",
+      "bcp": "EUR",
+      "moneda": "EURO",
+      "imagen": "euro.png",
+      "imaweb": "euro.png",
+      "compra": "7.490",
+      "venta": "7.790"
     },
     {
+      "id": "peso_argentino",
+      "bcp": "ARS",
       "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "220",
-      "venta": "235"
+      "imagen": "peso_argentino.png",
+      "imaweb": "peso_argentino.png",
+      "compra": "32",
+      "venta": "35"
     },
     {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,640",
-      "venta": "3,685"
+      "id": "dolar_real",
+      "bcp": "USD -> BRL",
+      "moneda": "Dólar Americano x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,610",
+      "venta": "5,720"
     },
     {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,500",
-      "venta": "25,000"
+      "id": "dolar_euro",
+      "bcp": "USD -> EUR",
+      "moneda": "Dólar Americano x EURO",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_euro.png",
+      "compra": "1,100",
+      "venta": "1,134"
     },
     {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,253",
-      "venta": "1,272"
+      "id": "dolar_peso",
+      "bcp": "USD -> ARS",
+      "moneda": "Dólar Americano x Peso Argentino",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_peso_argentino.png",
+      "compra": "193,000",
+      "venta": "213,000"
     },
     {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
+      "id": "dolar_cheque",
+      "bcp": "USD CHE",
+      "moneda": "Dólar Cheque",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
       "compra": "0",
       "venta": "0"
+    },
+    {
+      "id": "dolar_real_cheque",
+      "bcp": "USD CHE -> BRL",
+      "moneda": "Dólar Cheque x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,650",
+      "venta": "0,000"
+    },
+    {
+      "id": "timer",
+      "bcp": "",
+      "moneda": "Última Actualización",
+      "img": "timer.png",
+      "imaweb": "timer.png",
+      "compra": "01/01/2022",
+      "venta": "15:30:01"
     }
   ],
-  "salto": [
+  "saltodelguaira": [
     {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.510",
-      "venta": "5.540"
+      "id": "dolar_estadounidense",
+      "bcp": "USD",
+      "moneda": "Dólar Americano",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "6.780",
+      "venta": "6.870"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.495",
-      "venta": "1.520"
+      "id": "real_brasileno",
+      "bcp": "BRL",
+      "moneda": "Real Brasileño",
+      "imagen": "real_brasileno.png",
+      "imaweb": "real_brasileno.png",
+      "compra": "1.180",
+      "venta": "1.220"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.905",
-      "venta": "7.045"
+      "id": "euro",
+      "bcp": "EUR",
+      "moneda": "EURO",
+      "imagen": "euro.png",
+      "imaweb": "euro.png",
+      "compra": "7.395",
+      "venta": "7.845"
     },
     {
+      "id": "peso_argentino",
+      "bcp": "ARS",
       "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "215",
-      "venta": "235"
-    },
-    {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,650",
-      "venta": "3,695"
-    },
-    {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,500",
-      "venta": "25,500"
-    },
-    {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,253",
-      "venta": "1,272"
-    },
-    {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
+      "imagen": "peso_argentino.png",
+      "imaweb": "peso_argentino.png",
       "compra": "0",
       "venta": "0"
+    },
+    {
+      "id": "dolar_real",
+      "bcp": "USD -> BRL",
+      "moneda": "Dólar Americano x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,640",
+      "venta": "5,740"
+    },
+    {
+      "id": "dolar_euro",
+      "bcp": "USD -> EUR",
+      "moneda": "Dólar Americano x EURO",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_euro.png",
+      "compra": "1,091",
+      "venta": "1,142"
+    },
+    {
+      "id": "dolar_peso",
+      "bcp": "USD -> ARS",
+      "moneda": "Dólar Americano x Peso Argentino",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_peso_argentino.png",
+      "compra": "0,000",
+      "venta": "0,000"
+    },
+    {
+      "id": "dolar_cheque",
+      "bcp": "USD CHE",
+      "moneda": "Dólar Cheque",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "0",
+      "venta": "0"
+    },
+    {
+      "id": "dolar_real_cheque",
+      "bcp": "USD CHE -> BRL",
+      "moneda": "Dólar Cheque x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "0,000",
+      "venta": "0,000"
+    },
+    {
+      "id": "timer",
+      "bcp": "",
+      "moneda": "Última Actualización",
+      "img": "timer.png",
+      "imaweb": "timer.png",
+      "compra": "01/01/2022",
+      "venta": "15:30:02"
     }
   ],
-  "sanlo": [
+  "km4": [
     {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.515",
-      "venta": "5.530"
+      "id": "dolar_estadounidense",
+      "bcp": "USD",
+      "moneda": "Dólar Americano",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "6.810",
+      "venta": "6.865"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.490",
-      "venta": "1.520"
+      "id": "real_brasileno",
+      "bcp": "BRL",
+      "moneda": "Real Brasileño",
+      "imagen": "real_brasileno.png",
+      "imaweb": "real_brasileno.png",
+      "compra": "1.195",
+      "venta": "1.225"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.900",
-      "venta": "7.040"
+      "id": "euro",
+      "bcp": "EUR",
+      "moneda": "EURO",
+      "imagen": "euro.png",
+      "imaweb": "euro.png",
+      "compra": "7.490",
+      "venta": "7.785"
     },
     {
+      "id": "peso_argentino",
+      "bcp": "ARS",
       "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "219",
-      "venta": "235"
+      "imagen": "peso_argentino.png",
+      "imaweb": "peso_argentino.png",
+      "compra": "32",
+      "venta": "35"
     },
     {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,635",
-      "venta": "3,695"
+      "id": "dolar_real",
+      "bcp": "USD -> BRL",
+      "moneda": "Dólar Americano x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,610",
+      "venta": "5,700"
     },
     {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,700",
-      "venta": "25,200"
+      "id": "dolar_euro",
+      "bcp": "USD -> EUR",
+      "moneda": "Dólar Americano x EURO",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_euro.png",
+      "compra": "1,100",
+      "venta": "1,134"
     },
     {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,253",
-      "venta": "1,272"
+      "id": "dolar_peso",
+      "bcp": "USD -> ARS",
+      "moneda": "Dólar Americano x Peso Argentino",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_peso_argentino.png",
+      "compra": "193,000",
+      "venta": "213,000"
     },
     {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
+      "id": "dolar_cheque",
+      "bcp": "USD CHE",
+      "moneda": "Dólar Cheque",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
       "compra": "0",
       "venta": "0"
+    },
+    {
+      "id": "dolar_real_cheque",
+      "bcp": "USD CHE -> BRL",
+      "moneda": "Dólar Cheque x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "0,000",
+      "venta": "0,000"
+    },
+    {
+      "id": "timer",
+      "bcp": "",
+      "moneda": "Última Actualización",
+      "img": "timer.png",
+      "imaweb": "timer.png",
+      "compra": "01/01/2022",
+      "venta": "15:30:02"
     }
   ],
-  "cde2": [
+  "encarnacion": [
     {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.515",
-      "venta": "5.535"
+      "id": "dolar_estadounidense",
+      "bcp": "USD",
+      "moneda": "Dólar Americano",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
+      "compra": "6.780",
+      "venta": "6.860"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.495",
-      "venta": "1.520"
+      "id": "real_brasileno",
+      "bcp": "BRL",
+      "moneda": "Real Brasileño",
+      "imagen": "real_brasileno.png",
+      "imaweb": "real_brasileno.png",
+      "compra": "1.185",
+      "venta": "1.260"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.880",
-      "venta": "7.010"
+      "id": "euro",
+      "bcp": "EUR",
+      "moneda": "EURO",
+      "imagen": "euro.png",
+      "imaweb": "euro.png",
+      "compra": "7.420",
+      "venta": "7.800"
     },
     {
+      "id": "peso_argentino",
+      "bcp": "ARS",
       "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "220",
-      "venta": "233"
+      "imagen": "peso_argentino.png",
+      "imaweb": "peso_argentino.png",
+      "compra": "30",
+      "venta": "34"
     },
     {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,640",
-      "venta": "3,685"
+      "id": "dolar_real",
+      "bcp": "USD -> BRL",
+      "moneda": "Dólar Americano x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "5,450",
+      "venta": "5,700"
     },
     {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,700",
-      "venta": "25,000"
+      "id": "dolar_euro",
+      "bcp": "USD -> EUR",
+      "moneda": "Dólar Americano x EURO",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_euro.png",
+      "compra": "1,095",
+      "venta": "1,135"
     },
     {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,249",
-      "venta": "1,268"
+      "id": "dolar_peso",
+      "bcp": "USD -> ARS",
+      "moneda": "Dólar Americano x Peso Argentino",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_peso_argentino.png",
+      "compra": "202,000",
+      "venta": "226,000"
     },
     {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
+      "id": "dolar_cheque",
+      "bcp": "USD CHE",
+      "moneda": "Dólar Cheque",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_estadounidense.png",
       "compra": "0",
       "venta": "0"
-    }
-  ],
-  "enc": [
-    {
-      "moneda": "D\u00f3lar",
-      "img": "dolar.png",
-      "compra": "5.475",
-      "venta": "5.520"
     },
     {
-      "moneda": "Real",
-      "img": "real.png",
-      "compra": "1.485",
-      "venta": "1.520"
+      "id": "dolar_real_cheque",
+      "bcp": "USD CHE -> BRL",
+      "moneda": "Dólar Cheque x Real Brasileño",
+      "imagen": "dolar_estadounidense.png",
+      "imaweb": "dolar_real.png",
+      "compra": "0,000",
+      "venta": "0,000"
     },
     {
-      "moneda": "Euro",
-      "img": "euro.png",
-      "compra": "6.860",
-      "venta": "7.030"
-    },
-    {
-      "moneda": "Peso Argentino",
-      "img": "peso.png",
-      "compra": "219",
-      "venta": "233"
-    },
-    {
-      "moneda": "D\u00f3lar x Real",
-      "img": "dolar_real.jpg",
-      "compra": "3,635",
-      "venta": "3,690"
-    },
-    {
-      "moneda": "D\u00f3lar x Peso Arg",
-      "img": "dolar_peso.jpg",
-      "compra": "23,700",
-      "venta": "25,000"
-    },
-    {
-      "moneda": "Euro x D\u00f3lar",
-      "img": "euro_dolar.jpg",
-      "compra": "1,253",
-      "venta": "1,272"
-    },
-    {
-      "moneda": "D\u00f3lar Cheque",
-      "img": "dolar.png",
-      "compra": "0",
-      "venta": "0"
+      "id": "timer",
+      "bcp": "",
+      "moneda": "Última Actualización",
+      "img": "timer.png",
+      "imaweb": "timer.png",
+      "compra": "01/01/2022",
+      "venta": "15:30:03"
     }
   ]
 }
