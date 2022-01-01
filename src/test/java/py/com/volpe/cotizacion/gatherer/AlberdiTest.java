@@ -38,17 +38,8 @@ public class AlberdiTest {
     @InjectMocks
     private Alberdi alberdi;
 
-    @BeforeEach
-    public void init() throws Exception {
-
-        String data = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), "UTF-8");
-
-        when(wsHelper.doGet(anyString())).thenReturn(data);
-    }
-
     @Test
     public void create() throws Exception {
-
 
         Place created = alberdi.build();
 
@@ -80,7 +71,13 @@ public class AlberdiTest {
     }
 
     @Test
-    public void doQuery() {
+    public void doQuery() throws Exception {
+
+        String stringData = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), "UTF-8");
+
+        when(wsHelper.doGet(anyString())).thenReturn(stringData);
+
+
         Place place = alberdi.build();
 
         List<QueryResponse> data = alberdi.doQuery(place, place.getBranches());
