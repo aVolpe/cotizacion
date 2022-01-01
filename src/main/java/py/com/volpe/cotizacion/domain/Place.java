@@ -53,6 +53,7 @@ public class Place {
 
     public void addBranch(PlaceBranch newBranch) {
         if (this.branches == null) this.branches = new ArrayList<>();
+        if (this.branches.isEmpty()) this.branches = new ArrayList<>();
         newBranch.setPlace(this);
         this.branches.add(newBranch);
     }

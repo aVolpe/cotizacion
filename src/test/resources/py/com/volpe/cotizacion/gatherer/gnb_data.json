@@ -1,0 +1,27 @@
+[
+    {
+      "currency": {
+        "code": "USD",
+        "description": "DOLAR ESTADOUNIDENSE"
+      },
+      "electronicBuyPrice": 6785,
+      "electronicSellPrice": 6940,
+      "cashBuyPrice": 6730,
+      "cashSellPrice": 6950,
+      "checkBuyPrice": 6770,
+      "checkSellPrice": 6950
+    },
+    {
+      "currency": {
+        "code": "EUR",
+        "description": "EURO"
+      },
+      "electronicBuyPrice": 7510,
+      "electronicSellPrice": 7960,
+      "cashBuyPrice": 7400,
+      "cashSellPrice": 8100,
+      "checkBuyPrice": 7480,
+      "checkSellPrice": 8000
+    }
+  ]
+  
