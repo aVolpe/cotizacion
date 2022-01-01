@@ -30,6 +30,6 @@ RUN sh mvnw -B -q install -Ppostgres -DskipTests
 
 FROM openjdk:17.0.1
 VOLUME /tmp
-COPY --from=builder /app/target/cotizaciones-2.0.1.jar app.jar
+COPY --from=builder /app/target/cotizaciones-2.0.2.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
