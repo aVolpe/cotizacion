@@ -1,7 +1,6 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,10 +46,10 @@ public class AlberdiTest {
         assertNotNull(alberdi.getCode(), created.getCode());
         assertNotNull(created.getName());
 
-        assertEquals(7, created.getBranches().size());
+        assertEquals(5, created.getBranches().size());
 
         assertThat(created.getBranches().stream().map(PlaceBranch::getName).collect(Collectors.toList()),
-                hasItems("Villa Morra", "San Lorenzo"));
+                hasItems("Villa Morra", "CDE KM 4"));
 
         for (PlaceBranch pb : created.getBranches()) {
             assertNotEquals("A branch is not mapped", pb.getName(), pb.getRemoteCode());
@@ -82,23 +81,23 @@ public class AlberdiTest {
 
         List<QueryResponse> data = alberdi.doQuery(place, place.getBranches());
 
-        assertEquals(7, data.size());
+        assertEquals(5, data.size());
         for (QueryResponse qr : data) {
             assertNotNull(qr.getPlace());
             assertNotNull(qr.getDetails());
             assertNotNull(qr.getBranch());
             assertNotNull(qr.getDate());
-            assertEquals(4, qr.getDetails().size());
+            assertFalse(qr.getDetails().isEmpty(), "The branch " + qr.getBranch() + " is empty");
 
-            if (qr.getBranch().getRemoteCode().equalsIgnoreCase("asuncion")) {
+            if (qr.getBranch().getRemoteCode().equalsIgnoreCase("villamorra")) {
 
                 QueryResponseDetail qrdAsuncion = qr.getDetails()
                         .stream()
                         .filter(d -> d.getIsoCode().equals("USD"))
                         .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-                assertEquals(5510, qrdAsuncion.getPurchasePrice());
-                assertEquals(5535, qrdAsuncion.getSalePrice());
+                assertEquals(6800, qrdAsuncion.getPurchasePrice());
+                assertEquals(6890, qrdAsuncion.getSalePrice());
             }
 
             assertThat(

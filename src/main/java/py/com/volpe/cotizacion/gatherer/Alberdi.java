@@ -16,6 +16,7 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Alberdi implements Gatherer {
 
-    private static final String CODE = "ALBERDI";
-    private static final String WS_URL = "https://cambiosalberdi.com/ws/getCotizaciones.json";
+    private static final String CODE = "ALBERDI_2";
+    private static final String WS_URL = "http://www.cambiosalberdi.com/ws/getTablero.json.php";
     private final HTTPHelper helper;
 
     @Override
@@ -60,8 +61,8 @@ public class Alberdi implements Gatherer {
                 if (iso != null)
                     qr.addDetail(
                             new QueryResponseDetail(
-                                    parse(exchange.getCompra()),
-                                    parse(exchange.getVenta()),
+                                    parse(exchange.getCompra()).longValue(),
+                                    parse(exchange.getVenta()).longValue(),
                                     iso));
             });
 
@@ -71,8 +72,8 @@ public class Alberdi implements Gatherer {
 
     }
 
-    private long parse(String number) {
-        return Long.parseLong(number.replace(".", ""));
+    private BigDecimal parse(String number) {
+        return new BigDecimal(number.replace(".", "").replace(",", "."));
     }
 
     /**
@@ -130,26 +131,21 @@ public class Alberdi implements Gatherer {
     private static String mapToISO(ExchangeData data) {
         // We don't care for the check exchange
         if (data.getMoneda().contains("Cheque")) return null;
-        switch (data.getImg()) {
-            case "dolar.png":
-                return "USD";
-            case "real.png":
-                return "BRL";
-            case "euro.png":
-                return "EUR";
-            case "peso.png":
-                return "ARS";
-            default:
-                return null;
-        }
+        // we don't care about other exchanges
+        if (data.getBcp().contains("->")) return null;
+        if ("timer".equals(data.getId())) return null;
+        return data.getBcp();
     }
 
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class ExchangeData {
+        private String id;
+        private String bcp;
         private String moneda;
-        private String img;
+        private String imagen;
+        private String imaweb;
         private String compra;
         private String venta;
     }
