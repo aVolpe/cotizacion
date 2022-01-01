@@ -1,12 +1,12 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.util.Pair;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
@@ -18,15 +18,14 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Arturo Volpe
  * @since 10/5/18
  */
-@RunWith(MockitoJUnitRunner.class)
-public class FeCambiosTest {
+@ExtendWith(MockitoExtension.class)
+ public class FeCambiosTest {
 
 	@Mock
 	private HTTPHelper wsHelper;

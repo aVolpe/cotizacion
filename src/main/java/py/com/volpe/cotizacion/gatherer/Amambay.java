@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class Amambay implements Gatherer {
 
     private static final String URL_CHANGE = "https://www.bancobasa.com.py/ebanking_ext/api/data/currency_exchange";

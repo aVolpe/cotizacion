@@ -1,13 +1,16 @@
 package py.com.volpe.cotizacion.controller;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import py.com.volpe.cotizacion.Cotizacion;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository;
@@ -16,14 +19,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * @author Arturo Volpe
  * @since 5/12/18
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Cotizacion.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
 public class ExchangeControllerTest {
 
     @Autowired
@@ -35,7 +40,7 @@ public class ExchangeControllerTest {
     @Test
     public void byIso() {
 
-        //Mockito.when(repo.getAvailableISO()).thenReturn(Arrays.asList("EUR", "USD"));
+        Mockito.when(repo.getAvailableISO()).thenReturn(Arrays.asList("EUR", "USD"));
 
         List<String> data = restTemplate.getForEntity("/api/exchange/", List.class).getBody();
 

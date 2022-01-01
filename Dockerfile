@@ -12,7 +12,7 @@ RUN npm install
 COPY --chown=pptruser:pptruser client/. "$BUILD_FOLDER"
 RUN npm run build
 
-FROM adoptopenjdk:15-hotspot as builder
+FROM openjdk:17.0.1-jdk as builder
 ARG BRANCH_NAME
 WORKDIR /app
 COPY mvnw /app
@@ -28,8 +28,8 @@ RUN sh mvnw -B -q package
 RUN sh mvnw -B -q install -Ppostgres -DskipTests
 
 
-FROM adoptopenjdk:15-hotspot
+FROM openjdk:17.0.1
 VOLUME /tmp
-COPY --from=builder /app/target/cotizaciones-2.0.1.jar app.jar
+COPY --from=builder /app/target/cotizaciones-2.0.2.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 

@@ -1,8 +1,7 @@
 package py.com.volpe.cotizacion;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
@@ -14,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Arturo Volpe
@@ -45,10 +46,10 @@ public class GathererManagerTest {
 
         GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, er, null);
 
-        Assert.assertEquals(1, manager.init(null).size());
-        Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
+        assertEquals(1, manager.init(null).size());
+        assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
 
-        Assert.assertEquals(0, manager.init("p2").size());
+        assertEquals(0, manager.init("p2").size());
 
     }
 
@@ -74,10 +75,10 @@ public class GathererManagerTest {
 
         GathererManager manager = new GathererManager(Arrays.asList(first, second), pr, er, qr);
 
-        Assert.assertEquals(1, manager.doQuery(null).size());
-        Assert.assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
+        assertEquals(1, manager.doQuery(null).size());
+        assertThat(manager.init(null), CoreMatchers.hasItems("p1"));
 
-        Assert.assertEquals(0, manager.doQuery("p2").size());
-        Assert.assertEquals(1, manager.doQuery("p1").size());
+        assertEquals(0, manager.doQuery("p2").size());
+        assertEquals(1, manager.doQuery("p1").size());
     }
 }
