@@ -22,10 +22,10 @@ COPY src /app/src
 COPY utils /app/utils
 
 COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
-RUN ./mvnw clean
+RUN sh mvnw clean
 RUN sh ./utils/gen_licenses.sh
 RUN sh mvnw -B -q package
-RUN sh mvnw -B -q install -Ppostgres -DskipTests
+RUN sh mvnw -B -q clean install -Ppostgres -DskipTests
 
 
 FROM openjdk:17.0.1
