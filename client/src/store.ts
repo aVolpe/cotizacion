@@ -245,7 +245,7 @@ export default new Vuex.Store<RootState>({
         },
 
         fetchCurrencyData: ({commit, dispatch, state}, currency: string = "USD") => {
-            if (state.current.currency === currency) {
+            if (state.current.currency !== currency) {
                 commit("setCurrency", currency);
             }
             const exchanges = (state as RootState).exchanges;
