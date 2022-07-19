@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import py.com.volpe.cotizacion.Cotizacion;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
@@ -28,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest(classes = Cotizacion.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-public class ExchangeControllerTest {
+class ExchangeControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -37,7 +36,8 @@ public class ExchangeControllerTest {
     private QueryResponseDetailRepository repo;
 
     @Test
-    public void byIso() {
+    @SuppressWarnings("unchecked")
+    void byIso() {
 
         Mockito.when(repo.getAvailableISO()).thenReturn(Arrays.asList("EUR", "USD"));
 
@@ -48,7 +48,7 @@ public class ExchangeControllerTest {
     }
 
     @Test
-    public void getAvailableCurrencies() {
+    void getAvailableCurrencies() {
 
         Date now = new Date();
         Date tenMinutesAgo = addMinutes(now, -10);
@@ -58,6 +58,8 @@ public class ExchangeControllerTest {
         ));
 
         ExchangeController.ResultData data = restTemplate.getForEntity("/api/exchange/{cur}", ExchangeController.ResultData.class, "USD").getBody();
+
+        assertNotNull(data);
 
         assertEquals(2, data.getCount());
         assertEquals(2, data.getData().size());
@@ -70,6 +72,7 @@ public class ExchangeControllerTest {
 
         ExchangeController.ResultData dataEUR = restTemplate.getForEntity("/api/exchange/{cur}", ExchangeController.ResultData.class, "EUR").getBody();
 
+        assertNotNull(dataEUR);
         assertEquals(0, dataEUR.getCount());
         assertEquals(0, dataEUR.getData().size());
         assertNull(dataEUR.getFirstQueryResult());

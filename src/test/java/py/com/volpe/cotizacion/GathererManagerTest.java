@@ -13,19 +13,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Arturo Volpe
  * @since 5/14/18
  */
-public class GathererManagerTest {
+class GathererManagerTest {
 
     @Test
-    public void init() {
+    void init() {
 
 
         ExecutionRepository er = Mockito.mock(ExecutionRepository.class);
@@ -35,7 +35,6 @@ public class GathererManagerTest {
 
         Gatherer second = Mockito.mock(Gatherer.class);
         Mockito.when(second.getCode()).thenReturn("p2");
-        Mockito.when(second.build()).thenThrow(new AppException(400, "Invalid place"));
 
         PlaceRepository pr = Mockito.mock(PlaceRepository.class);
         Mockito.when(pr.save(any())).thenAnswer(returnsFirstArg());
@@ -54,7 +53,7 @@ public class GathererManagerTest {
     }
 
     @Test
-    public void doQuery() {
+    void doQuery() {
 
         ExecutionRepository er = Mockito.mock(ExecutionRepository.class);
 

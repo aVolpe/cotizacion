@@ -17,10 +17,8 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -40,8 +38,7 @@ public class MaxiCambios implements Gatherer {
 
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
-
-        return branches.stream().map(this::queryBranch).collect(Collectors.toList());
+        return branches.stream().map(this::queryBranch).toList();
 
     }
 
@@ -79,47 +76,6 @@ public class MaxiCambios implements Gatherer {
     }
 
 
-    /**
-     * More branches are present in the main webpage, but it's seems that all the branches shares the same price.
-     *
-     * @return the newly created place
-     */
-    @Override
-    public Place build() {
-
-
-        log.info("Creating place {}", CODE);
-
-        Place place = new Place();
-        place.setName(CODE);
-        place.setCode(CODE);
-
-
-        PlaceBranch main = new PlaceBranch();
-        main.setName("Shopping Multiplaza Casa Central");
-        main.setLatitude(-25.3167006);
-        main.setLongitude(-57.572267);
-        main.setImage("http://www.maxicambios.com.py/media/1044/asuncion_multiplaza.jpg");
-        main.setPhoneNumber("(021) 525105/8");
-        main.setSchedule("Lunes a Sábados: 8:00 a 21:00 Hs.\n" +
-                "Domingos: 10:00 a 21:00 Hs.");
-        main.setRemoteCode("0");
-
-        PlaceBranch cde = new PlaceBranch();
-        cde.setName("Casa Central CDE");
-        cde.setLatitude(-25.5083135);
-        cde.setLongitude(-54.6384264);
-        cde.setImage("http://www.maxicambios.com.py/media/1072/matriz_cde_original.jpg");
-        cde.setPhoneNumber("(061) 573106-574270-574295-509511/13");
-        cde.setSchedule("Lunes a viernes: 7:00 a 19:30 Hs. \n Sabados: 7:00 a 12:00 Hs.");
-        cde.setRemoteCode("13");
-
-
-        place.setBranches(Arrays.asList(main, cde));
-        return place;
-
-    }
-
     private List<ExchangeData> getParsedData(String wsUrl) {
 
         String xml = getData(wsUrl);
@@ -144,6 +100,7 @@ public class MaxiCambios implements Gatherer {
         return toRet;
     }
 
+
     private String getData(String wsUrl) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
@@ -164,8 +121,7 @@ public class MaxiCambios implements Gatherer {
                 return "BRL";
             case "Uruguay": //URU
                 return "UYU";
-            case "EU": //EURO
-            case "Euro": //EURO
+            case "EU", "Euro": //EURO
                 return "EUR";
             case "Mejico": //Mexico
                 return "MXN";

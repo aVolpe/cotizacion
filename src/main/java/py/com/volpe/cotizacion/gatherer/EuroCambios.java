@@ -5,24 +5,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-import org.springframework.data.util.Pair;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
-import py.com.volpe.cotizacion.domain.Place.Type;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.net.SocketTimeoutException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -33,7 +23,6 @@ import java.util.stream.Collectors;
 @Log4j2
 public class EuroCambios implements Gatherer {
 
-    protected static final String BRANCH_LIST_URL = "https://eurocambios.com.py/v2/index.php/oficinas/";
     protected static final String EXCHANGE_DATA_URL = "https://eurocambios.com.py/v2/sgi/utilsDto.php";
 
     private final HTTPHelper helper;
@@ -50,17 +39,17 @@ public class EuroCambios implements Gatherer {
 
         return branches.stream().map(branch -> {
 
-            QueryResponse qr = new QueryResponse(branch);
-            if (branch.getName().contains("Sucursal")) {
-                qr.setDetails(secondary.stream().map(QueryResponseDetail::dup).collect(Collectors.toList()));
-            } else {
-                qr.setDetails(main.stream().map(QueryResponseDetail::dup).collect(Collectors.toList()));
-            }
-            if (qr.getDetails().isEmpty()) return null;
-            return qr;
-        })
+                    QueryResponse qr = new QueryResponse(branch);
+                    if (branch.getName().contains("Sucursal")) {
+                        qr.setDetails(secondary.stream().map(QueryResponseDetail::dup).toList());
+                    } else {
+                        qr.setDetails(main.stream().map(QueryResponseDetail::dup).toList());
+                    }
+                    if (qr.getDetails().isEmpty()) return null;
+                    return qr;
+                })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<QueryResponseDetail> getExchangeOf(String id) {
@@ -71,7 +60,7 @@ public class EuroCambios implements Gatherer {
         String page = helper.doPost(EXCHANGE_DATA_URL, params);
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = null;
+        JsonNode data;
         try {
             data = mapper.readTree(page);
         } catch (JsonProcessingException e) {
@@ -102,122 +91,19 @@ public class EuroCambios implements Gatherer {
 
     private String mapToISO(String id) {
         if (id == null) return null;
-        switch (id) {
-            case "US":
-                return "USD";
-            case "EU":
-                return "EUR";
-            case "PA":
-                return "ARG";
-            case "RS":
-                return "BRL";
-            case "PC":
-                return "CLP";
-            case "PU":
-                return "UYU";
-            case "YE":
-                return "JPY";
-            case "DC":
-                return "CAD";
-            case "FS":
-                return "CHF";
-            case "LE":
-                return "GBP";
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public Place build() {
-
-        Place p = Place.builder()
-                .name("EuroCambios")
-                .code(getCode())
-                .type(Type.BUREAU)
-                .build();
-
-        try {
-            p.setBranches(buildBranches());
-        } catch (SocketTimeoutException e) {
-            throw new IllegalStateException("Can't build place, request timeout");
-        }
-
-        return p;
-    }
-
-    private List<PlaceBranch> buildBranches() throws SocketTimeoutException {
-        log.info("{} calling {}", getCode(), BRANCH_LIST_URL);
-
-        Document doc = Jsoup.parse(helper.doGet(BRANCH_LIST_URL,
-                50_000,
-                Collections.singletonMap(HttpHeaders.USER_AGENT, "Chrome"),
-                false));
-
-        List<PlaceBranch> data = new ArrayList<>();
-
-        Elements branches = doc.select(".siteorigin-widget-tinymce");
-
-        log.info("Found {} branches", branches.size());
-
-
-        // the first branch is the 1.
-        for (int i = 0; i < branches.size(); i++) {
-
-            Element branch = branches.get(i);
-            String title = branch.select("h3").text();
-
-            PlaceBranch pb = new PlaceBranch();
-            pb.setName(title);
-            pb.setRemoteCode((i + 1) + "");
-
-            Pair<Double, Double> location = findLocation(branch);
-            String schedule = findSchedule(branch);
-            Optional<String> phoneNumber = findPhone(branch);
-
-            if (location != null) {
-                pb.setLatitude(location.getFirst());
-                pb.setLongitude(location.getSecond());
-            }
-
-            phoneNumber.ifPresent(pb::setPhoneNumber);
-            if (schedule != null)
-                pb.setSchedule(schedule);
-
-            data.add(pb);
-        }
-
-        return data;
-    }
-
-    private String findSchedule(Element branch) {
-        return branch.select("h4 + p").text();
-    }
-
-    private Optional<String> findPhone(Element branch) {
-        return branch.select("h3 + p")
-                .textNodes()
-                .stream()
-                .map(TextNode::text)
-                .filter(row -> row.trim().startsWith("Tel"))
-                .map(row -> row.replace("Tel:", "").trim())
-                .findFirst();
-    }
-
-    private Pair<Double, Double> findLocation(Element branch) {
-        Elements iframe = branch.select("iframe");
-        if (iframe == null) return null;
-        String href = iframe.attr("src");
-        if (href == null) return null;
-        String query = href.substring(href.indexOf("?"));
-        String[] parts = query.split("!");
-        double longitude = 0D;
-        double latitude = 0D;
-        for (String part : parts) {
-            if (part.startsWith("3d")) longitude = Double.parseDouble(part.substring(2));
-            if (part.startsWith("2d")) latitude = Double.parseDouble(part.substring(2));
-        }
-        return Pair.of(longitude, latitude);
+        return switch (id) {
+            case "US" -> "USD";
+            case "EU" -> "EUR";
+            case "PA" -> "ARG";
+            case "RS" -> "BRL";
+            case "PC" -> "CLP";
+            case "PU" -> "UYU";
+            case "YE" -> "JPY";
+            case "DC" -> "CAD";
+            case "FS" -> "CHF";
+            case "LE" -> "GBP";
+            default -> null;
+        };
     }
 
     @Override

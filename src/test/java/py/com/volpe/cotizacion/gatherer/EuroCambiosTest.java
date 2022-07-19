@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
@@ -19,14 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Arturo Volpe
  * @since 2021-01-02
  */
 @ExtendWith(MockitoExtension.class)
-public class EuroCambiosTest {
+class EuroCambiosTest {
 
 
     @Mock
@@ -35,30 +35,8 @@ public class EuroCambiosTest {
     @InjectMocks
     private EuroCambios gatherer;
 
-
     @Test
-    public void buildTest() throws Exception {
-
-        String data = IOUtils.toString(getClass().getResourceAsStream("euro_branches.html"), StandardCharsets.UTF_8);
-        Mockito.doReturn(data).when(helper).doGet(Mockito.any(), Mockito.anyInt(), Mockito.any(), Mockito.anyBoolean());
-
-        Place build = gatherer.build();
-        assertNotNull(build);
-        assertEquals("EURO", build.getCode());
-        assertEquals(4, build.getBranches().size());
-        for (PlaceBranch branch: build.getBranches()) {
-            System.out.println(branch);
-            assertNotNull(branch);
-            assertNotNull(branch.getLatitude());
-            assertNotNull(branch.getLongitude());
-            assertNotNull(branch.getName());
-            assertNotNull(branch.getSchedule());
-            assertNotNull(branch.getPhoneNumber());
-        }
-    }
-
-    @Test
-    public void queryTest() throws Exception {
+    void queryTest() throws Exception {
 
         String main = IOUtils.toString(getClass().getResourceAsStream("euro_cot_1.json"), StandardCharsets.UTF_8);
         String sec = IOUtils.toString(getClass().getResourceAsStream("euro_cot_2.json"), StandardCharsets.UTF_8);
@@ -68,15 +46,15 @@ public class EuroCambiosTest {
         params.put("sucursal", "1");
 
         Mockito.doReturn(main).when(helper).doPost(
-                Mockito.eq(EuroCambios.EXCHANGE_DATA_URL),
-                Mockito.eq(params)
+                EuroCambios.EXCHANGE_DATA_URL,
+                params
         );
 
         HashMap<String, String> params2 = new HashMap<>(params);
         params2.put("sucursal", "2");
         Mockito.doReturn(sec).when(helper).doPost(
-                Mockito.eq(EuroCambios.EXCHANGE_DATA_URL),
-                Mockito.eq(params2)
+                EuroCambios.EXCHANGE_DATA_URL,
+                params2
         );
 
         Place p = Place.builder().build();

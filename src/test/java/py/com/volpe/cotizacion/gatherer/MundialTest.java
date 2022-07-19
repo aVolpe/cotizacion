@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 2021-01-02
  */
 @ExtendWith(MockitoExtension.class)
-public class MundialTest {
+class MundialTest {
 
 
     @Mock
@@ -35,22 +35,9 @@ public class MundialTest {
     @InjectMocks
     private Mundial gatherer;
 
-    @Test
-    @Disabled
-    public void build() {
-
-        HTTPHelper helper = new HTTPHelper();
-        Mundial m = new Mundial(helper);
-
-        Place p = m.build();
-
-        assertNotNull(p);
-        assertEquals(7, p.getBranches().size());
-        p.getBranches().forEach(System.out::println);
-    }
 
     @Test
-    public void query() throws Exception {
+    void query() throws Exception {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("mundial_6.html"), StandardCharsets.UTF_8);
         Mockito.when(helper.doGet(Mockito.any(), Mockito.anyInt())).thenReturn(data);
@@ -73,7 +60,7 @@ public class MundialTest {
     }
 
     @Test
-    public void parseTest() {
+    void parseTest() {
         assertEquals(7000L, Mundial.parse("7.000"), 0);
         assertEquals(6780L, Mundial.parse("6.780"), 0);
 
