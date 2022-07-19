@@ -17,43 +17,52 @@ import java.util.List;
 @AllArgsConstructor
 public class QueryResponse {
 
-	@Id
-	@GeneratedValue
-	private long id;
-	private Date date;
+    @Id
+    @GeneratedValue
+    private long id;
+    private Date date;
 
-	@ManyToOne
-	private Place place;
+    @ManyToOne
+    private Place place;
 
-	@ManyToOne
-	private PlaceBranch branch;
+    @ManyToOne
+    private PlaceBranch branch;
 
-	private String fullData;
+    private String fullData;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
-	private List<QueryResponseDetail> details;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
+    private List<QueryResponseDetail> details;
 
-	@ManyToOne
-	private Execution execution;
+    @ManyToOne
+    private Execution execution;
 
-	public QueryResponse() {
-		this.date = new Date();
-		this.details = new ArrayList<>();
-	}
+    public QueryResponse() {
+        this.date = new Date();
+        this.details = new ArrayList<>();
+    }
 
-	public QueryResponse(Place place) {
-		this();
-		this.place = place;
-	}
+    public QueryResponse(Place place) {
+        this();
+        this.place = place;
+    }
 
-	public QueryResponse(PlaceBranch pb) {
-		this(pb.getPlace());
-		this.branch = pb;
-	}
+    public QueryResponse(PlaceBranch pb) {
+        this(pb.getPlace());
+        this.branch = pb;
+    }
 
-	public QueryResponse addDetail(QueryResponseDetail detail) {
-		this.getDetails().add(detail);
-		detail.setQueryResponse(this);
-		return this;
-	}
+    public QueryResponse addDetail(QueryResponseDetail detail) {
+        this.getDetails().add(detail);
+        detail.setQueryResponse(this);
+        return this;
+    }
+
+    public void setDetails(List<QueryResponseDetail> details) {
+        if (details == null) {
+            this.details = new ArrayList<>();
+            return;
+        }
+        details.forEach(d -> d.setQueryResponse(this));
+        this.details = details;
+    }
 }

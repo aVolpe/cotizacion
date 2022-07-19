@@ -40,7 +40,7 @@ public class Mercosur implements Gatherer {
                 .stream()
                 .map(branch -> {
                     QueryResponse qr = new QueryResponse(branch);
-                    qr.setDetails(getExchangeOf(branch.getRemoteCode()).stream().map(QueryResponseDetail::dup).toList());
+                    qr.setDetails(getExchangeOf(branch.getRemoteCode()));
                     if (qr.getDetails().isEmpty()) return null;
                     return qr;
                 })
