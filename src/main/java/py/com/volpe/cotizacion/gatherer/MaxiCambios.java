@@ -100,6 +100,7 @@ public class MaxiCambios implements Gatherer {
         return toRet;
     }
 
+
     private String getData(String wsUrl) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
