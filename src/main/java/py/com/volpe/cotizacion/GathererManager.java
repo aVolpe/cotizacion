@@ -50,7 +50,7 @@ public class GathererManager {
     }
 
     /**
-     * This is in charge of performing a exchange query over a place
+     * This is in charge of performing an exchange query over a place
      *
      * @param code the code of the place (in case we want to only query one place)
      * @return the list of places with new data
@@ -106,7 +106,7 @@ public class GathererManager {
     /**
      * Make a query in a gatherer
      * <p>
-     * This methods is in charge of provide the correct parameters.
+     * This method is in charge of provide the correct parameters.
      *
      * @param gatherer the gatherer.
      */
@@ -117,13 +117,15 @@ public class GathererManager {
 
         return gatherer.doQuery(p, p.getBranches())
                 .stream()
-                .peek(qr -> qr.setExecution(e))
-                .map(queryResponseRepository::save)
-                .collect(Collectors.toList());
+                .map(qr -> {
+                    qr.setExecution(e);
+                    return queryResponseRepository.save(qr);
+                })
+                .toList();
     }
 
     /**
-     * Check if the place exists and if it doesn't, it create the place.
+     * Check if the place exists and if it doesn't, it creates the place.
      *
      * @param gatherer the gatherer
      * @return the persisted place
@@ -131,6 +133,6 @@ public class GathererManager {
     private Place getPlace(Gatherer gatherer) {
         return placeRepository
                 .findByCode(gatherer.getCode())
-                .orElseGet(() -> placeRepository.save(gatherer.build()));
+                .orElseThrow(() -> new AppException(500, "Place " + gatherer.getCode() + " is not loaded"));
     }
 }

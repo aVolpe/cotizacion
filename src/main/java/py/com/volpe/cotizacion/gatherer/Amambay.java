@@ -53,28 +53,6 @@ public class Amambay implements Gatherer {
 
     }
 
-
-    @Override
-    public Place build() {
-
-        Place place = new Place("Cambios Amambay", CODE);
-        place.setType(Place.Type.BANK);
-
-        PlaceBranch centralBranch = PlaceBranch.builder()
-                .place(place)
-                .name("Casa Matriz")
-                .phoneNumber("Tel: (595-21) 618-7000.")
-                .remoteCode("central")
-                .schedule("Lunes a viernes de 8:30 a 16:00")
-                .latitude(-25.2857864)
-                .longitude(-57.5718767)
-                .build();
-
-        place.addBranch(centralBranch);
-
-        return place;
-    }
-
     private ObjectMapper buildMapper() {
         return new ObjectMapper();
     }

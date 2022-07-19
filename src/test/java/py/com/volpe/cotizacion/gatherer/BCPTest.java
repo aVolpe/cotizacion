@@ -6,13 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
+import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
  * @since 10/28/20
  */
 @ExtendWith(MockitoExtension.class)
-public class BCPTest {
+class BCPTest {
 
     @InjectMocks
     private BCP bcp;
@@ -32,12 +33,12 @@ public class BCPTest {
     private HTTPHelper wsHelper;
 
     @Test
-    public void doQuery() throws Exception {
+    void doQuery() throws Exception {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("bcp.html"), StandardCharsets.UTF_8);
         when(wsHelper.doGet(anyString(), anyInt(), any(), anyBoolean())).thenReturn(data);
 
-        Place p = bcp.build();
+        Place p = build();
         assertNotNull(p);
         assertNotNull(p.getBranches());
         assertFalse(p.getBranches().isEmpty());
@@ -63,4 +64,26 @@ public class BCPTest {
                 .findFirst().orElseThrow(() -> new IllegalStateException("Currency not found: " + iso));
     }
 
+    public Place build() {
+        Place p = Place.builder()
+                .name("Banco Central del Paraguay (Cotización referencial)")
+                .type(Place.Type.BANK)
+                .code("BCP")
+                .build();
+
+        PlaceBranch pb = PlaceBranch.builder()
+                .name("Central")
+                .latitude(-25.2781319)
+                .longitude(-57.5765498)
+                .phoneNumber("+59521608011")
+                .email("nfo@bcp.gov.py ")
+                .remoteCode("01")
+                .schedule("")
+                .image("https://www.bcp.gov.py/userfiles/images/banners/slider-background-01.jpg")
+                .place(p)
+                .build();
+
+        p.setBranches(Collections.singletonList(pb));
+        return p;
+    }
 }

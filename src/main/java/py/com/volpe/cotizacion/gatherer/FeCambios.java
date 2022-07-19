@@ -10,16 +10,13 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
-import py.com.volpe.cotizacion.domain.Place.Type;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -32,8 +29,6 @@ public class FeCambios implements Gatherer {
 
     private final HTTPHelper helper;
 
-    private static final String BASE_IMAGE_PATH = "https://www.fecambios.com.py/";
-    private static final String BRANCH_DATA_URL = "https://www.fecambios.com.py/sucursales.php";
     private static final String BRANCH_EXCHANGE_DATA_URL = "https://www.fecambios.com.py/inc/getCotizaciones.php";
 
     @Override
@@ -58,8 +53,9 @@ public class FeCambios implements Gatherer {
                 return null;
             }
 
-        }) .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        })
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     private QueryResponseDetail scrapeData(Element e) {
@@ -68,50 +64,6 @@ public class FeCambios implements Gatherer {
                 parseAmount(e.select("strong").first().text()),
                 parseAmount(e.select("strong").last().text()),
                 mapToISO(e.select("h3").first().text()));
-    }
-
-    @Override
-    public Place build() {
-
-
-        Place p = Place.builder()
-                .type(Type.BUREAU)
-                .name("Fe Cambios S.A.")
-                .code(getCode())
-                .build();
-
-        Document doc = Jsoup.parse(helper.doGet(BRANCH_DATA_URL));
-
-        Element branchesSelect = doc.select("select#sucursales").first();
-        Elements branchesData = doc.select(".articlelista");
-        List<PlaceBranch> branches = new ArrayList<>(branchesData.size());
-
-        Elements children = branchesSelect.children();
-        for (int i = 0; i < children.size(); i++) {
-            Element option = children.get(i);
-            Element branchData = branchesData.get(i);
-
-
-            Pair<Double, Double> latlng = extractLatLng(branchData.select("iframe").first().attr("src"));
-
-            PlaceBranch pb = PlaceBranch.builder()
-                    .place(p)
-                    .remoteCode(option.attr("value"))
-                    .name(branchData.select("img").first().attr("alt"))
-                    .image(BASE_IMAGE_PATH + branchData.select("img").first().attr("src"))
-                    .schedule(branchData.select(".right p:last-child").first().text())
-                    .email(branchData.select(".right p:nth-child(4)").first().text())
-                    .phoneNumber(branchData.select(".right p:nth-child(3)").first().text())
-                    .latitude(latlng.getFirst())
-                    .longitude(latlng.getSecond())
-                    .build();
-
-            branches.add(pb);
-
-        }
-
-        p.setBranches(branches);
-        return p;
     }
 
     @Override

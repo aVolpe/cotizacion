@@ -22,16 +22,6 @@ public interface Gatherer {
     List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches);
 
     /**
-     * Build the place in the current version.
-     * <p>
-     * This method don't persist the place.
-     *
-     * @return the place
-     */
-    Place build();
-
-
-    /**
      * Unique code to represent this place
      *
      * @return the not null place code

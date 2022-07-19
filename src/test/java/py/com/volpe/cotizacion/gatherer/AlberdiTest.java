@@ -1,12 +1,13 @@
 package py.com.volpe.cotizacion.gatherer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
@@ -14,14 +15,19 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
@@ -29,7 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @since 5/15/18
  */
 @ExtendWith(MockitoExtension.class)
-public class AlberdiTest {
+class AlberdiTest {
 
     @Mock
     private HTTPHelper wsHelper;
@@ -38,27 +44,7 @@ public class AlberdiTest {
     private Alberdi alberdi;
 
     @Test
-    public void create() throws Exception {
-
-        Place created = alberdi.build();
-
-        assertNotNull(created);
-        assertNotNull(alberdi.getCode(), created.getCode());
-        assertNotNull(created.getName());
-
-        assertEquals(5, created.getBranches().size());
-
-        assertThat(created.getBranches().stream().map(PlaceBranch::getName).collect(Collectors.toList()),
-                hasItems("Villa Morra", "CDE KM 4"));
-
-        for (PlaceBranch pb : created.getBranches()) {
-            assertNotEquals("A branch is not mapped", pb.getName(), pb.getRemoteCode());
-        }
-
-    }
-
-    @Test
-    public void failToReadFile() {
+    void failToReadFile() {
 
         when(wsHelper.doGet(anyString())).thenReturn("[]");
         try {
@@ -70,14 +56,14 @@ public class AlberdiTest {
     }
 
     @Test
-    public void doQuery() throws Exception {
+    void doQuery() throws Exception {
 
-        String stringData = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), "UTF-8");
+        String stringData = IOUtils.toString(getClass().getResourceAsStream("alberdi_data.json"), StandardCharsets.UTF_8);
 
         when(wsHelper.doGet(anyString())).thenReturn(stringData);
 
 
-        Place place = alberdi.build();
+        Place place = build();
 
         List<QueryResponse> data = alberdi.doQuery(place, place.getBranches());
 
@@ -105,6 +91,31 @@ public class AlberdiTest {
                     hasItems("EUR", "USD", "BRL", "ARS")
 
             );
+        }
+    }
+
+    public Place build() {
+
+        Place place = new Place("Cambios Alberdi", "ALBERDI_2");
+
+        Map<String, PlaceBranch> result = getBranchData();
+
+        place.setBranches(new ArrayList<>(result.values()));
+
+        return place;
+
+    }
+
+    private Map<String, PlaceBranch> getBranchData() {
+
+        InputStream fileIS = getClass().getClassLoader().getResourceAsStream("alberdi_branch_data.json");
+
+        try {
+            return new ObjectMapper()
+                    .readValue(fileIS, new TypeReference<Map<String, PlaceBranch>>() {
+                    });
+        } catch (IOException e) {
+            throw new AppException(500, "Can't read branch file", e);
         }
     }
 

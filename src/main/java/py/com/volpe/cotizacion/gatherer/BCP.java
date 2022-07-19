@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
-import py.com.volpe.cotizacion.domain.Place.Type;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
@@ -72,30 +71,6 @@ public class BCP implements Gatherer {
         String rate = columns.get(3).text();
 
         return new QueryResponseDetail(parseAmount(rate), parseAmount(rate), currency);
-    }
-
-    @Override
-    public Place build() {
-        Place p = Place.builder()
-                .name("Banco Central del Paraguay (Cotización referencial)")
-                .type(Type.BANK)
-                .code(getCode())
-                .build();
-
-        PlaceBranch pb = PlaceBranch.builder()
-                .name("Central")
-                .latitude(-25.2781319)
-                .longitude(-57.5765498)
-                .phoneNumber("+59521608011")
-                .email("nfo@bcp.gov.py ")
-                .remoteCode("01")
-                .schedule("")
-                .image("https://www.bcp.gov.py/userfiles/images/banners/slider-background-01.jpg")
-                .place(p)
-                .build();
-
-        p.setBranches(Collections.singletonList(pb));
-        return p;
     }
 
     @Override

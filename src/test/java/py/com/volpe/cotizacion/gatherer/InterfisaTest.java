@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
@@ -15,14 +14,12 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
@@ -30,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @since 8/31/18
  */
 @ExtendWith(MockitoExtension.class)
-public class InterfisaTest {
+class InterfisaTest {
 
     @Mock
     private HTTPHelper wsHelper;
@@ -38,27 +35,11 @@ public class InterfisaTest {
     @InjectMocks
     private Interfisa interfisa;
 
-    @Test
-    public void build() throws IOException {
-
-
-        String data = IOUtils.toString(getClass().getResourceAsStream("interfisa_branches.html"), "UTF-8");
-        when(wsHelper.doGet(anyString())).thenReturn(data);
-
-        Place p = interfisa.build();
-
-        assertEquals(43, p.getBranches().size());
-
-        assertEquals("INTERFISA", p.getCode());
-
-        assertThat(p.getBranches().stream().map(PlaceBranch::getName).collect(Collectors.toList()),
-                hasItems("CASA MATRIZ", "FERNANDO DE LA MORA", "CIUDAD DEL ESTE CENTRO"));
-    }
 
     @Test
-    public void doQuery() throws IOException {
+    void doQuery() throws IOException {
 
-        String data = IOUtils.toString(getClass().getResourceAsStream("interfisa_data.json"), "UTF-8");
+        String data = IOUtils.toString(getClass().getResourceAsStream("interfisa_data.json"), StandardCharsets.UTF_8);
         when(wsHelper.doGet(anyString())).thenReturn(data);
 
         Place p = new Place("TEST", "TEST");
@@ -100,7 +81,7 @@ public class InterfisaTest {
     }
 
     @Test
-    public void extractData() {
+    void extractData() {
 
         String query = "Dirección: 25 de Mayo esq. Paraguarí. N° 417 Tel.: (021) 415 9500 (RA)";
         assertEquals("25 de Mayo esq. Paraguarí. N° 417", interfisa.extractData(query).getFirst());
@@ -112,7 +93,7 @@ public class InterfisaTest {
     }
 
     @Test
-    public void parseLocation() {
+    void parseLocation() {
         String query = "-25.285444, -57.630389";
 
         assertEquals(-25.285444, interfisa.parseLocation(query).getFirst(), 0.1);
@@ -121,7 +102,7 @@ public class InterfisaTest {
     }
 
     @Test
-    public void  mapToISO() {
+    void mapToISO() {
         assertNull(Interfisa.mapToISO("asdfas"));
         assertEquals("USD", Interfisa.mapToISO("Dólar"));
 

@@ -12,13 +12,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
-import py.com.volpe.cotizacion.domain.Place.Type;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -80,69 +78,6 @@ public class Mundial implements Gatherer {
                     branch.getId(), branch.getRemoteCode());
             return null;
         }
-    }
-
-    @Override
-    public Place build() {
-
-        Place p = Place.builder()
-                .name("MUNDIAL CAMBIOS")
-                .code(getCode())
-                .type(Type.BUREAU)
-                .build();
-
-        p.setBranches(buildBranches());
-
-        return p;
-    }
-
-    private List<PlaceBranch> buildBranches() {
-        log.info("{} calling {}", getCode(), BRANCH_LIST_URL);
-
-        Document doc = Jsoup.parse(helper.doGet(BRANCH_LIST_URL));
-        List<PlaceBranch> data = new ArrayList<>();
-
-        Elements branches = doc.select(".sucursales-list > .w-dyn-item");
-
-        log.info("Found {} branches", branches.size());
-
-
-        for (Element branch : branches) {
-
-            String title = branch.select("div").text();
-            String href = branch.select("a").attr("href");
-            if (!href.contains("=")) {
-                throw new IllegalStateException("Invalid url for parsing: " + href);
-
-            }
-            String remoteId = href.substring(href.indexOf('=') + 1);
-
-            log.info("{} calling {} to get info of branch", getCode(), href);
-            Document branchDoc = Jsoup.parse(helper.doGet(href));
-
-
-            PlaceBranch pb = new PlaceBranch();
-            pb.setName(title);
-            pb.setRemoteCode(remoteId);
-
-            Pair<Double, Double> location = findLocation(branchDoc);
-            String schedule = findSchedule(branchDoc);
-            String phoneNumber = findPhone(branchDoc);
-
-            if (location != null) {
-                pb.setLatitude(location.getFirst());
-                pb.setLongitude(location.getSecond());
-            }
-
-            if (phoneNumber != null)
-                pb.setPhoneNumber(phoneNumber);
-            if (schedule != null)
-                pb.setSchedule(schedule);
-
-            data.add(pb);
-        }
-
-        return data;
     }
 
     private String findPhone(Document branchDoc) {

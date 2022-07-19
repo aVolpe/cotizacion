@@ -7,26 +7,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * @author Arturo Volpe
  * @since 9/21/18
  */
 @ExtendWith(MockitoExtension.class)
-public class VisionBancoTest {
+class VisionBancoTest {
 
     @Mock
     private HTTPHelper helper;
@@ -35,9 +35,9 @@ public class VisionBancoTest {
     private VisionBanco visionBanco;
 
     @Test
-    public void doQuery() throws Exception {
+    void doQuery() throws Exception {
 
-        String data = IOUtils.toString(getClass().getResourceAsStream("vision_homepage.html"), "UTF-8");
+        String data = IOUtils.toString(getClass().getResourceAsStream("vision_homepage.html"), StandardCharsets.UTF_8);
 
         Mockito.when(helper.doGet(Mockito.any())).thenReturn(data);
 
@@ -68,18 +68,4 @@ public class VisionBancoTest {
         System.out.println(response.get(0).getDetails());
     }
 
-    @Test
-    public void build() throws Exception {
-
-        String data = IOUtils.toString(getClass().getResourceAsStream("vision_branches.json"), "UTF-8");
-
-        Mockito.when(helper.doGet(Mockito.any())).thenReturn(data);
-
-        Place p = visionBanco.build();
-
-
-        assertNotNull(p);
-        assertFalse(p.getBranches().isEmpty());
-
-    }
 }

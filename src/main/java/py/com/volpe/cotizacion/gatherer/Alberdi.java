@@ -15,12 +15,9 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Arturo Volpe
@@ -67,7 +64,7 @@ public class Alberdi implements Gatherer {
             });
 
             return qr;
-        }).collect(Collectors.toList());
+        }).toList();
 
 
     }
@@ -76,46 +73,11 @@ public class Alberdi implements Gatherer {
         return new BigDecimal(number.replace(".", "").replace(",", "."));
     }
 
-    /**
-     * We read a file from the class path called "alberdi_branch_data", the file has the
-     * important information about all the branches
-     *
-     * @return the place
-     */
-    @Override
-    public Place build() {
-
-
-        log.info("Creating place alberdi");
-
-        Place place = new Place("Cambios Alberdi", CODE);
-
-        Map<String, PlaceBranch> result = getBranchData();
-
-        place.setBranches(new ArrayList<>(result.values()));
-
-        return place;
-
-    }
-
-    private Map<String, PlaceBranch> getBranchData() {
-
-        InputStream fileIS = getClass().getClassLoader().getResourceAsStream("alberdi_branch_data.json");
-
-        try {
-            return buildMapper()
-                    .readValue(fileIS, new TypeReference<Map<String, PlaceBranch>>() {
-                    });
-        } catch (IOException e) {
-            throw new AppException(500, "Can't read branch file", e);
-        }
-    }
-
     protected Map<String, List<ExchangeData>> getParsedData() {
         try {
             String queryResult = helper.doGet(WS_URL);
             return buildMapper()
-                    .readValue(queryResult, new TypeReference<Map<String, List<ExchangeData>>>() {
+                    .readValue(queryResult, new TypeReference<>() {
                     });
         } catch (IOException e) {
             throw new AppException(500, "cant parse the result of alberdi ws", e);
@@ -123,7 +85,7 @@ public class Alberdi implements Gatherer {
     }
 
 
-    private ObjectMapper buildMapper() {
+    protected ObjectMapper buildMapper() {
         return new ObjectMapper();
     }
 

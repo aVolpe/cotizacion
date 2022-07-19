@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.util.Pair;
 import py.com.volpe.cotizacion.AppException;
 import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
@@ -15,82 +14,53 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Arturo Volpe
  * @since 10/5/18
  */
 @ExtendWith(MockitoExtension.class)
- public class FeCambiosTest {
+class FeCambiosTest {
 
-	@Mock
-	private HTTPHelper wsHelper;
+    @Mock
+    private HTTPHelper wsHelper;
 
-	@InjectMocks
-	private FeCambios gatherer;
+    @InjectMocks
+    private FeCambios gatherer;
 
-	@Test
-	public void doQuery() throws Exception {
-
-
-		String data = IOUtils.toString(getClass().getResourceAsStream("fecambios_exchange_data.html"), "UTF-8");
-		Mockito.when(wsHelper.doPost(Mockito.any(), Mockito.any())).thenReturn(data);
-
-		Place p = new Place();
-		PlaceBranch pb = new PlaceBranch();
-		pb.setRemoteCode("8");
-		List<QueryResponse> result = gatherer.doQuery(p, Collections.singletonList(pb));
-
-		assertEquals(1, result.size());
-
-		assertNotNull(result.get(0).getDetails());
-		assertNotNull(result.get(0).getDate());
-		assertEquals(10, result.get(0).getDetails().size());
+    @Test
+    void doQuery() throws Exception {
 
 
-		QueryResponseDetail qrdAsuncion = result.get(0).getDetails()
-				.stream()
-				.peek(System.out::println)
-				.filter(d -> d.getIsoCode().equals("USD"))
-				.findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
+        String data = IOUtils.toString(getClass().getResourceAsStream("fecambios_exchange_data.html"), StandardCharsets.UTF_8);
+        Mockito.when(wsHelper.doPost(Mockito.any(), Mockito.any())).thenReturn(data);
 
-		assertEquals(5830, qrdAsuncion.getPurchasePrice());
-		assertEquals(5890, qrdAsuncion.getSalePrice());
-	}
+        Place p = new Place();
+        PlaceBranch pb = new PlaceBranch();
+        pb.setRemoteCode("8");
+        List<QueryResponse> result = gatherer.doQuery(p, Collections.singletonList(pb));
 
-	@Test
-	public void build() throws Exception {
+        assertEquals(1, result.size());
 
-		String data = IOUtils.toString(getClass().getResourceAsStream("fecambios_branches.html"), "UTF-8");
-
-		Mockito.when(wsHelper.doGet(Mockito.any())).thenReturn(data);
-
-		Place p = gatherer.build();
+        assertNotNull(result.get(0).getDetails());
+        assertNotNull(result.get(0).getDate());
+        assertEquals(10, result.get(0).getDetails().size());
 
 
-		assertNotNull(p);
-		assertEquals(gatherer.getCode(), p.getCode());
+        QueryResponseDetail qrdAsuncion = result.get(0).getDetails()
+                .stream()
+                .peek(System.out::println)
+                .filter(d -> d.getIsoCode().equals("USD"))
+                .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-		assertEquals(5, p.getBranches().size());
+        assertEquals(5830, qrdAsuncion.getPurchasePrice());
+        assertEquals(5890, qrdAsuncion.getSalePrice());
+    }
 
-
-	}
-
-	@Test
-	public void extractLatLng() throws Exception {
-
-		Pair<Double, Double> data = gatherer.extractLatLng("http://maps.google.es/maps?q=-25.281095,-57.636751&amp;output=embed");
-
-		assertEquals(-25.281095, data.getFirst(), 0);
-		assertEquals(-57.636751, data.getSecond(), 0);
-
-		data = gatherer.extractLatLng("http://maps.google.es/maps?q=-25.281095,-57.636751");
-
-		assertEquals(-25.281095, data.getFirst(), 0);
-		assertEquals(-57.636751, data.getSecond(), 0);
-	}
 }
