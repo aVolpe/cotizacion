@@ -91,7 +91,7 @@ public class Mercosur implements Gatherer {
         return switch (countryName) {
             case "dólar", "dolar" -> "USD";
             case "real" -> "BRL";
-            case "peso" -> "ARG";
+            case "peso" -> "ARS";
             case "euro" -> "EUR";
             default -> null;
         };
