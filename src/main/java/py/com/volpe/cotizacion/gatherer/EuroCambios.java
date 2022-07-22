@@ -94,7 +94,7 @@ public class EuroCambios implements Gatherer {
         return switch (id) {
             case "US" -> "USD";
             case "EU" -> "EUR";
-            case "PA" -> "ARG";
+            case "PA" -> "ARS";
             case "RS" -> "BRL";
             case "PC" -> "CLP";
             case "PU" -> "UYU";
