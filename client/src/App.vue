@@ -33,7 +33,7 @@
             <v-spacer></v-spacer>
             <span>
                 <a href="https://www.github.com/avolpe/cotizacion" target="_blank">
-                    &copy; Arturo Volpe 2021
+                    &copy; Arturo Volpe 2022
                 </a>
             </span>
             <v-spacer></v-spacer>
