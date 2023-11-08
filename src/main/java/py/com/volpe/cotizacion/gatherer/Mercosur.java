@@ -29,7 +29,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Mercosur implements Gatherer {
 
-    private static final String BASE_URL = "https://2019.mercosurcambios.com/Sucursale/%s";
+    private static final String BASE_URL = "https://site.mercosurcambios.com/Sucursale/%s";
 
     private final HTTPHelper helper;
 
@@ -55,7 +55,7 @@ public class Mercosur implements Gatherer {
         Document doc = Jsoup.parse(html, "", Parser.htmlParser());
         List<QueryResponseDetail> toRet = new ArrayList<>();
 
-        for (Element e : doc.select("table.table tbody tr")) {
+        for (Element e : doc.select("table tbody tr")) {
             QueryResponseDetail ed = new QueryResponseDetail();
             Elements columns = e.getElementsByTag("th");
 
