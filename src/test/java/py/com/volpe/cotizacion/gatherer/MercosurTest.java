@@ -49,17 +49,17 @@ class MercosurTest {
         List<QueryResponseDetail> exchanges = data.get(0).getDetails();
 
         QueryResponseDetail usd = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "USD")).findFirst().orElseThrow();
-        assertEquals(6770, usd.getPurchasePrice());
-        assertEquals(6890, usd.getSalePrice());
+        assertEquals(7380, usd.getPurchasePrice());
+        assertEquals(7440, usd.getSalePrice());
         QueryResponseDetail brl = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "BRL")).findFirst().orElseThrow();
-        assertEquals(1220, brl.getPurchasePrice());
-        assertEquals(1280, brl.getSalePrice());
+        assertEquals(1475, brl.getPurchasePrice());
+        assertEquals(1500, brl.getSalePrice());
         QueryResponseDetail eur = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "EUR")).findFirst().orElseThrow();
-        assertEquals(6870, eur.getPurchasePrice());
-        assertEquals(7580, eur.getSalePrice());
+        assertEquals(7550, eur.getPurchasePrice());
+        assertEquals(8210, eur.getSalePrice());
         QueryResponseDetail arg = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "ARS")).findFirst().orElseThrow();
-        assertEquals(20, arg.getPurchasePrice());
-        assertEquals(36, arg.getSalePrice());
+        assertEquals(7, arg.getPurchasePrice());
+        assertEquals(9, arg.getSalePrice());
 
     }
 
