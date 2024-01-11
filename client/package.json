@@ -34,7 +34,7 @@
     "@vue/cli-plugin-typescript": "^3.0.3",
     "@vue/cli-service": "^3.0.3",
     "deep-extend": ">=0.5.1",
-    "license-report": "^2.1.1",
+    "license-report": "^2.2.1",
     "prerender-spa-plugin": "^3.4.0",
     "puppeteer": "^1.4.0",
     "sitemap-webpack-plugin": "^0.6.0",
