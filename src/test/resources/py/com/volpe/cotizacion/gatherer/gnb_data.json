@@ -1,27 +1,28 @@
-[
+{
+  "exchangeRates": [
     {
-      "currency": {
-        "code": "USD",
-        "description": "DOLAR ESTADOUNIDENSE"
-      },
-      "electronicBuyPrice": 6785,
-      "electronicSellPrice": 6940,
-      "cashBuyPrice": 6730,
-      "cashSellPrice": 6950,
-      "checkBuyPrice": 6770,
-      "checkSellPrice": 6950
+      "currencyCode": "USD",
+      "electronicSellPrice": "7350.00",
+      "electronicBuyPrice": "7250.00",
+      "currencyDesc": "DOLAR AMERICANO",
+      "currencyAbbreviation": "DOLAR",
+      "cashBuyPrice": "7220.00",
+      "checkSellPrice": "",
+      "checkBuyPrice": "",
+      "cashSellPrice": "7380.00",
+      "order": 1
     },
     {
-      "currency": {
-        "code": "EUR",
-        "description": "EURO"
-      },
-      "electronicBuyPrice": 7510,
-      "electronicSellPrice": 7960,
-      "cashBuyPrice": 7400,
-      "cashSellPrice": 8100,
-      "checkBuyPrice": 7480,
-      "checkSellPrice": 8000
+      "currencyCode": "EUR",
+      "electronicSellPrice": "8160.00",
+      "electronicBuyPrice": "7720.00",
+      "currencyDesc": "EUR",
+      "currencyAbbreviation": "EUROS",
+      "cashBuyPrice": "7570.00",
+      "checkSellPrice": "",
+      "checkBuyPrice": "",
+      "cashSellPrice": "8310.00",
+      "order": 2
     }
   ]
-  
+}

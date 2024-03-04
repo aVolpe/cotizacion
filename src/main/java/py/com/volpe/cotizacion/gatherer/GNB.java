@@ -1,7 +1,6 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,25 +34,24 @@ public class GNB implements Gatherer {
 
         QueryResponse toRet = new QueryResponse(place);
 
-        List<Root> parsed = getParsedData();
+        Root parsed = getParsedData();
 
-        for (Root info : parsed) {
+        for (Exchange info : parsed.getExchangeRates()) {
             toRet.addDetail(new QueryResponseDetail(
-                    info.getCashBuyPrice(),
-                    info.getCashSellPrice(),
-                    info.getCurrency().getCode()
+                    info.getCashBuyPrice().longValue(),
+                    info.getCashSellPrice().longValue(),
+                    info.getCurrencyCode()
             ));
         }
 
         return Collections.singletonList(toRet);
     }
 
-    protected List<Root> getParsedData() {
+    protected Root getParsedData() {
         try {
             String queryResult = helper.doGet(WS_URL);
             return buildMapper()
-                    .readValue(queryResult, new TypeReference<List<Root>>() {
-                    });
+                    .readValue(queryResult, Root.class);
         } catch (IOException e) {
             throw new AppException(500, "cant parse the result of GNB ws", e);
         }
@@ -76,21 +75,22 @@ public class GNB implements Gatherer {
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Currency {
-        public String code;
-        public String description;
+    public static class Root {
+        private List<Exchange> exchangeRates;
     }
+
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Root {
-        public Currency currency;
-        public int electronicBuyPrice;
-        public int electronicSellPrice;
-        public int cashBuyPrice;
-        public int cashSellPrice;
-        public int checkBuyPrice;
-        public int checkSellPrice;
+    public static class Exchange {
+        public String currencyCode;
+        public String currencyDesc;
+        public BigDecimal electronicBuyPrice;
+        public BigDecimal electronicSellPrice;
+        public BigDecimal cashBuyPrice;
+        public BigDecimal cashSellPrice;
+        public BigDecimal checkBuyPrice;
+        public BigDecimal checkSellPrice;
     }
 
 }

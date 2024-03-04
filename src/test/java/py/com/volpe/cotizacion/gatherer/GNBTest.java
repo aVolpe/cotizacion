@@ -66,11 +66,11 @@ class GNBTest {
             QueryResponseDetail usd = qr.getDetails().stream().filter(q -> q.getIsoCode().equals("USD")).findFirst().orElse(null);
             QueryResponseDetail eur = qr.getDetails().stream().filter(q -> q.getIsoCode().equals("EUR")).findFirst().orElse(null);
 
-            assertEquals(6730, usd.getPurchasePrice());
-            assertEquals(6950, usd.getSalePrice());
+            assertEquals(7220, usd.getPurchasePrice());
+            assertEquals(7380, usd.getSalePrice());
 
-            assertEquals(7400, eur.getPurchasePrice());
-            assertEquals(8100, eur.getSalePrice());
+            assertEquals(7570, eur.getPurchasePrice());
+            assertEquals(8310, eur.getSalePrice());
 
 
         }
