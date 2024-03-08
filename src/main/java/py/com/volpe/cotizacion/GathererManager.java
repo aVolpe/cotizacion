@@ -1,6 +1,5 @@
 package py.com.volpe.cotizacion;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
  * @since 5/2/18
  */
 @Service
-@AllArgsConstructor
 @Log4j2
 public class GathererManager {
 
@@ -38,6 +36,21 @@ public class GathererManager {
     private final PlaceRepository placeRepository;
     private final ExecutionRepository executionRepository;
     private final QueryResponseRepository queryResponseRepository;
+
+    public GathererManager(List<Gatherer> gathererList, PlaceRepository placeRepository, ExecutionRepository executionRepository, QueryResponseRepository queryResponseRepository) {
+
+        this.gathererList = gathererList;
+        this.placeRepository = placeRepository;
+        this.executionRepository = executionRepository;
+        this.queryResponseRepository = queryResponseRepository;
+
+        log.info("""
+                Staring GathererManager, available gatherers:
+                                
+                \t- '{}'
+                """, this.gathererList
+                .stream().map(g -> g.getCode()).collect(Collectors.joining("'\n\t- '")));
+    }
 
     /**
      * This is in charge of initializing the database (place and branches).

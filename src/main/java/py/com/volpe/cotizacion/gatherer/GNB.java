@@ -27,7 +27,7 @@ public class GNB implements Gatherer {
 
     private final HTTPHelper helper;
 
-    private static final String WS_URL = "https://www.bancognb.com.py/Yaguarete/public/quotations";
+    private static final String WS_URL = "https://www.bancognb.com.py/public/currency_quotations";
 
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
