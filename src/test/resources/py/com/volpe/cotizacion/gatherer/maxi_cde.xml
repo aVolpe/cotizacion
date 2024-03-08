@@ -1,8 +1,44 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <cotizaciones>
- <moneda><tipo>EFECTIVO</tipo><pais>EEUU</pais><nombre>Dólar</nombre><bandera>us.png</bandera><compra>6310</compra><compra_tendencia/><venta>6380</venta><venta_tendencia/></moneda>
- <moneda><tipo>EFECTIVO</tipo><pais>Argentina</pais><nombre>Peso </nombre><bandera>ar.png</bandera><compra>72</compra><compra_tendencia/><venta>85</venta><venta_tendencia/></moneda>
- <moneda><tipo>EFECTIVO</tipo><pais>Brasil</pais><nombre>Real</nombre><bandera>br.png</bandera><compra>1500</compra><compra_tendencia/><venta>1545</venta><venta_tendencia/></moneda>
- <moneda><tipo>EFECTIVO</tipo><pais>Euro</pais><nombre>Euro </nombre><bandera>eu.png</bandera><compra>6750</compra><compra_tendencia/><venta>7175</venta><venta_tendencia/></moneda>
- <actualizacion>04/01/2020 - 20:40</actualizacion>
+    <moneda>
+        <tipo>EFECTIVO</tipo>
+        <pais>EEUU</pais>
+        <nombre>DÛlar</nombre>
+        <bandera>us.png</bandera>
+        <compra>7210</compra>
+        <compra_tendencia>up.png</compra_tendencia>
+        <venta>7270</venta>
+        <venta_tendencia>up.png</venta_tendencia>
+    </moneda>
+    <moneda>
+        <tipo>EFECTIVO</tipo>
+        <pais>Argentina</pais>
+        <nombre>Peso</nombre>
+        <bandera>ar.png</bandera>
+        <compra>6,70</compra>
+        <compra_tendencia>down.png</compra_tendencia>
+        <venta>7,70</venta>
+        <venta_tendencia>up.png</venta_tendencia>
+    </moneda>
+    <moneda>
+        <tipo>EFECTIVO</tipo>
+        <pais>Brasil</pais>
+        <nombre>Real</nombre>
+        <bandera>br.png</bandera>
+        <compra>1430</compra>
+        <compra_tendencia>down.png</compra_tendencia>
+        <venta>1465</venta>
+        <venta_tendencia>up.png</venta_tendencia>
+    </moneda>
+    <moneda>
+        <tipo>EFECTIVO</tipo>
+        <pais>Euro</pais>
+        <nombre>Euro</nombre>
+        <bandera>eu.png</bandera>
+        <compra>7785</compra>
+        <compra_tendencia>down.png</compra_tendencia>
+        <venta>8175</venta>
+        <venta_tendencia>up.png</venta_tendencia>
+    </moneda>
+    <actualizacion>08/03/2024 - 09:07</actualizacion>
 </cotizaciones>

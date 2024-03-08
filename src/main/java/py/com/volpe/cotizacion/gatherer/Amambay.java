@@ -15,6 +15,7 @@ import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Arturo Volpe
@@ -41,7 +42,12 @@ public class Amambay implements Gatherer {
 
             QueryResponse qr = new QueryResponse(p);
 
-            BranchExchangeData data = buildMapper().readValue(httpHelper.doGet(URL_CHANGE), BranchExchangeData.class);
+            BranchExchangeData data = buildMapper().readValue(httpHelper.doGet(
+                    URL_CHANGE,
+                    5000,
+                    Map.of(),
+                    true
+            ), BranchExchangeData.class);
 
             data.getCurrencyExchanges().forEach(exchange -> qr.addDetail(exchange.map()));
 

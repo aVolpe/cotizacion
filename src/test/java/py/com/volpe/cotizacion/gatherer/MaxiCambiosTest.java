@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1/5/20
  */
 @ExtendWith(MockitoExtension.class)
-public class MaxiCambiosTest {
+class MaxiCambiosTest {
 
     @Mock
     private HTTPHelper wsHelper;
@@ -36,7 +36,7 @@ public class MaxiCambiosTest {
     private MaxiCambios maxi;
 
     @Test
-    public void testFetchAsu() throws Exception {
+    void testFetchAsu() throws Exception {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("maxi_asu.xml"), StandardCharsets.UTF_8);
 
@@ -51,20 +51,20 @@ public class MaxiCambiosTest {
 
         QueryResponse coti = result.get(0);
 
-        assertEquals(17, coti.getDetails().size());
+        assertEquals(15, coti.getDetails().size());
 
         QueryResponseDetail usd = coti.getDetails()
                 .stream()
                 .filter(d -> d.getIsoCode().equals("USD"))
                 .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-        assertEquals(6300, usd.getPurchasePrice());
-        assertEquals(6380, usd.getSalePrice());
+        assertEquals(7130, usd.getPurchasePrice());
+        assertEquals(7280, usd.getSalePrice());
 
     }
 
     @Test
-    public void testFetchCDE() throws Exception {
+    void testFetchCDE() throws Exception {
 
         String data = IOUtils.toString(getClass().getResourceAsStream("maxi_cde.xml"), StandardCharsets.UTF_8);
 
@@ -86,8 +86,8 @@ public class MaxiCambiosTest {
                 .filter(d -> d.getIsoCode().equals("USD"))
                 .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-        assertEquals(6310, usd.getPurchasePrice());
-        assertEquals(6380, usd.getSalePrice());
+        assertEquals(7210, usd.getPurchasePrice());
+        assertEquals(7270, usd.getSalePrice());
 
     }
 }

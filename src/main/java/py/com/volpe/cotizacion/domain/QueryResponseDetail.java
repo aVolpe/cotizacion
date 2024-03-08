@@ -25,11 +25,11 @@ public class QueryResponseDetail {
     private long purchasePrice;
     private long salePrice;
     /**
-     * >1 if is increasing
+     * >1 if it is increasing
      */
     private long purchaseTrend;
     /**
-     * >1 if is increasing
+     * >1 if it is increasing
      */
     private long saleTrend;
     private String isoCode;
