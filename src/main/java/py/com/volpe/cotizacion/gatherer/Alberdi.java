@@ -29,7 +29,7 @@ import java.util.Map;
 public class Alberdi implements Gatherer {
 
     private static final String CODE = "ALBERDI_2";
-    private static final String WS_URL = "http://www.cambiosalberdi.com/ws/getTablero.json.php";
+    private static final String WS_URL = "https://www.cambiosalberdi.com/ws/getTablero.json.php";
     private final HTTPHelper helper;
 
     @Override

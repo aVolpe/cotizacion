@@ -15,6 +15,7 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,9 +64,9 @@ public class MaxiCambios implements Gatherer {
     private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
         QueryResponseDetail qrd = new QueryResponseDetail();
         qrd.setIsoCode(iso);
-        qrd.setSalePrice(detail.getVenta());
+        qrd.setSalePrice(detail.getVenta().longValue());
         qrd.setSaleTrend("up.png".equals(detail.getVentaTendencia()) ? 1 : -1);
-        qrd.setPurchasePrice(detail.getCompra());
+        qrd.setPurchasePrice(detail.getCompra().longValue());
         qrd.setPurchaseTrend("up.png".equals(detail.getCompraTendencia()) ? 1 : -1);
         return qrd;
     }
@@ -177,14 +178,17 @@ public class MaxiCambios implements Gatherer {
         private String pais;
         private String nombre;
         private String bandera;
-        private long compra;
+        private BigDecimal compra;
         private String compraTendencia;
-        private long venta;
+        private BigDecimal venta;
         private String ventaTendencia;
     }
 
-    private static Long parse(String value) {
-        return Long.parseLong(value.replaceAll("\\..*", ""));
+    private static BigDecimal parse(String value) {
+        return new BigDecimal(value
+                .replaceAll("\\..*", "")
+                .replaceAll(",", ".")
+        );
     }
 
 }
