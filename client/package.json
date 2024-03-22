@@ -32,7 +32,7 @@
     "@vue/cli-plugin-babel": "^3.0.3",
     "@vue/cli-plugin-pwa": "^3.0.3",
     "@vue/cli-plugin-typescript": "^3.0.3",
-    "@vue/cli-service": "^3.0.3",
+    "@vue/cli-service": "^5.0.8",
     "deep-extend": ">=0.5.1",
     "license-report": "^2.1.1",
     "prerender-spa-plugin": "^3.4.0",
