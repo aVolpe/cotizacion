@@ -41,7 +41,7 @@ main Dockerfile.
 
 ## Back end
 
-1. You need java 8
+1. You need Java 21 or higher
 2. Execute in the root `./mvnw package`
 
 ## Front end
