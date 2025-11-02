@@ -19,9 +19,12 @@ WORKDIR $BUILD_FOLDER
 # Switch to node user
 USER node
 
+COPY --chown=node:node client/package.json client/package-lock.json "$BUILD_FOLDER"
+
+RUN npm ci
+
 COPY --chown=node:node client/. "$BUILD_FOLDER"
 
-RUN npm ci --ignore-scripts
 RUN npm run build
 
 FROM eclipse-temurin:17-jdk-jammy AS builder
