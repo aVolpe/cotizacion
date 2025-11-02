@@ -29,9 +29,9 @@
     "vuex-class": "^0.3.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.3",
-    "@vue/cli-plugin-pwa": "^3.0.3",
-    "@vue/cli-plugin-typescript": "^3.0.3",
+    "@vue/cli-plugin-babel": "^5.0.9",
+    "@vue/cli-plugin-pwa": "^5.0.9",
+    "@vue/cli-plugin-typescript": "^5.0.9",
     "@vue/cli-service": "^5.0.9",
     "deep-extend": ">=0.5.1",
     "license-report": "^2.1.1",
