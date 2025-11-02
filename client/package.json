@@ -18,7 +18,7 @@
   "dependencies": {
     "date-fns": "^2.16.1",
     "register-service-worker": "^1.0.0",
-    "vue": "^2.5.17",
+    "vue": "^2.7.16",
     "vue-class-component": "^6.0.0",
     "vue-meta": "^1.5.0",
     "vue-property-decorator": "^6.0.0",
@@ -35,13 +35,11 @@
     "@vue/cli-service": "^5.0.9",
     "deep-extend": ">=0.5.1",
     "license-report": "^2.1.1",
-    "prerender-spa-plugin": "^3.4.0",
-    "puppeteer": "^1.4.0",
-    "sitemap-webpack-plugin": "^0.6.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
+    "sitemap-webpack-plugin": "^1.1.0",
+    "stylus": "^0.64.0",
+    "stylus-loader": "^8.1.1",
     "ts-import-plugin": "^1.5.5",
     "typescript": "~4.9.5",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.7.16"
   }
 }
