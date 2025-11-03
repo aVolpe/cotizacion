@@ -15,6 +15,9 @@ spring:
     hibernate:
       ddl-auto: validate
 
+  web:
+    resources:
+      static-locations: classpath:/public/
 
   thymeleaf:
     cache: false

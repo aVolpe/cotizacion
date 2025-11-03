@@ -1,18 +1,33 @@
-FROM alekzonder/puppeteer:1.3.0 as client-builder
-MAINTAINER Arturo Volpe <arturovolpe@gmail.com>
-RUN whoami
-ENV BUILD_FOLDER /home/pptruser/client
-RUN mkdir "$BUILD_FOLDER"
+FROM node:20-bookworm AS client-builder
+LABEL maintainer="Arturo Volpe <arturovolpe@gmail.com>"
+
+# Install Chromium and dependencies for Puppeteer
+RUN apt-get update && apt-get install -y \
+    chromium \
+    chromium-sandbox \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variable to use system Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+ENV BUILD_FOLDER=/home/node/client
+RUN mkdir -p "$BUILD_FOLDER" && chown node:node "$BUILD_FOLDER"
 WORKDIR $BUILD_FOLDER
 
-COPY client/package.json "$BUILD_FOLDER"
-COPY client/package-lock.json "$BUILD_FOLDER"
+# Switch to node user
+USER node
 
-RUN npm install
-COPY --chown=pptruser:pptruser client/. "$BUILD_FOLDER"
+COPY --chown=node:node client/package.json client/package-lock.json "$BUILD_FOLDER"
+
+RUN npm ci
+
+COPY --chown=node:node client/. "$BUILD_FOLDER"
+
 RUN npm run build
 
-FROM eclipse-temurin:25-jdk as builder
+FROM eclipse-temurin:25-jdk AS builder
 ARG BRANCH_NAME
 WORKDIR /app
 COPY mvnw /app
@@ -21,7 +36,7 @@ COPY pom.xml /app
 COPY src /app/src
 COPY utils /app/utils
 
-COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
+COPY --from=client-builder /home/node/client/dist /app/src/main/resources/public
 RUN sh mvnw clean
 RUN sh ./utils/gen_licenses.sh
 RUN sh mvnw -B -q package -Pdevel
