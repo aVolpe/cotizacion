@@ -37,7 +37,7 @@
     "@vue/cli-service": "^5.0.9",
     "@vue/tsconfig": "^0.5.1",
     "deep-extend": ">=0.5.1",
-    "license-report": "^2.1.1",
+    "license-report": "^6.8.1",
     "sass": "^1.72.0",
     "sitemap-webpack-plugin": "^1.1.0",
     "typescript": "~5.4.2",
