@@ -1,10 +1,12 @@
 spring:
 
   flyway:
-    enabled: false
+    enabled: true
 
   datasource:
-    url: jdbc:h2:./data/db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    url: jdbc:postgresql://localhost:5432/exchange
+    username: exchange
+    password: exchange
 
   profiles:
     active: develop

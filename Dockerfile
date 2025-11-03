@@ -12,7 +12,7 @@ RUN npm install
 COPY --chown=pptruser:pptruser client/. "$BUILD_FOLDER"
 RUN npm run build
 
-FROM openjdk:17.0.1-jdk as builder
+FROM eclipse-temurin:25-jdk as builder
 ARG BRANCH_NAME
 WORKDIR /app
 COPY mvnw /app
@@ -24,11 +24,11 @@ COPY utils /app/utils
 COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
 RUN sh mvnw clean
 RUN sh ./utils/gen_licenses.sh
-RUN sh mvnw -B -q package
+RUN sh mvnw -B -q package -Pdevel
 RUN sh mvnw -B -q clean install -Ppostgres -DskipTests
 
 
-FROM openjdk:17.0.1
+FROM eclipse-temurin:25-jre
 VOLUME /tmp
 COPY --from=builder /app/target/cotizaciones-2.1.0.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
