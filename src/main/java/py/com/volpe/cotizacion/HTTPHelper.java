@@ -102,8 +102,8 @@ public class HTTPHelper {
 
             StringJoiner sj = new StringJoiner("&");
             for (Map.Entry<String, String> entry : data.entrySet())
-                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
+                sj.add(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "="
+                        + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
             byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
             int length = out.length;
 

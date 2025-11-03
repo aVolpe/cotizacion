@@ -72,10 +72,10 @@ public class EuroCambios implements Gatherer {
         data.forEach(node -> {
             String currency = mapToISO(node.get("id").asText());
             if (currency == null) return;
-            long purchase = Long.parseLong(node.get("compra").asText());
-            long sell = Long.parseLong(node.get("venta").asText());
-            long lastPurchase = Long.parseLong(node.get("compra_anterior").asText());
-            long lastSell = Long.parseLong(node.get("venta_anterior").asText());
+            var purchase = parseLong(node.get("compra").asText());
+            var sell = parseLong(node.get("venta").asText());
+            var lastPurchase = parseLong(node.get("compra_anterior").asText());
+            var lastSell = parseLong(node.get("venta_anterior").asText());
 
             QueryResponseDetail toAdd = new QueryResponseDetail(
                     purchase,
@@ -87,6 +87,22 @@ public class EuroCambios implements Gatherer {
             toRet.add(toAdd);
         });
         return toRet;
+    }
+
+    /**
+     * Parses a string in the format `9400.00` as 9400L
+     *
+     * @param asStr the string to parse
+     * @return the long value
+     */
+    private long parseLong(String asStr) {
+        try {
+            double asDbl = Double.parseDouble(asStr);
+            return Math.round(asDbl);
+        } catch (NumberFormatException e) {
+            log.warn("Can't parse value {}", asStr, e);
+            return 0L;
+        }
     }
 
     private String mapToISO(String id) {
