@@ -21,7 +21,7 @@ USER node
 
 COPY --chown=node:node client/package.json client/package-lock.json "$BUILD_FOLDER"
 
-RUN npm install
+RUN npm ci
 
 COPY --chown=node:node client/. "$BUILD_FOLDER"
 
