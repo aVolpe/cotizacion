@@ -24,7 +24,7 @@ COPY utils /app/utils
 COPY --from=client-builder /home/pptruser/client/dist /app/src/main/resources/public
 RUN sh mvnw clean
 RUN sh ./utils/gen_licenses.sh
-RUN sh mvnw -B -q package
+RUN sh mvnw -B -q package -Pdevel
 RUN sh mvnw -B -q clean install -Ppostgres -DskipTests
 
 
