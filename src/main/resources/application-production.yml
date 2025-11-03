@@ -11,3 +11,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+  web:
+    resources:
+      static-locations: classpath:/public/
