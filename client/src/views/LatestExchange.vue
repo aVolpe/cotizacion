@@ -1,65 +1,39 @@
 <template>
-    <div v-if="currencies.loaded">
-        <ListOfExchanges></ListOfExchanges>
-        <v-dialog v-model="exchangeDialog.show" max-width="500px" :fullscreen="isSmall">
-            <ExchangeData v-on:ok="hideExchangeDialog" :data="exchangeDialog.data"></ExchangeData>
-        </v-dialog>
-    </div>
-    <div v-else>
-        <img :src="`${baseUrl}imgs/loading.svg`"
-             style="margin: auto; width: 200px; height: 200px; max-width: 20vw; max-height: 20vw">
-    </div>
+  <div v-if="store.currencies.loaded">
+    <ListOfExchanges />
+    <v-dialog v-model="store.exchangeDialog.show" max-width="500px" :fullscreen="isSmall">
+      <ExchangeData @ok="store.hideExchangeDialog()" :data="store.exchangeDialog.data" />
+    </v-dialog>
+  </div>
+  <div v-else>
+    <img :src="`${baseUrl}imgs/loading.svg`"
+         style="margin: auto; width: 200px; height: 200px; max-width: 20vw; max-height: 20vw">
+  </div>
 </template>
 
-<script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import ExchangeData from "@/components/ExchangeData.vue";
-    import MapOfExchanges from "@/components/MapOfExchanges.vue";
-    import ListOfExchanges from "@/components/ListOfExchanges.vue";
-    import {MetaMethod} from "@/decorators";
-    import {Action, State} from "vuex-class";
-    import {Loaded} from "@/store";
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useHead } from '@unhead/vue'
+import { useExchangeStore } from '@/stores/exchange'
+import ExchangeData from '@/components/ExchangeData.vue'
+import ListOfExchanges from '@/components/ListOfExchanges.vue'
 
-    @Component({
-        components: {
-            ExchangeData,
-            MapOfExchanges,
-            ListOfExchanges
-        }
-    })
-    export default class LatestExchange extends Vue {
-        @Action fetchCurrencyData!: (isoCode: string) => void;
-        @Action fetchCurrencies!: () => void;
-        @Action hideExchangeDialog!: () => void;
-        @State exchangeDialog!: { loading: boolean; show: boolean };
-        @State current!: any;
-        @State currencies!: Loaded<string[]>;
-        tabModel: number = 0;
-        isSmall: boolean;
-        baseUrl: string | undefined;
+const route = useRoute()
+const store = useExchangeStore()
+const isSmall = ref(window.innerWidth < 600)
+const baseUrl = import.meta.env.BASE_URL
 
-        constructor() {
-            super();
-            this.isSmall = window.innerWidth < 600;
-            this.baseUrl = process.env.BASE_URL;
-        }
+useHead({
+  title: computed(() => `Cotización de ${store.current.currency}`)
+})
 
-        @MetaMethod
-        meta() {
-            return {
-                title: `Cotización de ${this.current.currency}`,
-                titleTemplate: undefined
-            };
-        }
-
-        mounted() {
-            let finalCurrency: string = "USD";
-            const str = this.$route.query.moneda;
-            if (Array.isArray(str)) finalCurrency = str[0] || "USD";
-            if (typeof str === "string") finalCurrency = str;
-            this.fetchCurrencyData(finalCurrency);
-            this.fetchCurrencies();
-        }
-
-    }
+onMounted(() => {
+  let finalCurrency: string = 'USD'
+  const str = route.query.moneda
+  if (Array.isArray(str)) finalCurrency = str[0] || 'USD'
+  if (typeof str === 'string') finalCurrency = str
+  store.fetchCurrencyData(finalCurrency)
+  store.fetchCurrencies()
+})
 </script>

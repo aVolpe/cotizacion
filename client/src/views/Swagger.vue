@@ -1,43 +1,30 @@
 <template>
-    <div>
-        <v-card>
-            <v-card-title>
-                <v-layout justify-center align-center>
-                    <v-flex text-xs-center xs12 md3 mt-1>
-                        Explorador de API:
-                    </v-flex>
-                </v-layout>
-            </v-card-title>
+  <div>
+    <v-card>
+      <v-card-title>
+        <v-row justify="center" align="center">
+          <v-col cols="12" md="3" class="text-center mt-1">
+            Explorador de API:
+          </v-col>
+        </v-row>
+      </v-card-title>
 
-            <v-card-text>
-                <iframe :src="swaggerUrl" class="swagger-iframe">
-                </iframe>
-
-            </v-card-text>
-        </v-card>
-    </div>
+      <v-card-text>
+        <iframe :src="swaggerUrl" class="swagger-iframe">
+        </iframe>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
-<script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import {Meta} from "../decorators";
+<script setup lang="ts">
+import { useHead } from '@unhead/vue'
 
+const swaggerUrl = import.meta.env.VITE_SWAGGER
 
-    @Component
-    @Meta({
-        title: "API"
-    })
-    export default class Swagger extends Vue {
-
-        public swaggerUrl: string | undefined;
-
-
-        constructor() {
-            super();
-            this.swaggerUrl = `${process.env.VUE_APP_SWAGGER}`;
-        }
-
-    }
+useHead({
+  title: 'API'
+})
 </script>
 
 <style>

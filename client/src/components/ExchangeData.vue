@@ -1,206 +1,207 @@
 <template>
-    <v-card v-if="data">
-        <span v-if="data.place.type !== 'BANK'">
-            <v-img v-if="data.branch.image" :src="data.branch.image" height="200px"></v-img>
-            <v-img v-if="!data.branch.image"
-                          :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-img>
-        </span>
-        <span v-if="data.place.type === 'BANK'">
-            <v-img :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + data.place.name"
-                          height="200px"></v-img>
-        </span>
-        <v-card-title primary-title v-if="data.place.type !== 'BANK'">
-            <div>
-                <h3 class="headline mb-0 text-md-center">
-                    {{ data.branch.name }} - {{ data.place.name }}
-                </h3>
-            </div>
-        </v-card-title>
+  <v-card v-if="props.data">
+    <span v-if="props.data.place.type !== 'BANK'">
+      <v-img v-if="props.data.branch.image" :src="props.data.branch.image" height="200"></v-img>
+      <v-img v-else
+        :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + props.data.place.name"
+        height="200"
+      />
+    </span>
+    <span v-else>
+      <v-img 
+        :src="'https://dummyimage.com/700x400/3F51B5/fff.png?text=' + props.data.place.name"
+        height="200"
+      />
+    </span>
+    
+    <v-card-title v-if="props.data.place.type !== 'BANK'">
+      <h3 class="text-h5 text-center w-100">
+        {{ props.data.branch.name }} - {{ props.data.place.name }}
+      </h3>
+    </v-card-title>
 
-        <v-card-text>
-            <v-container fluid>
-
-                <v-layout row>
-                    <v-flex xs4>
-                        <v-subheader>Compra de {{ data.exchange.currency }}</v-subheader>
-                    </v-flex>
-                    <v-flex xs6>
-                        <v-subheader class="text-xs-right"><b>{{ data.exchange.purchasePrice | fn}}</b></v-subheader>
-                    </v-flex>
-                </v-layout>
-                <v-layout row>
-                    <v-flex xs4>
-                        <v-subheader>Venta de {{ data.exchange.currency }}</v-subheader>
-                    </v-flex>
-                    <v-flex xs6 class="text-xs-right">
-                        <v-subheader class="text-xs-right"><b>{{ data.exchange.salePrice | fn}}</b></v-subheader>
-                    </v-flex>
-                </v-layout>
-                <v-layout row v-if="data.branch && data.branch.email">
-                    <v-flex xs4>
-                        <v-subheader>Email</v-subheader>
-                    </v-flex>
-                    <v-flex xs8>
-                        <v-subheader><a :href="'mailto:' + data.branch.email">{{ data.branch.email}}</a></v-subheader>
-                    </v-flex>
-                </v-layout>
-                <v-layout row v-if="data.branch && data.branch.phoneNumber">
-                    <v-flex xs4>
-                        <v-subheader>Telefono</v-subheader>
-                    </v-flex>
-                    <v-flex xs8>
-                        <v-subheader>{{ data.branch.phoneNumber }}</v-subheader>
-                    </v-flex>
-                </v-layout>
-                <v-layout row v-if="data.branch && data.branch.schedule">
-                    <v-flex xs4>
-                        <v-subheader>Horario de atención</v-subheader>
-                    </v-flex>
-                    <v-flex xs8>
-                        <v-subheader>{{ data.branch.schedule }}</v-subheader>
-                    </v-flex>
-                </v-layout>
-                <v-layout row v-if="data.place.branches && data.place.branches.length">
-                    <v-data-table
-                            :headers="headers"
-                            v-bind:pagination.sync="pagination"
-                            hide-actions
-                            no-data-text=""
-                            :must-sort="true"
-                            item-key="id"
-                            :items="data.place.branches"
-                            class="branches">
-                        <template slot="items" slot-scope="props">
-                            <tr>
-                                <td class="text-xs-left name-column">
-                                    <a :href="props.item.gmaps"
-                                       v-if="props.item.gmaps"
-                                       target="_blank">
-                                        <v-icon>map</v-icon>
-                                        <b>{{ props.item.name }}</b>
-                                    </a>
-                                    <span v-if="!props.item.gmaps">
-                                        <b>{{ props.item.name }}</b>
-                                    </span>
-
-                                </td>
-                                <td class="text-xs-right" v-html="getSchedule(props.item)"></td>
-                                <td class="text-xs-right" v-html="getPhone(props.item)"></td>
-                            </tr>
-                        </template>
-                    </v-data-table>
-                </v-layout>
-                <v-layout row v-if="data.place.branches && data.place.branches.length">
-                    <div class="text-xs-center pt-2" style="width: 100%">
-                        <v-pagination v-model="pagination.page"
-                                      :length="Math.ceil(data.place.branches.length / pagination.rowsPerPage)"
-                                      style="marign:auto"></v-pagination>
-                    </div>
-                </v-layout>
-
-            </v-container>
-        </v-card-text>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn :href="data.branch.gmaps" v-if="data.place.type === 'BUREAU' && data.branch.gmaps" target="_blank"
-                   flat
-                   color="orange">
-                Ir al mapa
-            </v-btn>
-            <v-btn flat color="blue" v-on:click="$emit('ok')">Aceptar</v-btn>
-        </v-card-actions>
-        <v-card-actions class="footpart">
-            <v-container fluid>
-                <v-layout row>
-                    <small class="footnote">
-                        Estos datos fueron obtenidos de la página web de cada casa de cambios.
-                        Si tienes mas datos de esta casa de cambios, <a href="mailto:arturovolpe@gmail.com"> envianos un
-                        mail</a>.
-                    </small>
-                </v-layout>
-                <br/>
-                <v-layout row>
-                    <v-spacer></v-spacer>
-                    <small class="footnote">
-                        Consultado el {{ data.exchange.date | fd("dd/MM/yyyy 'a las' HH:mm") }}
-                    </small>
-                    <v-spacer></v-spacer>
-                </v-layout>
-            </v-container>
-        </v-card-actions>
-    </v-card>
+    <v-card-text>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="4">
+            <div class="text-subtitle-2">Compra de {{ props.data.exchange.currency }}</div>
+          </v-col>
+          <v-col cols="6">
+            <div class="text-subtitle-2 text-right"><b>{{ formatNumber(props.data.exchange.purchasePrice) }}</b></div>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="4">
+            <div class="text-subtitle-2">Venta de {{ props.data.exchange.currency }}</div>
+          </v-col>
+          <v-col cols="6" class="text-right">
+            <div class="text-subtitle-2 text-right"><b>{{ formatNumber(props.data.exchange.salePrice) }}</b></div>
+          </v-col>
+        </v-row>
+        
+        <v-row v-if="props.data.branch && props.data.branch.email">
+          <v-col cols="4">
+            <div class="text-subtitle-2">Email</div>
+          </v-col>
+          <v-col cols="8">
+            <div class="text-subtitle-2"><a :href="'mailto:' + props.data.branch.email">{{ props.data.branch.email }}</a></div>
+          </v-col>
+        </v-row>
+        
+        <v-row v-if="props.data.branch && props.data.branch.phoneNumber">
+          <v-col cols="4">
+            <div class="text-subtitle-2">Telefono</div>
+          </v-col>
+          <v-col cols="8">
+            <div class="text-subtitle-2">{{ props.data.branch.phoneNumber }}</div>
+          </v-col>
+        </v-row>
+        
+        <v-row v-if="props.data.branch && props.data.branch.schedule">
+          <v-col cols="4">
+            <div class="text-subtitle-2">Horario de atención</div>
+          </v-col>
+          <v-col cols="8">
+            <div class="text-subtitle-2">{{ props.data.branch.schedule }}</div>
+          </v-col>
+        </v-row>
+        
+        <v-row v-if="props.data.place.branches && props.data.place.branches.length">
+          <v-data-table
+            :headers="headers"
+            :items="props.data.place.branches"
+            :items-per-page="itemsPerPage"
+            v-model:page="page"
+            :sort-by="[{ key: 'name', order: 'asc' }]"
+            item-value="id"
+            class="branches"
+            density="compact"
+          >
+            <template v-slot:item="{ item }">
+              <tr>
+                <td class="text-left name-column">
+                  <a :href="item.gmaps" v-if="item.gmaps" target="_blank">
+                    <v-icon>mdi-map</v-icon>
+                    <b>{{ item.name }}</b>
+                  </a>
+                  <span v-else>
+                    <b>{{ item.name }}</b>
+                  </span>
+                </td>
+                <td class="text-right" v-html="getSchedule(item)"></td>
+                <td class="text-right" v-html="getPhone(item)"></td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-row>
+      </v-container>
+    </v-card-text>
+    
+    <v-card-actions>
+      <v-spacer />
+      <v-btn 
+        :href="props.data.branch.gmaps" 
+        v-if="props.data.place.type === 'BUREAU' && props.data.branch.gmaps" 
+        target="_blank"
+        variant="text"
+        color="orange"
+      >
+        Ir al mapa
+      </v-btn>
+      <v-btn variant="text" color="blue" @click="emit('ok')">Aceptar</v-btn>
+    </v-card-actions>
+    
+    <v-card-actions class="footpart">
+      <v-container fluid>
+        <v-row>
+          <small class="footnote">
+            Estos datos fueron obtenidos de la página web de cada casa de cambios.
+            Si tienes mas datos de esta casa de cambios, <a href="mailto:arturovolpe@gmail.com"> envianos un mail</a>.
+          </small>
+        </v-row>
+        <br/>
+        <v-row>
+          <v-spacer />
+          <small class="footnote">
+            Consultado el {{ formatDate(props.data.exchange.date, "dd/MM/yyyy 'a las' HH:mm") }}
+          </small>
+          <v-spacer />
+        </v-row>
+      </v-container>
+    </v-card-actions>
+  </v-card>
 </template>
 
-<script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
-    import {Branch} from "../api/ExchangeAPI";
+<script setup lang="ts">
+import { ref } from 'vue'
+import { format } from 'date-fns'
+import type { Branch } from '@/api/ExchangeAPI'
 
-    @Component
-    export default class ExchangeData extends Vue {
-        @Prop() data: any;
-        isSmall: boolean;
-        headers: any[];
-        pagination: {
-            sortBy: string;
-            descending: boolean;
-            rowsPerPage: number
-        };
+interface Props {
+  data?: any
+}
 
-        constructor() {
-            super();
-            this.isSmall = window.innerWidth < 600;
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  ok: []
+}>()
 
-            this.headers = [
-                {text: "Nombre", value: "branch.name", align: "left", sortable: true},
-                {text: "Horario", value: "branch.schedule", sortable: false, class: "text-xs-right"},
-                {text: "Teléfono", value: "branch.phone", sortable: false, class: "text-xs-right"},
-            ];
+const isSmall = ref(window.innerWidth < 600)
+const page = ref(1)
+const itemsPerPage = 3
 
-            this.pagination = {sortBy: "name", descending: false, rowsPerPage: 3};
-        }
+const headers = [
+  { title: 'Nombre', key: 'name', align: 'start' as const, sortable: true },
+  { title: 'Horario', key: 'schedule', sortable: false, align: 'end' as const },
+  { title: 'Teléfono', key: 'phone', sortable: false, align: 'end' as const }
+]
 
-        public getSchedule(branch: Branch) {
-            if (!branch || !branch.schedule) return "";
+const formatNumber = (value: any) => {
+  if (typeof value !== 'number') return value
+  return value.toLocaleString('es-PY')
+}
 
-            return branch.schedule
-                .toLowerCase()
-                .replace(/\n/g, " ")
-                .replace(/lunes/, "L")
-                .replace(/martes/, "Ma")
-                .replace(/miercoles/, "Mi")
-                .replace(/jueves/, "J")
-                .replace(/viernes/, "V")
-                .replace(/sabado/, "S")
-                .replace(/sábado/, "S")
-                .replace(/domingo/, "D")
+const formatDate = (value: any, desiredFormat: string) => {
+  if (value) return format(new Date(value), desiredFormat)
+  return ''
+}
 
+const getSchedule = (branch: Branch) => {
+  if (!branch || !branch.schedule) return ''
 
-                .replace(/lunes_viernes/, "L a V")
-                .replace(/sbado/, "S")
-                .replace(/domingo/, "D")
-                .replace(/hs /, "")
+  return branch.schedule
+    .toLowerCase()
+    .replace(/\n/g, ' ')
+    .replace(/lunes/, 'L')
+    .replace(/martes/, 'Ma')
+    .replace(/miercoles/, 'Mi')
+    .replace(/jueves/, 'J')
+    .replace(/viernes/, 'V')
+    .replace(/sabado/, 'S')
+    .replace(/sábado/, 'S')
+    .replace(/domingo/, 'D')
+    .replace(/lunes_viernes/, 'L a V')
+    .replace(/sbado/, 'S')
+    .replace(/domingo/, 'D')
+    .replace(/hs /, '')
+    .replace(/0 a /, '0-')
+    .replace(/ - /g, '-')
+    .replace(/\./, '<br />')
+    .replace(/(\d) (S|D)/g, '$1<br />$2')
+    .trim()
+}
 
-                .replace(/0 a /, "0-")
-                .replace(/ - /g, "-")
-                .replace(/\./, "<br />")
-                .replace(/(\d) (S|D)/g, "$1<br />$2")
-                .trim();
-        }
+const getPhone = (branch: Branch) => {
+  if (!branch || !branch.phoneNumber) return ''
 
-        public getPhone(branch: Branch) {
-            if (!branch || !branch.phoneNumber) return "";
-
-            return branch.phoneNumber
-                .replace(/.*Cel.:/, "")
-                .replace(/\(RA\)/, "")
-                .replace(/\/.*/, "")
-                .replace(/y .*/, "")
-                .trim();
-
-        }
-
-    }
+  return branch.phoneNumber
+    .replace(/.*Cel.:/, '')
+    .replace(/\(RA\)/, '')
+    .replace(/\/.*/, '')
+    .replace(/y .*/, '')
+    .trim()
+}
 </script>
 
 <style scoped>
