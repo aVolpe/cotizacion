@@ -1,7 +1,7 @@
 export class APICaller {
 
     public static goTo(path: string) {
-        window.location.href = `${process.env.BASE_URL}#/${path}`;
+        window.location.href = `${import.meta.env.BASE_URL}#/${path}`;
     }
 
     public static handleError(response: Response) {
@@ -20,7 +20,7 @@ export class APICaller {
 
     public static doGet(url: string): Promise<any> {
 
-        return fetch(`${process.env.VUE_APP_API}/${url}`)
+        return fetch(`${import.meta.env.VITE_API}/${url}`)
             .then(this.handleError)
             .then(okResponse => okResponse.json())
             .catch(err => this.handleFirstError(err));
