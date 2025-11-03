@@ -18,7 +18,8 @@ import java.util.List;
 public class QueryResponse {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
+    @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 1)
     private long id;
     private Date date;
 

@@ -1,7 +1,7 @@
 spring:
 
   flyway:
-    enabled: true
+    enabled: false
 
   datasource:
     url: jdbc:postgresql://localhost:5432/exchange

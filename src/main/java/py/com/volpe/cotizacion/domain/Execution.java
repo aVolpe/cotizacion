@@ -3,10 +3,7 @@ package py.com.volpe.cotizacion.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +17,8 @@ import java.util.List;
 public class Execution {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
+    @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 1)
     private long id;
 
     private Date date;
