@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { createUnhead } from '@unhead/vue'
+import { createHead } from '@unhead/vue/client'
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 import App from './App.vue'
 import router from './router'
@@ -11,7 +11,7 @@ import es from 'date-fns/locale/es'
 
 const app = createApp(App)
 const pinia = createPinia()
-const head = createUnhead()
+const head = createHead()
 
 app.use(pinia)
 app.use(router)
