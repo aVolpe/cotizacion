@@ -28,12 +28,20 @@ import java.util.StringJoiner;
 @Service
 public class HTTPHelper {
 
+    /**
+     * Default timeout for calls without an explicit one; without it HttpURLConnection waits forever
+     * and a hung provider blocks the scheduler thread.
+     */
+    static final int DEFAULT_TIMEOUT_MS = 30_000;
+
     public String doGet(String uri) {
 
         try {
             URL url = new URL(uri);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
+            con.setConnectTimeout(DEFAULT_TIMEOUT_MS);
+            con.setReadTimeout(DEFAULT_TIMEOUT_MS);
 
             con.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
 
@@ -96,6 +104,8 @@ public class HTTPHelper {
             URL url = new URL(uri);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
+            con.setConnectTimeout(DEFAULT_TIMEOUT_MS);
+            con.setReadTimeout(DEFAULT_TIMEOUT_MS);
 
             con.setDoOutput(true);
 
