@@ -34,7 +34,7 @@
       <v-spacer></v-spacer>
       <span>
         <a href="https://www.github.com/avolpe/cotizacion" target="_blank">
-          &copy; Arturo Volpe 2025
+          &copy; Arturo Volpe {{ year }}
         </a>
       </span>
       <v-spacer></v-spacer>
@@ -60,6 +60,7 @@ import theme from './theme'
 
 const router = useRouter()
 const drawer = ref(false)
+const year = new Date().getFullYear()
 
 const routes = [
   {
