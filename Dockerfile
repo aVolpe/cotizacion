@@ -1,4 +1,4 @@
-FROM node:20-bookworm AS client-builder
+FROM node:24-bookworm AS client-builder
 LABEL maintainer="Arturo Volpe <arturovolpe@gmail.com>"
 
 # Install Chromium and dependencies for Puppeteer

@@ -5,7 +5,6 @@ import VueGoogleMaps from '@fawmi/vue-google-maps'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
-import './registerServiceWorker'
 import { formatDistance, format } from 'date-fns'
 import es from 'date-fns/locale/es'
 
