@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface PlaceBranchRepository extends JpaRepository<PlaceBranch, Long> {
 
-    List<PlaceBranch> getByPlaceCode(String placeCode);
+    List<PlaceBranch> getByPlaceCodeAndActiveTrue(String placeCode);
 }
 
 

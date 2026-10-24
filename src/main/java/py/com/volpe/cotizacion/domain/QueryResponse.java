@@ -1,41 +1,30 @@
 package py.com.volpe.cotizacion.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
+ * The result of querying a place (or one of its branches), as returned by a gatherer.
+ * <p>
+ * It is not persisted as is: {@link py.com.volpe.cotizacion.ExchangeRateRecorder} turns its details into
+ * {@link ExchangeRate} rows, which only grow when a price changes.
+ *
  * @author Arturo Volpe
  * @since 4/26/18
  */
 @Data
-@Entity
-@AllArgsConstructor
 public class QueryResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
-    @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 1)
-    private long id;
     private Date date;
 
-    @ManyToOne
     private Place place;
 
-    @ManyToOne
     private PlaceBranch branch;
 
-    private String fullData;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "queryResponse")
     private List<QueryResponseDetail> details;
-
-    @ManyToOne
-    private Execution execution;
 
     public QueryResponse() {
         this.date = new Date();
@@ -54,16 +43,10 @@ public class QueryResponse {
 
     public QueryResponse addDetail(QueryResponseDetail detail) {
         this.getDetails().add(detail);
-        detail.setQueryResponse(this);
         return this;
     }
 
     public void setDetails(List<QueryResponseDetail> details) {
-        if (details == null) {
-            this.details = new ArrayList<>();
-            return;
-        }
-        details.forEach(d -> d.setQueryResponse(this));
-        this.details = details;
+        this.details = details == null ? new ArrayList<>() : details;
     }
 }

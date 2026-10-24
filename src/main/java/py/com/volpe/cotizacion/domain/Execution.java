@@ -5,7 +5,6 @@ import lombok.Data;
 
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Arturo Volpe
@@ -22,9 +21,6 @@ public class Execution {
     private long id;
 
     private Date date;
-
-    @OneToMany(mappedBy = "execution")
-    private List<QueryResponse> responses;
 
     public Execution() {
         date = new Date();

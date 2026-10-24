@@ -12,7 +12,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/exchange
 
   db:
-    image: postgres:10.4
+    image: postgres:17
     ports:
       - "5432:5432"
     volumes:

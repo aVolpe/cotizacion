@@ -271,3 +271,7 @@ Sábado: 08:00 - 13:00', 4903180),
 ON CONFLICT DO NOTHING;
 
 
+
+-- The ids above are fixed, move the sequence past them so the next NEXTVAL doesn't collide.
+-- Production was baselined at version 2, so this only affects new databases.
+SELECT setval('hibernate_sequence', GREATEST((SELECT max(id) FROM place), (SELECT max(id) FROM place_branch)));

@@ -22,7 +22,7 @@ public class PlaceController {
 
     @GetMapping(value = "/api/places/{code}/branches", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PlaceBranch> init(@PathVariable(value = "code") String code) {
-        return branchRepository.getByPlaceCode(code);
+        return branchRepository.getByPlaceCodeAndActiveTrue(code);
     }
 
 
