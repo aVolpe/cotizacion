@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import py.com.volpe.cotizacion.EmbeddedPostgresConfiguration;
+import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 
 import java.util.List;
@@ -35,6 +36,14 @@ class BranchMigrationsTest {
     @Test
     void mercosurBranchesHaveTheirOwnRemoteCode() {
         assertThat(activeRemoteCodes("MERCOSUR")).containsExactlyInAnyOrder("1", "2", "5");
+    }
+
+    @Test
+    void norteCambiosIsLoadedWithTheBranchIdsOfTheSite() {
+        Place norte = places.findByCode("NORTE").orElseThrow();
+        assertThat(norte.getName()).isEqualTo("Norte Cambios");
+        assertThat(norte.getType()).isEqualTo(Place.Type.BUREAU);
+        assertThat(activeRemoteCodes("NORTE")).containsExactlyInAnyOrder("1", "2", "3", "4", "5", "6", "8");
     }
 
     @Test

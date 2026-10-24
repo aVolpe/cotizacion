@@ -105,6 +105,10 @@ class InterfisaTest {
     void mapToISO() {
         assertNull(Interfisa.mapToISO("asdfas"));
         assertEquals("USD", Interfisa.mapToISO("Dólar"));
+        // names returned by the web service in 2026-10
+        assertEquals("USD", Interfisa.mapToISO("DÓLARES AMERICANOS"));
+        assertEquals("BRL", Interfisa.mapToISO("REALES"));
+        assertNull(Interfisa.mapToISO("DÓLARES WEB"));
 
     }
 }
