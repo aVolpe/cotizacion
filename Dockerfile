@@ -39,8 +39,8 @@ COPY utils /app/utils
 COPY --from=client-builder /home/node/client/dist /app/src/main/resources/public
 RUN sh mvnw clean
 RUN sh ./utils/gen_licenses.sh
-RUN sh mvnw -B -q package -Pdevel
-RUN sh mvnw -B -q clean install -Ppostgres -DskipTests
+# Tests run in the CI workflow (initdb from embedded-postgres refuses to run as root)
+RUN sh mvnw -B -q package -DskipTests
 
 
 FROM eclipse-temurin:25-jre

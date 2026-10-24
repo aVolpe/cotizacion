@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import py.com.volpe.cotizacion.Cotizacion;
+import py.com.volpe.cotizacion.EmbeddedPostgresConfiguration;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
-import py.com.volpe.cotizacion.repository.QueryResponseDetailRepository;
+import py.com.volpe.cotizacion.repository.ExchangeRateRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 5/12/18
  */
 @SpringBootTest(classes = Cotizacion.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(EmbeddedPostgresConfiguration.class)
 @ExtendWith(SpringExtension.class)
 class ExchangeControllerTest {
 
@@ -33,7 +36,7 @@ class ExchangeControllerTest {
     private TestRestTemplate restTemplate;
 
     @MockBean
-    private QueryResponseDetailRepository repo;
+    private ExchangeRateRepository repo;
 
     @Test
     @SuppressWarnings("unchecked")
@@ -53,8 +56,8 @@ class ExchangeControllerTest {
         Date now = new Date();
         Date tenMinutesAgo = addMinutes(now, -10);
         Mockito.when(repo.getMaxByPlaceInISO("USD")).thenReturn(Arrays.asList(
-                new QueryResponseDetailRepository.ByIsoCodeResult(1, new Place(), new PlaceBranch(), 1, now, 1, 5000, 6000),
-                new QueryResponseDetailRepository.ByIsoCodeResult(2, new Place(), new PlaceBranch(), 2, tenMinutesAgo, 2, 6000, 7000)
+                new ExchangeRateRepository.ByIsoCodeResult(1, new Place(), new PlaceBranch(), 1, now, 1, 5000, 6000),
+                new ExchangeRateRepository.ByIsoCodeResult(2, new Place(), new PlaceBranch(), 2, tenMinutesAgo, 2, 6000, 7000)
         ));
 
         ExchangeController.ResultData data = restTemplate.getForEntity("/api/exchange/{cur}", ExchangeController.ResultData.class, "USD").getBody();
@@ -63,8 +66,8 @@ class ExchangeControllerTest {
 
         assertEquals(2, data.getCount());
         assertEquals(2, data.getData().size());
-        assertThat(data.getData().stream().map(QueryResponseDetailRepository.ByIsoCodeResult::getPurchasePrice).collect(Collectors.toList()), hasItems(6000L, 7000L));
-        assertThat(data.getData().stream().map(QueryResponseDetailRepository.ByIsoCodeResult::getSalePrice).collect(Collectors.toList()), hasItems(5000L, 6000L));
+        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getPurchasePrice).collect(Collectors.toList()), hasItems(6000L, 7000L));
+        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getSalePrice).collect(Collectors.toList()), hasItems(5000L, 6000L));
         assertEquals(tenMinutesAgo, data.getFirstQueryResult());
         assertEquals(now, data.getLastQueryResult());
 

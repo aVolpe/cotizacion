@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLRestriction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class Place {
     private Type type = Type.BUREAU;
 
     @JsonIgnore
+    // Only the active branches are queried, the inactive ones just keep their history.
+    @SQLRestriction("active")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "place", fetch = FetchType.EAGER)
     @Singular
     private List<PlaceBranch> branches;

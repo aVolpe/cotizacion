@@ -33,6 +33,13 @@ public class PlaceBranch {
     private String schedule;
     private String remoteCode;
 
+    /**
+     * Inactive branches are not queried nor listed, but keep their history.
+     */
+    @JsonIgnore
+    @Builder.Default
+    private boolean active = true;
+
     @JsonIgnore
     @ManyToOne
     private Place place;

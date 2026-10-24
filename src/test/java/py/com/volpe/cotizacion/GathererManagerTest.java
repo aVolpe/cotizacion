@@ -7,7 +7,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
 import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
+import py.com.volpe.cotizacion.domain.Execution;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,8 +60,8 @@ class GathererManagerTest {
         PlaceRepository pr = Mockito.mock(PlaceRepository.class);
         Mockito.when(pr.findByCode(any())).thenReturn(Optional.of(new Place()));
 
-        QueryResponseRepository qr = Mockito.mock(QueryResponseRepository.class);
-        Mockito.when(qr.save(any())).thenAnswer(returnsFirstArg());
+        ExchangeRateRecorder qr = Mockito.mock(ExchangeRateRecorder.class);
+        Mockito.when(er.save(any())).thenReturn(new Execution());
 
         Gatherer first = Mockito.mock(Gatherer.class);
         Mockito.when(first.getCode()).thenReturn("p1");

@@ -9,7 +9,6 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.gatherer.Gatherer;
 import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
-import py.com.volpe.cotizacion.repository.QueryResponseRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -35,14 +34,14 @@ public class GathererManager {
     private final List<Gatherer> gathererList;
     private final PlaceRepository placeRepository;
     private final ExecutionRepository executionRepository;
-    private final QueryResponseRepository queryResponseRepository;
+    private final ExchangeRateRecorder recorder;
 
-    public GathererManager(List<Gatherer> gathererList, PlaceRepository placeRepository, ExecutionRepository executionRepository, QueryResponseRepository queryResponseRepository) {
+    public GathererManager(List<Gatherer> gathererList, PlaceRepository placeRepository, ExecutionRepository executionRepository, ExchangeRateRecorder recorder) {
 
         this.gathererList = gathererList;
         this.placeRepository = placeRepository;
         this.executionRepository = executionRepository;
-        this.queryResponseRepository = queryResponseRepository;
+        this.recorder = recorder;
 
         log.info("""
                 Staring GathererManager, available gatherers:
@@ -128,13 +127,9 @@ public class GathererManager {
 
         Place p = getPlace(gatherer);
 
-        return gatherer.doQuery(p, p.getBranches())
-                .stream()
-                .map(qr -> {
-                    qr.setExecution(e);
-                    return queryResponseRepository.save(qr);
-                })
-                .toList();
+        List<QueryResponse> responses = gatherer.doQuery(p, p.getBranches());
+        responses.forEach(qr -> recorder.record(qr, e));
+        return responses;
     }
 
     /**

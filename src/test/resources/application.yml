@@ -1,29 +1,14 @@
 spring:
 
+  # The datasource comes from the embedded Postgres (see EmbeddedPostgresConfiguration),
+  # the schema from the same Flyway migrations used in production.
   flyway:
-    enabled: false
-
-  datasource:
-    url: jdbc:h2:./data/db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
-
-  profiles:
-    active: develop
+    enabled: true
 
   jpa:
     hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-
+      ddl-auto: validate
 
   thymeleaf:
     cache: false
     prefix: classpath:/public/
-#    suffix: html
-
-
-logging:
-  level:
-    web: debug
-
