@@ -89,10 +89,10 @@ public class Interfisa implements Gatherer {
     protected static String mapToISO(String key) {
         // We don't care for the check exchange
         return switch (key) {
-            case "Dólar", "DOLARES AMERICANOS" -> "USD";
+            case "Dólar", "DOLARES AMERICANOS", "DÓLARES AMERICANOS" -> "USD";
             case "Euro", "EUROS" -> "EUR";
             case "Peso", "PESO ARGENTINO" -> "ARS";
-            case "Real", "REAL" -> "BRL";
+            case "Real", "REAL", "REALES" -> "BRL";
             default -> null;
         };
     }

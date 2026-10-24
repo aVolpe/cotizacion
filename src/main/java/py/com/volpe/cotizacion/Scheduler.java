@@ -36,7 +36,18 @@ public class Scheduler {
         this.manager = manager;
     }
 
-    @Scheduled(cron = "0 */10 7-20 * * MON-SAT", zone = "America/Asuncion")
+    static final String ZONE = "America/Asuncion";
+    /**
+     * Every 10 minutes from 7:00 to 20:50 on weekdays.
+     */
+    static final String WEEKDAYS_CRON = "0 */10 7-20 * * MON-FRI";
+    /**
+     * Every 10 minutes from 7:00 to 15:50 on Saturdays, the places close earlier.
+     */
+    static final String SATURDAY_CRON = "0 */10 7-15 * * SAT";
+
+    @Scheduled(cron = WEEKDAYS_CRON, zone = ZONE)
+    @Scheduled(cron = SATURDAY_CRON, zone = ZONE)
     public void triggerQuery() throws InterruptedException {
         log.info("Querying the services");
         Future<?> work = executor.submit(() -> manager.doQuery(null));
