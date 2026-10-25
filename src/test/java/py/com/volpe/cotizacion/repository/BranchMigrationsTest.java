@@ -81,6 +81,24 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void feCambiosBranchesUseTheUrlPrefixOfTheSite() {
+        assertThat(activeRemoteCodes("FeCambios")).containsExactlyInAnyOrder("pal", "vmo", "cde", "slo");
+        assertThat(places.findByCode("FeCambios").orElseThrow().getBranches())
+                .extracting(PlaceBranch::getRemoteCode)
+                .containsExactlyInAnyOrder("pal", "vmo", "cde", "slo");
+    }
+
+    @Test
+    void feCambiosPedroJuanCaballeroIsDeactivatedButKeepsItsRow() {
+        assertThat(jdbc.queryForObject(
+                "SELECT b.active FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'FeCambios' AND b.remote_code = '8'",
+                Boolean.class)).isFalse();
+        assertThat(jdbc.queryForObject(
+                "SELECT b.name FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'FeCambios' AND b.remote_code = 'pal'",
+                String.class)).isEqualTo("Casa Matriz  - Palma");
+    }
+
+    @Test
     void everyBranchHasARemoteCode() {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE remote_code IS NULL", Long.class))
                 .isZero();
