@@ -14,7 +14,7 @@
       />
     </span>
     
-    <v-card-title v-if="props.data.place.type !== 'BANK'">
+    <v-card-title v-if="props.data.place.type !== 'BANK'" class="text-wrap">
       <h3 class="text-h5 text-center w-100">
         {{ props.data.branch.name }} - {{ props.data.place.name }}
       </h3>
