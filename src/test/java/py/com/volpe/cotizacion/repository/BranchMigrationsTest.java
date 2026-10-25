@@ -5,15 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import py.com.volpe.cotizacion.EmbeddedPostgresConfiguration;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
 
 /**
  * Checks the branch data after all the migrations and the functions used to evolve it
@@ -44,6 +49,35 @@ class BranchMigrationsTest {
         assertThat(norte.getName()).isEqualTo("Norte Cambios");
         assertThat(norte.getType()).isEqualTo(Place.Type.BUREAU);
         assertThat(activeRemoteCodes("NORTE")).containsExactlyInAnyOrder("1", "2", "3", "4", "5", "6", "8");
+    }
+
+    @Test
+    void mundialBranchesUseTheTabsOfTheSiteAndKeepTheirData() {
+        assertThat(branches.getByPlaceCodeAndActiveTrue("MUNDIAL"))
+                .extracting(PlaceBranch::getId, PlaceBranch::getRemoteCode, PlaceBranch::getName)
+                .containsExactlyInAnyOrder(
+                        tuple(28298260L, "globo-center", "Globo Center"),
+                        tuple(28298262L, "jebai", "Jebai Center"),
+                        tuple(28298263L, "km-4", "KM 4 - Supercarretera"),
+                        tuple(28298264L, "salto-del-guaira", "Salto del Guairá"),
+                        tuple(28298266L, "villa-morra", "Villa Morra"));
+        assertThat(branches.getByPlaceCodeAndActiveTrue("MUNDIAL"))
+                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getPhoneNumber, PlaceBranch::getSchedule,
+                        PlaceBranch::getLatitude, PlaceBranch::getLongitude).doesNotContainNull());
+
+        // Vendome and Asunción are no longer in the site
+        assertThat(jdbc.queryForList(
+                "SELECT b.name FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'MUNDIAL' AND NOT b.active",
+                String.class)).containsExactlyInAnyOrder("Vendome", "Asunción");
+    }
+
+    @Test
+    void mundialMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V10__Mundial_branches.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
     }
 
     @Test
