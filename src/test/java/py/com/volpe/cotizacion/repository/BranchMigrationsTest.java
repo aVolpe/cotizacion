@@ -52,6 +52,28 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void masCambiosIsLoadedWithTheBranchesOfTheSite() {
+        Place masCambios = places.findByCode("MASCAMBIOS").orElseThrow();
+        assertThat(masCambios.getName()).isEqualTo("Más Cambios");
+        assertThat(masCambios.getType()).isEqualTo(Place.Type.BUREAU);
+        assertThat(activeRemoteCodes("MASCAMBIOS")).containsExactlyInAnyOrder("matriz", "sucursal1", "sucursal2",
+                "sucursal3", "sucursal4", "sucursal5", "sucursal6", "sucursal7", "sucursal8", "sucursal9", "sucursal10",
+                "sucursal11", "sucursal12", "sucursal13", "sucursal14");
+        assertThat(branches.getByPlaceCodeAndActiveTrue("MASCAMBIOS"))
+                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getLatitude, PlaceBranch::getLongitude)
+                        .doesNotContainNull());
+    }
+
+    @Test
+    void laMonedaIsLoadedWithTheBranchesOfTheSite() {
+        Place laMoneda = places.findByCode("LAMONEDA").orElseThrow();
+        assertThat(laMoneda.getName()).isEqualTo("La Moneda Cambios");
+        assertThat(laMoneda.getType()).isEqualTo(Place.Type.BUREAU);
+        assertThat(activeRemoteCodes("LAMONEDA")).containsExactlyInAnyOrder("casa_matriz", "sucursal_jebai",
+                "sucursal_centro", "sucursal_km7", "sucursal_algesa");
+    }
+
+    @Test
     void mundialBranchesUseTheTabsOfTheSiteAndKeepTheirData() {
         assertThat(branches.getByPlaceCodeAndActiveTrue("MUNDIAL"))
                 .extracting(PlaceBranch::getId, PlaceBranch::getRemoteCode, PlaceBranch::getName)
