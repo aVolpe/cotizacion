@@ -194,6 +194,38 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void maxiCambiosActiveBranchesAreTheOnesOfTheSite() {
+        assertThat(activeRemoteCodes("MaxiCambios")).containsExactlyInAnyOrder(
+                "1", "2", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                "22", "23", "24", "25");
+    }
+
+    @Test
+    void maxiCambiosOldBranchesUseTheSiteIdAndKeepTheirRows() {
+        // V2 created Multiplaza ('0') as 2 and Casa Central CDE ('13') as 3, '13' is now Fuente Shopping
+        assertThat(branches.getByPlaceCodeAndActiveTrue("MaxiCambios"))
+                .filteredOn(b -> List.of("1", "13", "17").contains(b.getRemoteCode()))
+                .extracting(PlaceBranch::getRemoteCode, PlaceBranch::getName)
+                .containsExactlyInAnyOrder(
+                        tuple("1", "Shopping Multiplaza Casa Central"),
+                        tuple("13", "Fuente Shopping de Salemma"),
+                        tuple("17", "Casa Central - Ciudad del Este"));
+        assertThat(jdbc.queryForObject(
+                "SELECT id FROM place_branch WHERE place_id = 1 AND remote_code = '1'", Long.class)).isEqualTo(2L);
+        assertThat(jdbc.queryForObject(
+                "SELECT id FROM place_branch WHERE place_id = 1 AND remote_code = '17'", Long.class)).isEqualTo(3L);
+    }
+
+    @Test
+    void maxiCambiosMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V15__Maxi_branches.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
+    }
+
+    @Test
     void everyBranchHasARemoteCode() {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE remote_code IS NULL", Long.class))
                 .isZero();

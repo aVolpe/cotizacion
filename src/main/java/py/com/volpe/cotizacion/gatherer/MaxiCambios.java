@@ -20,7 +20,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Arturo Volpe
@@ -35,20 +38,28 @@ public class MaxiCambios implements Gatherer {
     private static final String CODE = "MaxiCambios";
     private static final String WS_URL_AS = "http://cotizext.maxicambios.com.py/maxicambios4.xml";
     private static final String WS_URL_CDE = "http://cotizext.maxicambios.com.py/cotiza_cde.xml";
+    /**
+     * The site only has the Asunción and CDE boards, these branches (the ones in Ciudad del Este) use the CDE one.
+     */
+    static final Set<String> CDE_CODES = Set.of("17", "18", "20");
 
     private final HTTPHelper helper;
 
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
-        return branches.stream().map(this::queryBranch).toList();
+        // every branch uses one of the two boards, each one is downloaded once
+        Map<String, List<ExchangeData>> boards = new HashMap<>();
+        return branches.stream()
+                .map(branch -> queryBranch(branch, boards.computeIfAbsent(getURLForBranch(branch), this::getParsedData)))
+                .toList();
 
     }
 
-    private QueryResponse queryBranch(PlaceBranch branch) {
+    private QueryResponse queryBranch(PlaceBranch branch, List<ExchangeData> board) {
 
         QueryResponse qr = new QueryResponse(branch);
 
-        getParsedData(getURLForBranch(branch)).forEach(detail -> {
+        board.forEach(detail -> {
 
             String iso = mapToISO(detail);
             if (iso != null)
@@ -59,7 +70,7 @@ public class MaxiCambios implements Gatherer {
     }
 
     private String getURLForBranch(PlaceBranch branch) {
-        return "0".equals(branch.getRemoteCode()) ? WS_URL_AS : WS_URL_CDE;
+        return CDE_CODES.contains(branch.getRemoteCode()) ? WS_URL_CDE : WS_URL_AS;
     }
 
     private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
