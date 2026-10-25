@@ -8,21 +8,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
 import { useExchangeStore } from '@/stores/exchange'
 import MapOfExchanges from '@/components/MapOfExchanges.vue'
 import ExchangeData from '@/components/ExchangeData.vue'
 
+const route = useRoute()
 const store = useExchangeStore()
 const isSmall = ref(window.innerWidth < 600)
 
 useHead({
-  title: 'Cotizaciones de hoy'
+  title: computed(() => `Mapa de cotizaciones de ${store.current.currency}`)
 })
 
 onMounted(() => {
-  store.init()
+  const str = route.query.moneda
+  const currency = (Array.isArray(str) ? str[0] : str) || 'USD'
+  store.fetchCurrencyData(currency)
+  if (!store.currencies.loaded) store.fetchCurrencies()
 })
 </script>
 

@@ -223,17 +223,6 @@ export const useExchangeStore = defineStore('exchange', () => {
     current.value.place = undefined
   }
 
-  async function init() {
-    fetchExchange('USD')
-    if (currencies.value.loaded) return
-    fetchCurrencies()
-    currencies.value = {
-      loading: false,
-      loaded: true,
-      data: ['USD']
-    }
-  }
-
   async function fetchCurrencies() {
     currencies.value.loading = true
     const data = await ExchangeAPI.getCurrencies()
@@ -315,7 +304,6 @@ export const useExchangeStore = defineStore('exchange', () => {
     setAmount,
     setCurrentPlace,
     clearCurrentPlace,
-    init,
     fetchCurrencies,
     fetchCurrencyData,
     fetchExchange

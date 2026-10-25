@@ -35,7 +35,7 @@
         :loading="store.filteredCurrencies.loading"
         :items="store.filteredCurrencies.data?.data || []"
         :sort-by="[{ key: 'purchasePrice', order: 'desc' }]"
-        item-value="id"
+        :item-value="(item: QueryResponseDetail) => String(item.id)"
         v-model:expanded="expanded"
         density="default"
         :items-per-page="-1"
@@ -68,8 +68,8 @@
         </template>
 
         <template v-slot:item="{ item }">
-          <tr :class="{ 'expandable-row': isSmall, 'expanded-row': isSmall && expanded.includes(item.id) }"
-              @click="isSmall && toggleRow(item.id)">
+          <tr :class="{ 'expandable-row': isSmall, 'expanded-row': isSmall && expanded.includes(String(item.id)) }"
+              @click="isSmall && toggleRow(String(item.id))">
             <td class="text-left name-column">
               <b>{{ item.place.name }}</b>
               <br/>
@@ -118,7 +118,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, getCurrentInstance } from 'vue'
 import { useExchangeStore } from '@/stores/exchange'
-import type { Place } from '@/api/ExchangeAPI'
+import type { Place, QueryResponseDetail } from '@/api/ExchangeAPI'
 import { formatDistance as formatDistanceFn } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -127,8 +127,8 @@ const instance = getCurrentInstance()
 const isSmall = ref(window.innerWidth < 600)
 
 // Only one row expanded at a time: opening a row closes the previous one
-const expanded = ref<number[]>([])
-const toggleRow = (id: number) => {
+const expanded = ref<string[]>([])
+const toggleRow = (id: string) => {
   expanded.value = expanded.value.includes(id) ? [] : [id]
 }
 const isMD = ref(window.innerWidth < 960)
