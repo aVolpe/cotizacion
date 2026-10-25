@@ -74,6 +74,27 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void familiarIsLoadedAsABankWithTheBranchesOfTheSite() {
+        Place familiar = places.findByCode("FAMILIAR").orElseThrow();
+        assertThat(familiar.getName()).isEqualTo("Banco Familiar");
+        assertThat(familiar.getType()).isEqualTo(Place.Type.BANK);
+        assertThat(branches.getByPlaceCodeAndActiveTrue("FAMILIAR"))
+                .hasSize(47)
+                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getPhoneNumber, PlaceBranch::getSchedule,
+                        PlaceBranch::getLatitude, PlaceBranch::getLongitude).doesNotContainNull());
+        assertThat(activeRemoteCodes("FAMILIAR")).contains("casa-matriz", "villa-morra", "cde-1", "encarnacion");
+    }
+
+    @Test
+    void familiarMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V16__Familiar.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
+    }
+
+    @Test
     void mundialBranchesUseTheTabsOfTheSiteAndKeepTheirData() {
         assertThat(branches.getByPlaceCodeAndActiveTrue("MUNDIAL"))
                 .extracting(PlaceBranch::getId, PlaceBranch::getRemoteCode, PlaceBranch::getName)
