@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -53,29 +54,23 @@ class MyDTest {
         assertEquals(11, vm.getDetails().size());
         assertEquals(11, as.getDetails().size());
 
-        assertEquals(5850, as.getDetails().get(0).getPurchasePrice());
-        assertEquals(5870, as.getDetails().get(0).getSalePrice());
-        assertEquals("USD", as.getDetails().get(0).getIsoCode());
+        assertEquals(Quote.of("USD", 5850), as.getDetails().get(0).getPurchase());
+        assertEquals(Quote.of("USD", 5870), as.getDetails().get(0).getSale());
 
-        assertEquals(1465, as.getDetails().get(1).getPurchasePrice());
-        assertEquals(1485, as.getDetails().get(1).getSalePrice());
-        assertEquals("BRL", as.getDetails().get(1).getIsoCode());
+        assertEquals(Quote.of("BRL", 1465), as.getDetails().get(1).getPurchase());
+        assertEquals(Quote.of("BRL", 1485), as.getDetails().get(1).getSale());
 
-        assertEquals(170, as.getDetails().get(10).getPurchasePrice());
-        assertEquals(260, as.getDetails().get(10).getSalePrice());
-        assertEquals("UYU", as.getDetails().get(10).getIsoCode());
+        assertEquals(Quote.of("UYU", 170), as.getDetails().get(10).getPurchase());
+        assertEquals(Quote.of("UYU", 260), as.getDetails().get(10).getSale());
 
-        assertEquals(5850, vm.getDetails().get(0).getPurchasePrice());
-        assertEquals(5870, vm.getDetails().get(0).getSalePrice());
-        assertEquals("USD", vm.getDetails().get(0).getIsoCode());
+        assertEquals(Quote.of("USD", 5850), vm.getDetails().get(0).getPurchase());
+        assertEquals(Quote.of("USD", 5870), vm.getDetails().get(0).getSale());
 
-        assertEquals(1465, vm.getDetails().get(1).getPurchasePrice());
-        assertEquals(1485, vm.getDetails().get(1).getSalePrice());
-        assertEquals("BRL", vm.getDetails().get(1).getIsoCode());
+        assertEquals(Quote.of("BRL", 1465), vm.getDetails().get(1).getPurchase());
+        assertEquals(Quote.of("BRL", 1485), vm.getDetails().get(1).getSale());
 
-        assertEquals(170, vm.getDetails().get(10).getPurchasePrice());
-        assertEquals(260, vm.getDetails().get(10).getSalePrice());
-        assertEquals("UYU", vm.getDetails().get(10).getIsoCode());
+        assertEquals(Quote.of("UYU", 170), vm.getDetails().get(10).getPurchase());
+        assertEquals(Quote.of("UYU", 260), vm.getDetails().get(10).getSale());
     }
 
     @Test

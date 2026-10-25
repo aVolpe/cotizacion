@@ -16,6 +16,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.repository.ExchangeRateRepository;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,8 @@ class ExchangeControllerTest {
         Date now = new Date();
         Date tenMinutesAgo = addMinutes(now, -10);
         Mockito.when(repo.getMaxByPlaceInISO("USD")).thenReturn(Arrays.asList(
-                new ExchangeRateRepository.ByIsoCodeResult(1, new Place(), new PlaceBranch(), 1, now, 1, 5000, 6000),
-                new ExchangeRateRepository.ByIsoCodeResult(2, new Place(), new PlaceBranch(), 2, tenMinutesAgo, 2, 6000, 7000)
+                new ExchangeRateRepository.ByIsoCodeResult(1, new Place(), new PlaceBranch(), 1, now, 1, new BigDecimal("5000.00"), new BigDecimal("6000.00")),
+                new ExchangeRateRepository.ByIsoCodeResult(2, new Place(), new PlaceBranch(), 2, tenMinutesAgo, 2, new BigDecimal("4.50"), new BigDecimal("3.45"))
         ));
 
         ExchangeController.ResultData data = restTemplate.getForEntity("/api/exchange/{cur}", ExchangeController.ResultData.class, "USD").getBody();
@@ -68,8 +69,8 @@ class ExchangeControllerTest {
 
         assertEquals(2, data.getCount());
         assertEquals(2, data.getData().size());
-        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getPurchasePrice).collect(Collectors.toList()), hasItems(6000L, 7000L));
-        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getSalePrice).collect(Collectors.toList()), hasItems(5000L, 6000L));
+        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getPurchasePrice).collect(Collectors.toList()), hasItems(new BigDecimal("6000.00"), new BigDecimal("3.45")));
+        assertThat(data.getData().stream().map(ExchangeRateRepository.ByIsoCodeResult::getSalePrice).collect(Collectors.toList()), hasItems(new BigDecimal("5000.00"), new BigDecimal("4.50")));
         assertEquals(tenMinutesAgo, data.getFirstQueryResult());
         assertEquals(now, data.getLastQueryResult());
 

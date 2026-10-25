@@ -11,7 +11,9 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -72,36 +74,34 @@ public class EuroCambios implements Gatherer {
         data.forEach(node -> {
             String currency = mapToISO(node.get("id").asString());
             if (currency == null) return;
-            var purchase = parseLong(node.get("compra").asString());
-            var sell = parseLong(node.get("venta").asString());
-            var lastPurchase = parseLong(node.get("compra_anterior").asString());
-            var lastSell = parseLong(node.get("venta_anterior").asString());
+            var purchase = parse(node.get("compra").asString());
+            var sell = parse(node.get("venta").asString());
+            var lastPurchase = parse(node.get("compra_anterior").asString());
+            var lastSell = parse(node.get("venta_anterior").asString());
 
             QueryResponseDetail toAdd = new QueryResponseDetail(
-                    purchase,
-                    sell,
-                    currency
+                    Quote.of(currency, purchase),
+                    Quote.of(currency, sell)
             );
-            toAdd.setPurchaseTrend(Long.compare(purchase, lastPurchase));
-            toAdd.setSaleTrend(Long.compare(sell, lastSell));
+            toAdd.setPurchaseTrend(purchase.compareTo(lastPurchase));
+            toAdd.setSaleTrend(sell.compareTo(lastSell));
             toRet.add(toAdd);
         });
         return toRet;
     }
 
     /**
-     * Parses a string in the format `9400.00` as 9400L
+     * Parses a string in the format `9400.00` as 9400.00 and `4.20` as 4.20
      *
      * @param asStr the string to parse
-     * @return the long value
+     * @return the price
      */
-    private long parseLong(String asStr) {
+    private BigDecimal parse(String asStr) {
         try {
-            double asDbl = Double.parseDouble(asStr);
-            return Math.round(asDbl);
+            return new BigDecimal(asStr.trim());
         } catch (NumberFormatException e) {
             log.warn("Can't parse value {}", asStr, e);
-            return 0L;
+            return BigDecimal.ZERO;
         }
     }
 

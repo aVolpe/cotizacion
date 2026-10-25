@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,6 +46,7 @@ public class FeCambios implements Gatherer {
                 QueryResponse toRet = new QueryResponse(branch);
                 exchangeDat.stream()
                         .map(this::scrapeData)
+                        .filter(Objects::nonNull)
                         .forEach(toRet::addDetail);
 
                 return toRet;
@@ -60,10 +62,12 @@ public class FeCambios implements Gatherer {
 
     private QueryResponseDetail scrapeData(Element e) {
 
+        String iso = mapToISO(e.select("h3").first().text());
+        if (iso == null) return null;
+
         return new QueryResponseDetail(
-                parseAmount(e.select("strong").first().text()),
-                parseAmount(e.select("strong").last().text()),
-                mapToISO(e.select("h3").first().text()));
+                Quote.parseLocal(iso, e.select("strong").first().text()),
+                Quote.parseLocal(iso, e.select("strong").last().text()));
     }
 
     @Override
@@ -82,12 +86,6 @@ public class FeCambios implements Gatherer {
         String[] parts = data.split(",");
 
         return Pair.of(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-
-    }
-
-    protected Long parseAmount(String amount) {
-        return Long.parseLong(amount.substring(0, amount.indexOf(','))
-                .replace(".", ""));
 
     }
 

@@ -14,6 +14,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -57,12 +58,9 @@ class MundialTest {
         assertFalse(exchanges.isEmpty());
 
         exchanges.forEach(System.out::println);
-    }
 
-    @Test
-    void parseTest() {
-        assertEquals(7000L, Mundial.parse("7.000"), 0);
-        assertEquals(6780L, Mundial.parse("6.780"), 0);
-
+        QueryResponseDetail usd = exchanges.stream().filter(d -> d.getIsoCode().equals("USD")).findFirst().orElseThrow();
+        assertEquals(Quote.of("USD", 6780), usd.getPurchase());
+        assertEquals(Quote.of("USD", 6950), usd.getSale());
     }
 }

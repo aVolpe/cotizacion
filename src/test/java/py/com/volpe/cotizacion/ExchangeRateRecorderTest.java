@@ -4,18 +4,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 import py.com.volpe.cotizacion.domain.Execution;
 import py.com.volpe.cotizacion.domain.ExchangeRate;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 import py.com.volpe.cotizacion.repository.ExchangeRateRepository;
 import py.com.volpe.cotizacion.repository.ExchangeRateRepository.ByIsoCodeResult;
 import py.com.volpe.cotizacion.repository.ExecutionRepository;
 import py.com.volpe.cotizacion.repository.PlaceRepository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +48,12 @@ class ExchangeRateRecorderTest {
     @Autowired
     private PlaceRepository places;
 
+    @Autowired
+    private JdbcTemplate jdbc;
+
+    @Autowired
+    private TestEntityManager em;
+
     private final Date start = new Date(1_760_000_000_000L);
 
     @Test
@@ -55,9 +65,9 @@ class ExchangeRateRecorderTest {
         record(branch, 20, "USD", 7000, 7100);
 
         assertThat(history(branch, "USD"))
-                .extracting(ExchangeRate::getPurchasePrice, ExchangeRate::getSalePrice, ExchangeRate::getFirstSeen,
+                .extracting(ExchangeRate::getPurchase, ExchangeRate::getSale, ExchangeRate::getFirstSeen,
                         ExchangeRate::getLastSeen, ExchangeRate::isLatest)
-                .containsExactly(tuple(7000L, 7100L, at(0), at(20), true));
+                .containsExactly(tuple(Quote.of("USD", 7000), Quote.of("USD", 7100), at(0), at(20), true));
     }
 
     @Test
@@ -69,12 +79,12 @@ class ExchangeRateRecorderTest {
         record(branch, 20, "USD", 7000, 7100);
 
         assertThat(history(branch, "USD"))
-                .extracting(ExchangeRate::getPurchasePrice, ExchangeRate::getFirstSeen, ExchangeRate::getLastSeen,
+                .extracting(ExchangeRate::getPurchase, ExchangeRate::getFirstSeen, ExchangeRate::getLastSeen,
                         ExchangeRate::isLatest)
                 .containsExactly(
-                        tuple(7000L, at(0), at(0), false),
-                        tuple(7010L, at(10), at(10), false),
-                        tuple(7000L, at(20), at(20), true));
+                        tuple(Quote.of("USD", 7000), at(0), at(0), false),
+                        tuple(Quote.of("USD", 7010), at(10), at(10), false),
+                        tuple(Quote.of("USD", 7000), at(20), at(20), true));
     }
 
     @Test
@@ -122,8 +132,67 @@ class ExchangeRateRecorderTest {
         assertThat(latest)
                 .extracting(r -> r.getBranch().getId(), ByIsoCodeResult::getQueryId, r -> r.getQueryDate().getTime(),
                         ByIsoCodeResult::getPurchasePrice, ByIsoCodeResult::getSalePrice)
-                .containsExactly(tuple(seenByBoth.getId(), second.getId(), at(10).getTime(), 7000L, 7100L));
+                .containsExactly(tuple(seenByBoth.getId(), second.getId(), at(10).getTime(), new BigDecimal("7000.00"),
+                        new BigDecimal("7100.00")));
         assertThat(rates.getMaxByPlaceInISO("EUR")).isEmpty();
+    }
+
+    @Test
+    void thePricesAreStoredWithTwoDecimals() {
+        assertThat(jdbc.queryForList("""
+                SELECT column_name, data_type, numeric_precision, numeric_scale
+                FROM information_schema.columns
+                WHERE table_name = 'exchange_rate' AND column_name IN ('purchase_price', 'sale_price')
+                ORDER BY column_name"""))
+                .extracting(c -> c.get("column_name"), c -> c.get("data_type"), c -> c.get("numeric_precision"),
+                        c -> c.get("numeric_scale"))
+                .containsExactly(
+                        tuple("purchase_price", "numeric", 14, 2),
+                        tuple("sale_price", "numeric", 14, 2));
+    }
+
+    @Test
+    void aPriceWithDecimalsIsReadAsItWasRecorded() {
+        PlaceBranch branch = branch("MUNDIAL");
+
+        record(branch, 0, Quote.of("ARS", "3.45"), Quote.of("ARS", "4.5"));
+        em.flush();
+        em.clear();
+
+        assertThat(history(branch, "ARS"))
+                .extracting(ExchangeRate::getPurchase, ExchangeRate::getSale)
+                .containsExactly(tuple(Quote.of("ARS", "3.45"), Quote.of("ARS", "4.50")));
+        assertThat(rates.getMaxByPlaceInISO("ARS"))
+                .extracting(ByIsoCodeResult::getPurchasePrice, ByIsoCodeResult::getSalePrice)
+                .containsExactly(tuple(new BigDecimal("3.45"), new BigDecimal("4.50")));
+    }
+
+    @Test
+    void theSameValueWithOtherScaleIsTheSamePrice() {
+        PlaceBranch branch = branch("MUNDIAL");
+
+        record(branch, 0, Quote.of("ARS", "3.4"), Quote.of("ARS", "5"));
+        em.flush();
+        em.clear();
+        record(branch, 10, Quote.of("ARS", "3.40"), Quote.of("ARS", "5.00"));
+
+        assertThat(history(branch, "ARS"))
+                .extracting(ExchangeRate::getPurchase, r -> r.getFirstSeen().getTime(), r -> r.getLastSeen().getTime())
+                .containsExactly(tuple(Quote.of("ARS", "3.40"), at(0).getTime(), at(10).getTime()));
+    }
+
+    @Test
+    void aChangeInTheDecimalsAddsARow() {
+        PlaceBranch branch = branch("MUNDIAL");
+
+        record(branch, 0, Quote.of("ARS", "3.45"), Quote.of("ARS", "5"));
+        record(branch, 10, Quote.of("ARS", "3.46"), Quote.of("ARS", "5"));
+
+        assertThat(history(branch, "ARS"))
+                .extracting(ExchangeRate::getPurchase, ExchangeRate::isLatest)
+                .containsExactly(
+                        tuple(Quote.of("ARS", "3.45"), false),
+                        tuple(Quote.of("ARS", "3.46"), true));
     }
 
     private PlaceBranch branch(String placeCode) {
@@ -131,12 +200,20 @@ class ExchangeRateRecorderTest {
     }
 
     private void record(PlaceBranch branch, int minute, String iso, long purchase, long sale) {
-        recorder.record(response(new QueryResponse(branch), minute, iso, purchase, sale), executions.save(new Execution()));
+        record(branch, minute, Quote.of(iso, purchase), Quote.of(iso, sale));
+    }
+
+    private void record(PlaceBranch branch, int minute, Quote purchase, Quote sale) {
+        recorder.record(response(new QueryResponse(branch), minute, purchase, sale), executions.save(new Execution()));
     }
 
     private QueryResponse response(QueryResponse response, int minute, String iso, long purchase, long sale) {
+        return response(response, minute, Quote.of(iso, purchase), Quote.of(iso, sale));
+    }
+
+    private QueryResponse response(QueryResponse response, int minute, Quote purchase, Quote sale) {
         response.setDate(at(minute));
-        return response.addDetail(new QueryResponseDetail(purchase, sale, iso));
+        return response.addDetail(new QueryResponseDetail(purchase, sale));
     }
 
     private List<ExchangeRate> history(PlaceBranch branch, String iso) {

@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -56,7 +57,6 @@ public class Mercosur implements Gatherer {
         List<QueryResponseDetail> toRet = new ArrayList<>();
 
         for (Element e : doc.select("table tbody tr")) {
-            QueryResponseDetail ed = new QueryResponseDetail();
             Elements columns = e.getElementsByTag("th");
 
             if (columns.size() != 5) continue;
@@ -66,18 +66,19 @@ public class Mercosur implements Gatherer {
                 continue;
             }
 
-            ed.setIsoCode(currency);
-            ed.setPurchasePrice(parseNumber(columns.get(3).text()));
-            ed.setSalePrice(parseNumber(columns.get(4).text()));
-
-            toRet.add(ed);
+            toRet.add(new QueryResponseDetail(
+                    parseQuote(currency, columns.get(3).text()),
+                    parseQuote(currency, columns.get(4).text())));
         }
         return toRet;
     }
 
-    private long parseNumber(String text) {
-        if (text == null || text.isEmpty()) return 0L;
-        return Long.parseLong(text);
+    /**
+     * The site has no thousand separator (7380), a decimal separator ('.' or ',') is accepted.
+     */
+    private Quote parseQuote(String currency, String text) {
+        if (text == null || text.isEmpty()) return Quote.of(currency, 0);
+        return Quote.of(currency, text.replace(",", "."));
     }
 
     protected String getCurrency(String baseText) {

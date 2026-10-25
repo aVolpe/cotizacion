@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -59,8 +60,8 @@ class FeCambiosTest {
                 .filter(d -> d.getIsoCode().equals("USD"))
                 .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-        assertEquals(5830, qrdAsuncion.getPurchasePrice());
-        assertEquals(5890, qrdAsuncion.getSalePrice());
+        assertEquals(Quote.of("USD", 5830), qrdAsuncion.getPurchase());
+        assertEquals(Quote.of("USD", 5890), qrdAsuncion.getSale());
     }
 
 }

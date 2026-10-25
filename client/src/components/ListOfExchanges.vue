@@ -172,7 +172,7 @@ const multiply = (value: number, multiplier: number = 1) => {
 
 const formatNumber = (value: any) => {
   if (typeof value !== 'number') return value
-  return value.toLocaleString('es-PY')
+  return value.toLocaleString('es-PY', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 }
 
 const formatDistance = (value: string) => {

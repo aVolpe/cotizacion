@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -51,18 +52,13 @@ class VisionBancoTest {
 
 
         assertThat(
-                response.get(0).getDetails().stream().map(QueryResponseDetail::getIsoCode).collect(Collectors.toList()),
-                hasItems("EUR", "USD", "BRL", "ARS")
+                response.get(0).getDetails().stream().map(QueryResponseDetail::getPurchase).collect(Collectors.toList()),
+                hasItems(Quote.of("USD", 5785), Quote.of("BRL", 1350), Quote.of("ARS", 140), Quote.of("EUR", 6550))
         );
 
         assertThat(
-                response.get(0).getDetails().stream().map(QueryResponseDetail::getPurchasePrice).collect(Collectors.toList()),
-                hasItems(5785L, 1350L, 140L, 6550L)
-        );
-
-        assertThat(
-                response.get(0).getDetails().stream().map(QueryResponseDetail::getSalePrice).collect(Collectors.toList()),
-                hasItems(5830L, 1410L, 160L, 6850L)
+                response.get(0).getDetails().stream().map(QueryResponseDetail::getSale).collect(Collectors.toList()),
+                hasItems(Quote.of("USD", 5830), Quote.of("BRL", 1410), Quote.of("ARS", 160), Quote.of("EUR", 6850))
         );
 
         System.out.println(response.get(0).getDetails());

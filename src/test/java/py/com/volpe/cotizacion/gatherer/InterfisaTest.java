@@ -12,6 +12,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -59,17 +60,17 @@ class InterfisaTest {
         assertEquals(1, response.size());
 
 
-        assertEquals(5910, getDetail(response.get(0), "USD").getPurchasePrice());
-        assertEquals(6030, getDetail(response.get(0), "USD").getSalePrice());
+        assertEquals(Quote.of("USD", 5910), getDetail(response.get(0), "USD").getPurchase());
+        assertEquals(Quote.of("USD", 6030), getDetail(response.get(0), "USD").getSale());
 
-        assertEquals(1500, getDetail(response.get(0), "BRL").getPurchasePrice());
-        assertEquals(1600, getDetail(response.get(0), "BRL").getSalePrice());
+        assertEquals(Quote.of("BRL", 1500), getDetail(response.get(0), "BRL").getPurchase());
+        assertEquals(Quote.of("BRL", 1600), getDetail(response.get(0), "BRL").getSale());
 
-        assertEquals(6400, getDetail(response.get(0), "EUR").getPurchasePrice());
-        assertEquals(6900, getDetail(response.get(0), "EUR").getSalePrice());
+        assertEquals(Quote.of("EUR", 6400), getDetail(response.get(0), "EUR").getPurchase());
+        assertEquals(Quote.of("EUR", 6900), getDetail(response.get(0), "EUR").getSale());
 
-        assertEquals(130, getDetail(response.get(0), "ARS").getPurchasePrice());
-        assertEquals(170, getDetail(response.get(0), "ARS").getSalePrice());
+        assertEquals(Quote.of("ARS", 130), getDetail(response.get(0), "ARS").getPurchase());
+        assertEquals(Quote.of("ARS", 170), getDetail(response.get(0), "ARS").getSale());
     }
 
     private QueryResponseDetail getDetail(QueryResponse response, String iso) {

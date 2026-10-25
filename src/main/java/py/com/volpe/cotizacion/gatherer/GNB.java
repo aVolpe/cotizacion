@@ -12,6 +12,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -38,9 +39,8 @@ public class GNB implements Gatherer {
 
         for (Exchange info : parsed.getExchangeRates()) {
             toRet.addDetail(new QueryResponseDetail(
-                    info.getCashBuyPrice().longValue(),
-                    info.getCashSellPrice().longValue(),
-                    info.getCurrencyCode()
+                    Quote.of(info.getCurrencyCode(), info.getCashBuyPrice()),
+                    Quote.of(info.getCurrencyCode(), info.getCashSellPrice())
             ));
         }
 
@@ -66,12 +66,6 @@ public class GNB implements Gatherer {
         return "GNB";
     }
 
-
-    protected Long parseAmount(String amount) {
-        return Long.parseLong(amount.substring(0, amount.indexOf(','))
-                .replace(".", ""));
-
-    }
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

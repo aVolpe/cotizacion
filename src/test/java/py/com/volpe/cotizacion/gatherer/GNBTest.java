@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -66,11 +67,11 @@ class GNBTest {
             QueryResponseDetail usd = qr.getDetails().stream().filter(q -> q.getIsoCode().equals("USD")).findFirst().orElse(null);
             QueryResponseDetail eur = qr.getDetails().stream().filter(q -> q.getIsoCode().equals("EUR")).findFirst().orElse(null);
 
-            assertEquals(7220, usd.getPurchasePrice());
-            assertEquals(7380, usd.getSalePrice());
+            assertEquals(Quote.of("USD", 7220), usd.getPurchase());
+            assertEquals(Quote.of("USD", 7380), usd.getSale());
 
-            assertEquals(7570, eur.getPurchasePrice());
-            assertEquals(8310, eur.getSalePrice());
+            assertEquals(Quote.of("EUR", 7570), eur.getPurchase());
+            assertEquals(Quote.of("EUR", 8310), eur.getSale());
 
 
         }

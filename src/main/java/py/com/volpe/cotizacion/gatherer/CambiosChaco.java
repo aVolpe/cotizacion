@@ -14,8 +14,10 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Objects;
@@ -59,7 +61,7 @@ public class CambiosChaco implements Gatherer {
                 BranchExchangeData data = buildMapper().readValue(query, BranchExchangeData.class);
                 data.getItems()
                         .forEach(d -> {
-                            if (d.getPurchasePrice() > 0) {
+                            if (d.getPurchasePrice() != null && d.getPurchasePrice().signum() > 0) {
                                 qr.addDetail(d.map());
                             }
                         });
@@ -112,16 +114,13 @@ public class CambiosChaco implements Gatherer {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BranchExchangeDetailsData {
         private String isoCode;
-        private long purchasePrice;
-        private long salePrice;
+        private BigDecimal purchasePrice;
+        private BigDecimal salePrice;
         private long purchaseTrend;
         private long saleTrend;
 
         public QueryResponseDetail map() {
-            QueryResponseDetail toRet = new QueryResponseDetail();
-            toRet.setIsoCode(isoCode);
-            toRet.setPurchasePrice(purchasePrice);
-            toRet.setSalePrice(salePrice);
+            QueryResponseDetail toRet = new QueryResponseDetail(Quote.of(isoCode, purchasePrice), Quote.of(isoCode, salePrice));
             toRet.setPurchaseTrend(purchaseTrend);
             toRet.setSaleTrend(saleTrend);
             return toRet;

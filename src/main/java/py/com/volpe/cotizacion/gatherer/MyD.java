@@ -14,6 +14,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,17 +52,13 @@ public class MyD implements Gatherer {
                     fullTable.forEach(data -> {
 
                         String isoCode = getISOName(data);
-                        Long purchase = parse(data.getPurchasePrice());
-                        Long sale = parse(data.getSalePrice());
+                        if (isoCode == null) return;
 
-                        if (isoCode == null || purchase < 1 || sale < 1) {
-                            return;
-                        }
+                        Quote purchase = parse(isoCode, data.getPurchasePrice());
+                        Quote sale = parse(isoCode, data.getSalePrice());
+                        if (purchase.amount().signum() <= 0 || sale.amount().signum() <= 0) return;
 
-                        qr.addDetail(new QueryResponseDetail(
-                                parse(data.getPurchasePrice()),
-                                parse(data.getSalePrice()),
-                                isoCode));
+                        qr.addDetail(new QueryResponseDetail(purchase, sale));
                     });
 
                     return qr;
@@ -131,8 +128,11 @@ public class MyD implements Gatherer {
         return img.substring(img.lastIndexOf('/') + 1, img.lastIndexOf('.'));
     }
 
-    private static Long parse(String s) {
-        return Long.parseLong(s.replaceAll(",", "").replaceAll("\\..*", ""));
+    /**
+     * ',' as thousand separator and '.' as decimal separator: '5,850.50'.
+     */
+    private static Quote parse(String isoCode, String s) {
+        return Quote.of(isoCode, s.replace(",", ""));
     }
 
     @Value

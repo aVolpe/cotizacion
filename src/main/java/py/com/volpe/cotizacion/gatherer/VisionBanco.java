@@ -12,6 +12,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,10 +49,11 @@ public class VisionBanco implements Gatherer {
 
         for (Element e : exchanges) {
             Elements columns = e.select("td");
+            String iso = getISOName(columns.get(0).text().trim());
+            if (iso == null) continue;
             qr.addDetail(new QueryResponseDetail(
-                    parse(columns.get(1).text()),
-                    parse(columns.get(2).text()),
-                    getISOName(columns.get(0).text().trim())
+                    parse(iso, columns.get(1).text()),
+                    parse(iso, columns.get(2).text())
             ));
         }
 
@@ -70,12 +72,10 @@ public class VisionBanco implements Gatherer {
 
     }
 
-    private static Long parse(String s) {
-        return Long.parseLong(s
+    private static Quote parse(String iso, String s) {
+        return Quote.parseLocal(iso, s
                 .replace("compra", "")
-                .replace("venta", "")
-                .trim()
-                .replaceAll("\\.", ""));
+                .replace("venta", ""));
     }
 
     @Override

@@ -12,7 +12,9 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,7 @@ public class Interfisa implements Gatherer {
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        Map<String, Pair<Long, Long>> data = getParsedData();
+        Map<String, Pair<BigDecimal, BigDecimal>> data = getParsedData();
 
         QueryResponse qr = new QueryResponse(place);
 
@@ -49,9 +51,8 @@ public class Interfisa implements Gatherer {
             }
             qr.addDetail(
                     new QueryResponseDetail(
-                            value.getFirst(),
-                            value.getSecond(),
-                            iso));
+                            Quote.of(iso, value.getFirst()),
+                            Quote.of(iso, value.getSecond())));
         });
 
         return Collections.singletonList(qr);
@@ -97,10 +98,10 @@ public class Interfisa implements Gatherer {
         };
     }
 
-    private Map<String, Pair<Long, Long>> getParsedData() {
+    private Map<String, Pair<BigDecimal, BigDecimal>> getParsedData() {
 
         try {
-            Map<String, Pair<Long, Long>> toRet = new HashMap<>();
+            Map<String, Pair<BigDecimal, BigDecimal>> toRet = new HashMap<>();
             String json = helper.doGet(WS_EXCHANGE);
 
             ObjectMapper om = new ObjectMapper();
@@ -109,7 +110,8 @@ public class Interfisa implements Gatherer {
             JsonNode currencyDataList = data.get("operacionResponse").get("cotizaciones").get("monedaCot");
             for (JsonNode currencyData : currencyDataList) {
                 toRet.put(currencyData.get("descripcion").asString(),
-                        Pair.of(currencyData.get("compra").asLong(), currencyData.get("venta").asLong()));
+                        Pair.of(new BigDecimal(currencyData.get("compra").asString().trim()),
+                                new BigDecimal(currencyData.get("venta").asString().trim())));
             }
 
 
