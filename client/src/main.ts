@@ -18,7 +18,7 @@ app.use(vuetify)
 app.use(head)
 app.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyAcZVbIDdV7dM8nAiIPsCXnjUY51gXZPJI'
+    key: 'AIzaSyD5B_25oxK_RgkrWVhZP9TIziAdwh3z9z4'
   }
 })
 
