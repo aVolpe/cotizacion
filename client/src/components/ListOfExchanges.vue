@@ -66,8 +66,9 @@
           />
         </template>
 
-        <template v-slot:item="{ item }">
-          <tr>
+        <template v-slot:item="{ item, internalItem, isExpanded, toggleExpand }">
+          <tr :class="{ 'expandable-row': isSmall, 'expanded-row': isSmall && isExpanded(internalItem) }"
+              @click="isSmall && toggleExpand(internalItem)">
             <td class="text-left name-column">
               <b>{{ item.place.name }}</b>
               <br/>
@@ -84,6 +85,22 @@
                  v-if="item.place.type === 'BUREAU' && item.branch.gmaps" target="_blank">
                 <v-icon>mdi-map</v-icon>
               </a>
+            </td>
+          </tr>
+        </template>
+
+        <!-- On phones the actions column is hidden, tapping a row shows the actions below it -->
+        <template v-slot:expanded-row="{ columns, item }">
+          <tr v-if="isSmall" class="row-actions">
+            <td :colspan="columns.length" class="text-right">
+              <v-btn variant="text" color="primary" prepend-icon="mdi-information"
+                     @click="store.showExchangeData(item)">
+                Ver detalles
+              </v-btn>
+              <v-btn variant="text" prepend-icon="mdi-map" :href="item.branch.gmaps" target="_blank"
+                     v-if="item.place.type === 'BUREAU' && item.branch.gmaps">
+                Mapa
+              </v-btn>
             </td>
           </tr>
         </template>
@@ -212,6 +229,18 @@ watch(() => store.currentPlaces, (places) => {
 
     .v-data-table tbody tr {
         border-top: 8px solid transparent;
+    }
+
+    .expandable-row {
+        cursor: pointer;
+    }
+
+    .expanded-row td {
+        border-bottom: none !important;
+    }
+
+    .v-data-table tbody tr.row-actions {
+        border-top: none;
     }
 
     .combined-input {
