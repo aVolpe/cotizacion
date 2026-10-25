@@ -120,7 +120,7 @@ import { ref, computed, watch, getCurrentInstance } from 'vue'
 import { useExchangeStore } from '@/stores/exchange'
 import type { Place } from '@/api/ExchangeAPI'
 import { formatDistance as formatDistanceFn } from 'date-fns'
-import es from 'date-fns/locale/es'
+import { es } from 'date-fns/locale'
 
 const store = useExchangeStore()
 const instance = getCurrentInstance()

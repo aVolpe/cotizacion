@@ -27,20 +27,53 @@ function addMinutes(date: Date, minutes: number): Date {
   return new Date(date.getTime() + minutes * 60000)
 }
 
+// Links each branch to its place and its Google Maps url
+function withBranchLinks(result: ExchangeDataDTO): ExchangeDataDTO {
+  for (const row of result.data) {
+    if (row.branch) {
+      row.branch.place = row.place
+      row.branch.gmaps = getGmap(row.branch)
+    }
+  }
+  return result
+}
+
+interface SSRState {
+  exchanges: { [k: string]: Loaded<ExchangeDataDTO> }
+  currencies: Loaded<string[]>
+  current: { currency: string, amount: number }
+}
+
+// Data of the first screen rendered by the backend (SSR.java), null when served without it (vite dev/preview)
+function readSSR(): SSRState | null {
+  const raw = (window as any).ssr
+  if (typeof raw !== 'string') return null
+  try {
+    const state: SSRState = JSON.parse(raw)
+    Object.values(state.exchanges).forEach(e => e.data && withBranchLinks(e.data))
+    return state
+  } catch (e) {
+    console.warn("Can't read the pre-rendered data", e)
+    return null
+  }
+}
+
 export const useExchangeStore = defineStore('exchange', () => {
+  const ssr = readSSR()
+
   // State
-  const currencies = ref<Loaded<string[]>>({
+  const currencies = ref<Loaded<string[]>>(ssr?.currencies || {
     loading: false,
     loaded: false
   })
 
-  const branches = ref<{ [k: string]: Loaded<Branch> }>({})
+  const branches = ref<{ [k: string]: Loaded<Branch[]> }>({})
 
-  const exchanges = ref<{ [k: string]: Loaded<ExchangeDataDTO> }>({})
+  const exchanges = ref<{ [k: string]: Loaded<ExchangeDataDTO> }>(ssr?.exchanges || {})
 
   const current = ref({
-    currency: 'USD',
-    amount: 1,
+    currency: ssr?.current.currency || 'USD',
+    amount: ssr?.current.amount || 1,
     place: undefined as number | undefined
   })
 
@@ -191,8 +224,9 @@ export const useExchangeStore = defineStore('exchange', () => {
   }
 
   async function init() {
-    fetchCurrencies()
     fetchExchange('USD')
+    if (currencies.value.loaded) return
+    fetchCurrencies()
     currencies.value = {
       loading: false,
       loaded: true,
@@ -242,18 +276,10 @@ export const useExchangeStore = defineStore('exchange', () => {
 
     if (result === null) return
 
-    const toRet: QueryResponseDetail[] = []
-
-    for (const row of result.data) {
-      if (row.branch) {
-        row.branch.place = row.place
-        row.branch.gmaps = getGmap(row.branch)
-      }
-      toRet.push(row)
-    }
+    withBranchLinks(result)
 
     if (current.value.place) {
-      const countOfCurrentPlace = toRet.filter(tr => tr.place.id === current.value.place).length
+      const countOfCurrentPlace = result.data.filter(tr => tr.place.id === current.value.place).length
       if (countOfCurrentPlace === 0) {
         clearCurrentPlace()
       }
@@ -264,13 +290,7 @@ export const useExchangeStore = defineStore('exchange', () => {
       [isoCode]: {
         loading: false,
         loaded: true,
-        data: {
-          ...result,
-          lastQueryResult: result.lastQueryResult,
-          firstQueryResult: result.firstQueryResult,
-          count: result.count,
-          data: toRet
-        }
+        data: result
       }
     }
   }

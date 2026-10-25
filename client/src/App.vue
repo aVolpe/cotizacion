@@ -113,10 +113,7 @@ useHead({
       content: 'Cotizaciones de varias casas de cambio del Paraguay, actualizado cada 10 minutos.'
     },
     { name: 'twitter:creator', content: '@cochoVolpe' },
-    { name: 'twitter:image:src', content: 'https://blog.volpe.com.py/static/img/avatar.jpg' },
-    { itemprop: 'name', content: 'Cotizaciones del paraguay' },
-    { itemprop: 'description', content: 'Cotizaciones del paraguay' },
-    { itemprop: 'image', content: 'https://blog.volpe.com.py/static/img/avatar.jpg' }
+    { name: 'twitter:image:src', content: 'https://blog.volpe.com.py/static/img/avatar.jpg' }
   ]
 })
 

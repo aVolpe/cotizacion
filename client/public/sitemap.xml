@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/?moneda=EUR</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/?moneda=BRL</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/?moneda=ARS</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/map</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/licenses</loc>
+  </url>
+  <url>
+    <loc>https://cotizaciones.volpe.com.py/swagger</loc>
+  </url>
+</urlset>

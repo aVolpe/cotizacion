@@ -70,7 +70,7 @@
         <v-row v-if="props.data.place.branches && props.data.place.branches.length">
           <v-data-table
             :headers="headers"
-            :items="props.data.place.branches"
+            :items="(props.data.place.branches as Branch[])"
             :items-per-page="itemsPerPage"
             v-model:page="page"
             :sort-by="[{ key: 'name', order: 'asc' }]"

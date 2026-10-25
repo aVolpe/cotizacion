@@ -65,7 +65,7 @@ import type { QueryResponseDetail } from '@/api/ExchangeAPI'
 
 const store = useExchangeStore()
 const mapRef = ref()
-const selected = ref('')
+const selected = ref<number | null>(null)
 
 const height = window.innerWidth < 600
   ? window.innerHeight - 46 - 56 - 20

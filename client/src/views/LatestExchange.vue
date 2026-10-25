@@ -34,6 +34,6 @@ onMounted(() => {
   if (Array.isArray(str)) finalCurrency = str[0] || 'USD'
   if (typeof str === 'string') finalCurrency = str
   store.fetchCurrencyData(finalCurrency)
-  store.fetchCurrencies()
+  if (!store.currencies.loaded) store.fetchCurrencies()
 })
 </script>
