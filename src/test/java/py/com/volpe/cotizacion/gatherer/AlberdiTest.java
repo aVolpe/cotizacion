@@ -1,7 +1,8 @@
 package py.com.volpe.cotizacion.gatherer;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ class AlberdiTest {
             return new ObjectMapper()
                     .readValue(fileIS, new TypeReference<Map<String, PlaceBranch>>() {
                     });
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new AppException(500, "Can't read branch file", e);
         }
     }

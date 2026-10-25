@@ -1,7 +1,7 @@
 package py.com.volpe.cotizacion.gatherer;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.util.Pair;
@@ -108,7 +108,7 @@ public class Interfisa implements Gatherer {
 
             JsonNode currencyDataList = data.get("operacionResponse").get("cotizaciones").get("monedaCot");
             for (JsonNode currencyData : currencyDataList) {
-                toRet.put(currencyData.get("descripcion").asText(),
+                toRet.put(currencyData.get("descripcion").asString(),
                         Pair.of(currencyData.get("compra").asLong(), currencyData.get("venta").asLong()));
             }
 

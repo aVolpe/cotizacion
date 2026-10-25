@@ -1,8 +1,9 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -69,7 +70,7 @@ public class CambiosChaco implements Gatherer {
             log.warn("calling the branch {} (remote {}) resulted in a timeout after 5000 milliseconds",
                     branch.getId(), branch.getRemoteCode());
             return null;
-        } catch (IOException e) {
+        } catch (IOException | JacksonException e) {
             throw new AppException(500, "cant read response from chaco branch: " + branch.getId(), e);
         }
     }
@@ -90,7 +91,7 @@ public class CambiosChaco implements Gatherer {
             p.setBranches(res.stream().map(d -> d.map(p)).collect(Collectors.toList()));
 
             return p;
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new AppException(500, "Can't read the body to build the place (chaco)", e);
         }
     }

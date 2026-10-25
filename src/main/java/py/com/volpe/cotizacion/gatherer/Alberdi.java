@@ -1,8 +1,9 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +15,6 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class Alberdi implements Gatherer {
             return buildMapper()
                     .readValue(queryResult, new TypeReference<>() {
                     });
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new AppException(500, "cant parse the result of alberdi ws", e);
         }
     }

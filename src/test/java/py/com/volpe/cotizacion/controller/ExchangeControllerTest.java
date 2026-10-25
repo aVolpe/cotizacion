@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import py.com.volpe.cotizacion.Cotizacion;
 import py.com.volpe.cotizacion.EmbeddedPostgresConfiguration;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 5/12/18
  */
 @SpringBootTest(classes = Cotizacion.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 @Import(EmbeddedPostgresConfiguration.class)
 @ExtendWith(SpringExtension.class)
 class ExchangeControllerTest {
@@ -35,7 +37,7 @@ class ExchangeControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @MockBean
+    @MockitoBean
     private ExchangeRateRepository repo;
 
     @Test

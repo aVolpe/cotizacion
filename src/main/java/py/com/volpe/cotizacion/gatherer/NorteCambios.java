@@ -1,7 +1,7 @@
 package py.com.volpe.cotizacion.gatherer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
@@ -102,10 +102,10 @@ public class NorteCambios implements Gatherer {
                                     "params", List.of(Integer.parseInt(branchId))))))));
 
             String response = client.postJson(UPDATE_URL, body);
-            String html = mapper.readTree(response).path("components").path(0).path("effects").path("html").asText();
+            String html = mapper.readTree(response).path("components").path(0).path("effects").path("html").asString();
 
             return parseTable(Jsoup.parse(html));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new AppException(500, "Invalid response from Norte Cambios (branch: " + branchId + ")", e);
         }
     }
