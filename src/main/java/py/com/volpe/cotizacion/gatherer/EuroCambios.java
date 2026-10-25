@@ -1,8 +1,8 @@
 package py.com.volpe.cotizacion.gatherer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -63,19 +63,19 @@ public class EuroCambios implements Gatherer {
         JsonNode data;
         try {
             data = mapper.readTree(page);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.warn("Can't parse data of {} of branch {}", getCode(), id, e);
             return Collections.emptyList();
         }
         List<QueryResponseDetail> toRet = new ArrayList<>();
 
         data.forEach(node -> {
-            String currency = mapToISO(node.get("id").asText());
+            String currency = mapToISO(node.get("id").asString());
             if (currency == null) return;
-            var purchase = parseLong(node.get("compra").asText());
-            var sell = parseLong(node.get("venta").asText());
-            var lastPurchase = parseLong(node.get("compra_anterior").asText());
-            var lastSell = parseLong(node.get("venta_anterior").asText());
+            var purchase = parseLong(node.get("compra").asString());
+            var sell = parseLong(node.get("venta").asString());
+            var lastPurchase = parseLong(node.get("compra_anterior").asString());
+            var lastSell = parseLong(node.get("venta_anterior").asString());
 
             QueryResponseDetail toAdd = new QueryResponseDetail(
                     purchase,

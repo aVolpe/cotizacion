@@ -31,7 +31,7 @@ public class LicenseControllerTest {
         LicenseController lc = new LicenseController(loader);
 
         ResponseEntity<Object> re = lc.getLicenses();
-        assertEquals(404, re.getStatusCodeValue());
+        assertEquals(404, re.getStatusCode().value());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class LicenseControllerTest {
         LicenseController lc = new LicenseController(loader);
 
         ResponseEntity<Object> re = lc.getLicenses();
-        assertEquals(200, re.getStatusCodeValue());
+        assertEquals(200, re.getStatusCode().value());
         String body = IOUtils.toString(((InputStreamResource) re.getBody()).getInputStream(), StandardCharsets.UTF_8);
         assertEquals("test", body);
     }

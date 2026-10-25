@@ -1,7 +1,7 @@
 package py.com.volpe.cotizacion.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -39,7 +39,7 @@ public class SSR {
             model.addAttribute("branches", UNDEFINED);
             model.addAttribute("currencies", mapper.writeValueAsString(loaded(exchanges.getAvailableCurrencies())));
             model.addAttribute("current", mapper.writeValueAsString(buildCurrent(currency)));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.warn("Can't pre-render 'index' with currency {}", currency, e);
             model.addAttribute("exchanges", UNDEFINED);
             model.addAttribute("branches", UNDEFINED);

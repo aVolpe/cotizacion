@@ -1,7 +1,8 @@
 package py.com.volpe.cotizacion.gatherer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,6 @@ import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +52,7 @@ public class GNB implements Gatherer {
             String queryResult = helper.doGet(WS_URL);
             return buildMapper()
                     .readValue(queryResult, Root.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new AppException(500, "cant parse the result of GNB ws", e);
         }
     }
