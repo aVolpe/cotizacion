@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Stand-in for the client's built index.html (only exists in the Docker image), same ssr script as client/index.html -->
+    <title>Cotizaciones en el Paraguay</title>
+    <script th:inline="javascript">
+      window.ssr = /*[[${ssr}]]*/ null;
+    </script>
+</head>
+<body>
+<div id="app"></div>
+</body>
+</html>

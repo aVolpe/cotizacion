@@ -14,6 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Renders the client's index.html with the data of the first screen already loaded
+ * (<code>window.ssr</code>, read by the exchange store), so the page doesn't need to wait for the API.
+ * <p>
+ * It also serves the client routes (history mode), so a direct link to /map or /licenses opens the app.
+ *
  * @author Arturo Volpe
  * @since 10/25/20
  */
@@ -22,31 +27,35 @@ import java.util.Map;
 @Log4j2
 public class SSR {
 
-    public static final String UNDEFINED = "undefined";
     private final ObjectMapper mapper;
     private final ExchangeController exchanges;
 
-    @GetMapping(value = "/")
+    /**
+     * Same paths as client/src/router.ts.
+     */
+    @GetMapping(value = {"/", "/about", "/map", "/licenses", "/swagger", "/no-back"})
     public String doQuery(
             Model model,
             @RequestParam(name = "moneda", required = false, defaultValue = "USD") String currency
     ) {
 
+        // The template inlines it as a JS string literal (escaped by Thymeleaf), the client parses it
+        model.addAttribute("ssr", buildState(currency));
+        return "index";
+    }
+
+    private String buildState(String currency) {
+
+        Map<String, Object> state = new HashMap<>();
         try {
-            model.addAttribute("exchanges", mapper.writeValueAsString(Collections.singletonMap(
-                    currency, loaded(exchanges.byIso(currency)))
-            ));
-            model.addAttribute("branches", UNDEFINED);
-            model.addAttribute("currencies", mapper.writeValueAsString(loaded(exchanges.getAvailableCurrencies())));
-            model.addAttribute("current", mapper.writeValueAsString(buildCurrent(currency)));
+            state.put("exchanges", Collections.singletonMap(currency, loaded(exchanges.byIso(currency))));
+            state.put("currencies", loaded(exchanges.getAvailableCurrencies()));
+            state.put("current", buildCurrent(currency));
+            return mapper.writeValueAsString(state);
         } catch (JacksonException e) {
             log.warn("Can't pre-render 'index' with currency {}", currency, e);
-            model.addAttribute("exchanges", UNDEFINED);
-            model.addAttribute("branches", UNDEFINED);
-            model.addAttribute("currencies", UNDEFINED);
-            model.addAttribute("current", UNDEFINED);
+            return null;
         }
-        return "index";
     }
 
     private Map<String, Object> loaded(Object toWrap) {
