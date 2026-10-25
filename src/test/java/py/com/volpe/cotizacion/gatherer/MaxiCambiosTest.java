@@ -19,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +46,7 @@ class MaxiCambiosTest {
         when(wsHelper.doGet("http://cotizext.maxicambios.com.py/maxicambios4.xml")).thenReturn(data);
 
         Place place = new Place("mxi", "MAXI");
-        PlaceBranch asu = new PlaceBranch(120, "0");
+        PlaceBranch asu = new PlaceBranch(120, "1");
         List<QueryResponse> result = maxi.doQuery(place, Collections.singletonList(asu));
 
         assertNotNull(result);
@@ -77,7 +79,7 @@ class MaxiCambiosTest {
         when(wsHelper.doGet("http://cotizext.maxicambios.com.py/cotiza_cde.xml")).thenReturn(data);
 
         Place place = new Place("mxi", "MAXI");
-        PlaceBranch cde = new PlaceBranch(120, "13");
+        PlaceBranch cde = new PlaceBranch(120, "17");
         List<QueryResponse> result = maxi.doQuery(place, Collections.singletonList(cde));
 
         assertNotNull(result);
@@ -99,6 +101,33 @@ class MaxiCambiosTest {
         QueryResponseDetail ars = getCurrency(coti, "ARS");
         assertEquals(Quote.of("ARS", "6.70"), ars.getPurchase());
         assertEquals(Quote.of("ARS", "7.70"), ars.getSale());
+    }
+
+    @Test
+    void testBranchesShareTheBoards() throws Exception {
+
+        String asu = IOUtils.toString(getClass().getResourceAsStream("maxi_asu.xml"), StandardCharsets.UTF_8);
+        String cde = IOUtils.toString(getClass().getResourceAsStream("maxi_cde.xml"), StandardCharsets.UTF_8);
+
+        when(wsHelper.doGet("http://cotizext.maxicambios.com.py/maxicambios4.xml")).thenReturn(asu);
+        when(wsHelper.doGet("http://cotizext.maxicambios.com.py/cotiza_cde.xml")).thenReturn(cde);
+
+        Place place = new Place("mxi", "MAXI");
+        // Multiplaza, Lago Shopping (CDE), Shopping Costanera (Encarnación) and Casa Central CDE
+        List<QueryResponse> result = maxi.doQuery(place, List.of(
+                new PlaceBranch(120, "1"),
+                new PlaceBranch(121, "18"),
+                new PlaceBranch(122, "19"),
+                new PlaceBranch(123, "17")));
+
+        assertEquals(4, result.size());
+        assertEquals(Quote.of("USD", 7130), getCurrency(result.get(0), "USD").getPurchase());
+        assertEquals(Quote.of("USD", 7210), getCurrency(result.get(1), "USD").getPurchase());
+        assertEquals(Quote.of("USD", 7130), getCurrency(result.get(2), "USD").getPurchase());
+        assertEquals(Quote.of("USD", 7210), getCurrency(result.get(3), "USD").getPurchase());
+
+        verify(wsHelper, times(1)).doGet("http://cotizext.maxicambios.com.py/maxicambios4.xml");
+        verify(wsHelper, times(1)).doGet("http://cotizext.maxicambios.com.py/cotiza_cde.xml");
     }
 
     private static QueryResponseDetail getCurrency(QueryResponse qr, String iso) {
