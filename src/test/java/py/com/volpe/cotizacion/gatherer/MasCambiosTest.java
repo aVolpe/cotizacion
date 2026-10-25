@@ -80,6 +80,85 @@ class MasCambiosTest {
     }
 
     @Test
+    void discardsTheRatesOfABranchThatDeviateFromTheMainBranch() {
+        // sucursal4 on 2026-10-25: only the EUR is within 10% of the main branch (6790 / 7050)
+        tester().withTheBranch("matriz", "mascambios_matriz.json")
+                .withTheResponse("sucursal4", """
+                        {"cotizaciones":{"1":{"compra":"6950","venta":"7080"},"2":{"compra":"1300","venta":"1380"},
+                         "4":{"compra":"9","venta":"10"},"5":{"compra":"7050","venta":"7350"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal4")
+                .query()
+                .shouldReturnBranches("matriz", "sucursal4")
+                .shouldQuote("sucursal4", "EUR", "7.050", "7.350")
+                .shouldNotQuote("sucursal4", "USD")
+                .shouldNotQuote("sucursal4", "BRL")
+                .shouldNotQuote("sucursal4", "ARS")
+                .shouldQuote("matriz", "USD", "5.850", "5.950");
+    }
+
+    @Test
+    void discardsTheRateWhenOnlyTheSaleDeviates() {
+        // sucursal6 on 2026-10-25: the purchases are close to the main branch, the sales are not
+        tester().withTheBranch("matriz", "mascambios_matriz.json")
+                .withTheResponse("sucursal6", """
+                        {"cotizaciones":{"1":{"compra":"5976.74","venta":"7700"},"2":{"compra":"1165.35","venta":"1400"},
+                         "4":{"compra":"3.98","venta":"95"},"5":{"compra":"7035","venta":"7350"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal6")
+                .query()
+                .shouldQuote("sucursal6", "EUR", "7.035", "7.350")
+                .shouldNotQuote("sucursal6", "USD")
+                .shouldNotQuote("sucursal6", "BRL")
+                .shouldNotQuote("sucursal6", "ARS");
+    }
+
+    @Test
+    void allowsTheArsToDeviateUpToHalfOfTheMainBranch() {
+        // the ARS is rounded to integers (3 / 4 against 3.60 / 3.85 is -17%), but 1 / 10 is not a real rate
+        tester().withTheBranch("matriz", "mascambios_matriz.json")
+                .withTheResponse("sucursal3", """
+                        {"cotizaciones":{"4":{"compra":"3","venta":"4"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withTheResponse("sucursal5", """
+                        {"cotizaciones":{"1":{"compra":"5850","venta":"5950"},"4":{"compra":"1","venta":"10"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal3", "sucursal5")
+                .query()
+                .shouldQuote("sucursal3", "ARS", "3", "4")
+                .shouldNotQuote("sucursal5", "ARS");
+    }
+
+    @Test
+    void skipsTheBranchWhenAllItsRatesDeviate() {
+        tester().withTheBranch("matriz", "mascambios_matriz.json")
+                .withTheResponse("sucursal7", """
+                        {"cotizaciones":{"1":{"compra":"6550","venta":"6670"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal7")
+                .query()
+                .shouldReturnBranches("matriz");
+    }
+
+    @Test
+    void keepsTheRatesWhenTheMainBranchCantBeQueried() {
+        tester().withAFailingBranch("matriz")
+                .withTheResponse("sucursal4", """
+                        {"cotizaciones":{"1":{"compra":"6950","venta":"7080"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal4")
+                .query()
+                .shouldReturnBranches("sucursal4")
+                .shouldQuote("sucursal4", "USD", "6.950", "7.080");
+    }
+
+    @Test
+    void keepsTheCurrenciesThatTheMainBranchDoesntQuote() {
+        tester().withTheResponse("matriz", """
+                        {"cotizaciones":{"1":{"compra":"5850","venta":"5950"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withTheResponse("sucursal2", """
+                        {"cotizaciones":{"1":{"compra":"5800","venta":"5900"},"2":{"compra":"1120","venta":"1155"}},"fecha":"2026-10-25 20:18:06"}""")
+                .withBranches("matriz", "sucursal2")
+                .query()
+                .shouldQuote("sucursal2", "USD", "5.800", "5.900")
+                .shouldQuote("sucursal2", "BRL", "1.120", "1.155");
+    }
+
+    @Test
     void queriesTheApiWithTheRemoteCode() {
         assertEquals("https://mascambios.com.py/api/cotizaciones.php?sucursal=sucursal1", MasCambios.getBranchUrl("sucursal1"));
     }

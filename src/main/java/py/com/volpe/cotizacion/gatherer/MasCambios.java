@@ -15,11 +15,15 @@ import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
 import py.com.volpe.cotizacion.domain.Quote;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.Objects;
 
 /**
@@ -42,6 +46,17 @@ public class MasCambios implements Gatherer {
 
     private static final String CODE = "MASCAMBIOS";
     private static final int TIMEOUT = 30_000;
+    private static final String MAIN_BRANCH = "matriz";
+    /**
+     * Some branches publish rates far from the rest of the market (2026-10-25: USD 6950 / 7080 in sucursal4 with the
+     * main branch at 5850 / 5950), a rate whose purchase or sale is further than this from the main branch is discarded.
+     */
+    private static final BigDecimal MAX_DEVIATION = new BigDecimal("0.10");
+    /**
+     * The ARS is rounded to integers (3 / 4 against 3.60 / 3.85) and it is barely traded, only the absurd values
+     * are discarded (2026-10-25: 3.98 / 95 in sucursal6).
+     */
+    private static final BigDecimal MAX_ARS_DEVIATION = new BigDecimal("0.50");
     /**
      * The id used by the site for each currency, the 3 is the guaraní (always 0).
      */
@@ -60,10 +75,58 @@ public class MasCambios implements Gatherer {
     @Override
     public List<QueryResponse> doQuery(Place place, List<PlaceBranch> branches) {
 
-        return branches.stream()
+        List<QueryResponse> responses = branches.stream()
                 .map(this::queryBranch)
                 .filter(Objects::nonNull)
                 .toList();
+        return discardDeviations(responses);
+    }
+
+    /**
+     * Compares every branch with the main branch, before anything is stored. Without the main branch there is nothing
+     * to compare with and the rates are kept.
+     */
+    private static List<QueryResponse> discardDeviations(List<QueryResponse> responses) {
+
+        QueryResponse main = responses.stream()
+                .filter(qr -> MAIN_BRANCH.equals(qr.getBranch().getRemoteCode()))
+                .findFirst()
+                .orElse(null);
+        if (main == null) {
+            log.warn("Más Cambios has no rates of the main branch, the rates of the branches are not checked");
+            return responses;
+        }
+
+        Map<String, QueryResponseDetail> reference = main.getDetails().stream()
+                .collect(Collectors.toMap(QueryResponseDetail::getIsoCode, Function.identity()));
+        List<QueryResponse> toRet = new ArrayList<>();
+        for (QueryResponse qr : responses) {
+            if (qr != main) {
+                qr.setDetails(qr.getDetails().stream()
+                        .filter(detail -> isCloseTo(qr.getBranch().getRemoteCode(), detail, reference.get(detail.getIsoCode())))
+                        .toList());
+                if (qr.getDetails().isEmpty()) continue;
+            }
+            toRet.add(qr);
+        }
+        return toRet;
+    }
+
+    private static boolean isCloseTo(String remoteCode, QueryResponseDetail detail, QueryResponseDetail main) {
+        if (main == null) return true;
+        BigDecimal maxDeviation = "ARS".equals(detail.getIsoCode()) ? MAX_ARS_DEVIATION : MAX_DEVIATION;
+        if (isClose(detail.getPurchase().amount(), main.getPurchase().amount(), maxDeviation)
+                && isClose(detail.getSale().amount(), main.getSale().amount(), maxDeviation)) return true;
+
+        log.warn("Más Cambios {} {} {} / {} is too far from the main branch {} / {}, it is discarded", remoteCode,
+                detail.getIsoCode(), detail.getPurchase().amount(), detail.getSale().amount(),
+                main.getPurchase().amount(), main.getSale().amount());
+        return false;
+    }
+
+    private static boolean isClose(BigDecimal value, BigDecimal reference, BigDecimal maxDeviation) {
+        BigDecimal deviation = value.subtract(reference).abs().divide(reference, 4, RoundingMode.HALF_UP);
+        return deviation.compareTo(maxDeviation) <= 0;
     }
 
     static String getBranchUrl(String remoteCode) {
