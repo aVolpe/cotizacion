@@ -99,6 +99,79 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void cambiosChacoActiveBranchesAreTheOnesOfTheSite() {
+        assertThat(activeRemoteCodes("CAMBIOS_CHACO")).containsExactlyInAnyOrder(
+                "1", "2", "3", "30", "6", "7", "8", "9", "11", "13", "14", "16", "22", "23", "24", "27", "28", "29",
+                "32", "40", "41");
+    }
+
+    @Test
+    void cambiosChacoMovedBranchesKeepTheirRowsAndHistory() {
+        // V2 created KM 7 (12) as 103 and Curupayty (14) as 105, the site now calls them 32 and 40
+        assertThat(branches.getByPlaceCodeAndActiveTrue("CAMBIOS_CHACO"))
+                .filteredOn(b -> List.of("32", "40").contains(b.getRemoteCode()))
+                .extracting(PlaceBranch::getId, PlaceBranch::getRemoteCode, PlaceBranch::getName)
+                .containsExactlyInAnyOrder(
+                        tuple(103L, "32", "Ciudad del Este - Km7"),
+                        tuple(105L, "40", "Ciudad del Este - Curupayty"));
+        assertThat(chacoBranches("b.remote_code IN ('12', '14-old')")).isEmpty();
+    }
+
+    @Test
+    void cambiosChacoCurupaytyKeepsItsLocation() {
+        // the site doesn't publish the location of 40, the one of the old row is kept
+        assertThat(jdbc.queryForMap("SELECT latitude, longitude FROM place_branch WHERE id = 105"))
+                .isEqualTo(Map.of("latitude", -25.5139662717053177, "longitude", -54.612792916602757));
+    }
+
+    @Test
+    void cambiosChacoReusedIdsAreNewBranchesAndTheOldOneKeepsItsRow() {
+        assertThat(branches.getByPlaceCodeAndActiveTrue("CAMBIOS_CHACO"))
+                .filteredOn(b -> List.of("14", "16", "41").contains(b.getRemoteCode()))
+                .extracting(PlaceBranch::getRemoteCode, PlaceBranch::getName)
+                .containsExactlyInAnyOrder(
+                        tuple("14", "Ag. Plaza Madero"),
+                        tuple("16", "Hernandarias - Super Carretera"),
+                        tuple("41", "Minga Guazu - Abasto Este"));
+        assertThat(chacoBranches("b.remote_code = '14'"))
+                .extracting(r -> r.get("id"))
+                .singleElement()
+                .isNotIn(103L, 105L, 115L);
+
+        // the history of Monseñor Rodriguez stays in its original row
+        assertThat(chacoBranches("NOT b.active AND b.remote_code LIKE '%-old'"))
+                .containsExactly(Map.of("id", 115L, "remote_code", "32-old", "name", "Monseñor Rodriguez - CDE"));
+    }
+
+    @Test
+    void cambiosChacoBranchesNotInTheSiteAreDeactivatedButKeepTheirRows() {
+        assertThat(chacoBranches("NOT b.active AND b.remote_code NOT LIKE '%-old'"))
+                .containsExactlyInAnyOrder(
+                        Map.of("id", 101L, "remote_code", "10", "name", "Supercarretera KM 4 - CDE"),
+                        Map.of("id", 106L, "remote_code", "15", "name", "Toledo - CDE"),
+                        Map.of("id", 111L, "remote_code", "19", "name", "EBY  Circuito Comercial - ENC"),
+                        Map.of("id", 107L, "remote_code", "20", "name", "Hernandarias"));
+    }
+
+    @Test
+    void chacoAlberdiMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V11__Chaco_alberdi_branches.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
+    }
+
+    @Test
+    void alberdiSaltoDelGuairaIsDeactivated() {
+        assertThat(activeRemoteCodes("ALBERDI_2"))
+                .containsExactlyInAnyOrder("villamorra", "ciudaddeleste", "km4", "encarnacion");
+        assertThat(jdbc.queryForObject(
+                "SELECT b.active FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'ALBERDI_2' AND b.remote_code = 'saltodelguaira'",
+                Boolean.class)).isFalse();
+    }
+
+    @Test
     void everyBranchHasARemoteCode() {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE remote_code IS NULL", Long.class))
                 .isZero();
@@ -168,6 +241,12 @@ class BranchMigrationsTest {
         assertThat(places.findByCode("MERCOSUR").orElseThrow().getBranches())
                 .extracting(PlaceBranch::getRemoteCode)
                 .containsExactlyInAnyOrder("1", "2");
+    }
+
+    private List<Map<String, Object>> chacoBranches(String condition) {
+        return jdbc.queryForList(
+                "SELECT b.id, b.remote_code, b.name FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'CAMBIOS_CHACO' AND "
+                        + condition);
     }
 
     private List<String> activeRemoteCodes(String placeCode) {
