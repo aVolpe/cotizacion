@@ -14,6 +14,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,19 +122,13 @@ public class NorteCambios implements Gatherer {
             String isoCode = columns.get(0).select("span").last().text().trim();
             if (!isoCode.matches("[A-Z]{3}")) continue;
 
-            long purchase = parse(columns.get(1).select("p").first().ownText());
-            long sale = parse(columns.get(2).select("p").first().ownText());
-            if (purchase < 1 || sale < 1) continue;
+            // big amounts use '.' as thousand separator (5.660) and small ones ',' as decimal separator (3,40)
+            Quote purchase = Quote.parseLocal(isoCode, columns.get(1).select("p").first().ownText());
+            Quote sale = Quote.parseLocal(isoCode, columns.get(2).select("p").first().ownText());
+            if (purchase.amount().signum() <= 0 || sale.amount().signum() <= 0) continue;
 
-            toRet.add(new QueryResponseDetail(purchase, sale, isoCode));
+            toRet.add(new QueryResponseDetail(purchase, sale));
         }
         return toRet;
-    }
-
-    /**
-     * Big amounts use '.' as thousand separator (5.660) and small ones ',' as decimal separator (3,40).
-     */
-    private static long parse(String s) {
-        return Long.parseLong(s.trim().replace(".", "").replaceAll(",.*", ""));
     }
 }

@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -58,8 +59,13 @@ class MaxiCambiosTest {
                 .filter(d -> d.getIsoCode().equals("USD"))
                 .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-        assertEquals(7130, usd.getPurchasePrice());
-        assertEquals(7280, usd.getSalePrice());
+        assertEquals(Quote.of("USD", 7130), usd.getPurchase());
+        assertEquals(Quote.of("USD", 7280), usd.getSale());
+
+        // '.' is the decimal separator in Asunción
+        QueryResponseDetail ars = getCurrency(coti, "ARS");
+        assertEquals(Quote.of("ARS", "7.20"), ars.getPurchase());
+        assertEquals(Quote.of("ARS", "8.20"), ars.getSale());
 
     }
 
@@ -86,8 +92,19 @@ class MaxiCambiosTest {
                 .filter(d -> d.getIsoCode().equals("USD"))
                 .findFirst().orElseThrow(() -> new AppException(500, "Data not found"));
 
-        assertEquals(7210, usd.getPurchasePrice());
-        assertEquals(7270, usd.getSalePrice());
+        assertEquals(Quote.of("USD", 7210), usd.getPurchase());
+        assertEquals(Quote.of("USD", 7270), usd.getSale());
 
+        // ',' is the decimal separator in CDE
+        QueryResponseDetail ars = getCurrency(coti, "ARS");
+        assertEquals(Quote.of("ARS", "6.70"), ars.getPurchase());
+        assertEquals(Quote.of("ARS", "7.70"), ars.getSale());
+    }
+
+    private static QueryResponseDetail getCurrency(QueryResponse qr, String iso) {
+        return qr.getDetails()
+                .stream()
+                .filter(d -> d.getIsoCode().equals(iso))
+                .findFirst().orElseThrow(() -> new AppException(500, "Data not found: " + iso));
     }
 }

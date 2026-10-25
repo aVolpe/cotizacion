@@ -15,6 +15,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.net.SocketTimeoutException;
 import java.util.List;
@@ -64,10 +65,10 @@ public class Mundial implements Gatherer {
                     String title = row.select(".titulo-divisa").text();
                     Elements exchanges = row.select(".divisa");
                     if (title.isEmpty() || exchanges.size() != 2) continue;
-                    String buy = exchanges.get(0).text();
-                    String sell = exchanges.get(1).text();
-                    if (parse(buy) > 0 && parse(sell) > 0)
-                        qr.addDetail(new QueryResponseDetail(parse(buy), parse(sell), title));
+                    Quote buy = Quote.parseLocal(title, exchanges.get(0).text());
+                    Quote sell = Quote.parseLocal(title, exchanges.get(1).text());
+                    if (buy.amount().signum() > 0 && sell.amount().signum() > 0)
+                        qr.addDetail(new QueryResponseDetail(buy, sell));
                 }
                 return qr;
             }
@@ -128,9 +129,5 @@ public class Mundial implements Gatherer {
     @Override
     public String getCode() {
         return "MUNDIAL";
-    }
-
-    protected static Long parse(String s) {
-        return Long.parseLong(s.replace(".", ""));
     }
 }

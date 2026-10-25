@@ -8,6 +8,7 @@ import py.com.volpe.cotizacion.domain.ExchangeRate;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -87,8 +88,8 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long
          * Same as {@link #id}, kept for compatibility.
          */
         private long queryDetailId;
-        private long salePrice;
-        private long purchasePrice;
+        private BigDecimal salePrice;
+        private BigDecimal purchasePrice;
 
     }
 

@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -52,10 +53,10 @@ class AmambayTest {
         // pesosargentinos: Compra 1 -> 1
         // euros: Compra 7.820 -> 7820
 
-        assertEquals(6940L, getCurrency(first, "USD").getPurchasePrice());
-        assertEquals(1210L, getCurrency(first, "BRL").getPurchasePrice());
-        assertEquals(1L, getCurrency(first, "ARS").getPurchasePrice());
-        assertEquals(7820L, getCurrency(first, "EUR").getPurchasePrice());
+        assertEquals(Quote.of("USD", 6940), getCurrency(first, "USD").getPurchase());
+        assertEquals(Quote.of("BRL", 1210), getCurrency(first, "BRL").getPurchase());
+        assertEquals(Quote.of("ARS", 1), getCurrency(first, "ARS").getPurchase());
+        assertEquals(Quote.of("EUR", 7820), getCurrency(first, "EUR").getPurchase());
     }
 
     private QueryResponseDetail getCurrency(QueryResponse first, String iso) {

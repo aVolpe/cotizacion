@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,7 +17,8 @@ import static org.assertj.core.api.Assertions.tuple;
 /**
  * V5 turns the query_response/query_response_detail of every query into an exchange_rate per price.
  * <p>
- * The legacy rows are loaded in a database migrated up to V4, then V5 runs over them.
+ * The legacy rows are loaded in a database migrated up to V4, then V5 runs over them (and V7 keeps the integer
+ * prices as x.00).
  */
 class ExchangeRateMigrationTest {
 
@@ -61,17 +63,17 @@ class ExchangeRateMigrationTest {
                 .extracting(r -> r.get("place"), r -> r.get("purchase_price"), r -> r.get("first_seen"),
                         r -> r.get("last_seen"), r -> r.get("last_execution_id"), r -> r.get("latest"))
                 .containsExactly(
-                        tuple("GNB", 5710L, "2018-07-23 10:00", "2018-07-23 10:10", 20L, true),
-                        tuple("MUNDIAL", 5700L, "2018-07-01 10:00", "2018-07-01 10:00", null, false),
-                        tuple("MUNDIAL", 5690L, "2018-07-01 10:10", "2018-07-01 10:10", null, false),
-                        tuple("MUNDIAL", 5700L, "2018-07-23 10:00", "2018-07-23 10:00", 10L, false),
-                        tuple("MUNDIAL", 5710L, "2018-07-23 10:10", "2018-07-23 10:10", 20L, false),
-                        tuple("MUNDIAL", 5700L, "2018-07-23 10:20", "2018-07-23 10:20", 30L, true));
+                        tuple("GNB", new BigDecimal("5710.00"), "2018-07-23 10:00", "2018-07-23 10:10", 20L, true),
+                        tuple("MUNDIAL", new BigDecimal("5700.00"), "2018-07-01 10:00", "2018-07-01 10:00", null, false),
+                        tuple("MUNDIAL", new BigDecimal("5690.00"), "2018-07-01 10:10", "2018-07-01 10:10", null, false),
+                        tuple("MUNDIAL", new BigDecimal("5700.00"), "2018-07-23 10:00", "2018-07-23 10:00", 10L, false),
+                        tuple("MUNDIAL", new BigDecimal("5710.00"), "2018-07-23 10:10", "2018-07-23 10:10", 20L, false),
+                        tuple("MUNDIAL", new BigDecimal("5700.00"), "2018-07-23 10:20", "2018-07-23 10:20", 30L, true));
     }
 
     @Test
     void aCurrencyRepeatedInTheSameQueryKeepsTheFirstRate() {
-        assertThat(rates("USD")).extracting(r -> r.get("sale_price")).doesNotContain(0L);
+        assertThat(rates("USD")).extracting(r -> r.get("sale_price")).doesNotContain(new BigDecimal("0.00"));
     }
 
     @Test
@@ -80,8 +82,8 @@ class ExchangeRateMigrationTest {
                 .extracting(r -> r.get("sale_price"), r -> r.get("first_seen"), r -> r.get("last_seen"),
                         r -> r.get("latest"))
                 .containsExactly(
-                        tuple(6700L, "2018-07-01 10:00", "2018-07-01 10:00", false),
-                        tuple(6750L, "2018-07-23 10:00", "2018-07-23 10:10", true));
+                        tuple(new BigDecimal("6700.00"), "2018-07-01 10:00", "2018-07-01 10:00", false),
+                        tuple(new BigDecimal("6750.00"), "2018-07-23 10:00", "2018-07-23 10:10", true));
     }
 
     @Test

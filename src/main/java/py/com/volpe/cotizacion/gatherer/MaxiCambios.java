@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -62,11 +63,8 @@ public class MaxiCambios implements Gatherer {
     }
 
     private QueryResponseDetail mapToDetail(ExchangeData detail, String iso) {
-        QueryResponseDetail qrd = new QueryResponseDetail();
-        qrd.setIsoCode(iso);
-        qrd.setSalePrice(detail.getVenta().longValue());
+        QueryResponseDetail qrd = new QueryResponseDetail(Quote.of(iso, detail.getCompra()), Quote.of(iso, detail.getVenta()));
         qrd.setSaleTrend("up.png".equals(detail.getVentaTendencia()) ? 1 : -1);
-        qrd.setPurchasePrice(detail.getCompra().longValue());
         qrd.setPurchaseTrend("up.png".equals(detail.getCompraTendencia()) ? 1 : -1);
         return qrd;
     }
@@ -184,11 +182,11 @@ public class MaxiCambios implements Gatherer {
         private String ventaTendencia;
     }
 
+    /**
+     * There is no thousand separator, the decimal separator is '.' in Asunción (7.20) and ',' in CDE (6,70).
+     */
     private static BigDecimal parse(String value) {
-        return new BigDecimal(value
-                .replaceAll("\\..*", "")
-                .replaceAll(",", ".")
-        );
+        return new BigDecimal(value.trim().replace(",", "."));
     }
 
 }

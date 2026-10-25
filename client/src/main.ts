@@ -30,7 +30,7 @@ app.config.globalProperties.$filters = {
   },
   fn: (value: any) => {
     if (typeof value !== 'number') return value
-    return value.toLocaleString('es-PY')
+    return value.toLocaleString('es-PY', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
   },
   fd: (value: any, desiredFormat: string | null = null) => {
     const finalFormat = desiredFormat ? desiredFormat : 'dd/MM/yyyy hh:mm'

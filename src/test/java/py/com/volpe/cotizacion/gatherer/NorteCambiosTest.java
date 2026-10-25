@@ -14,6 +14,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -60,18 +61,18 @@ class NorteCambiosTest {
 
         assertEquals("Casa Matriz", pjc.getBranch().getName());
         assertEquals(4, pjc.getDetails().size());
-        assertDetail(pjc.getDetails().get(0), "USD", 5660, 5800);
-        assertDetail(pjc.getDetails().get(1), "BRL", 1110, 1150);
-        assertDetail(pjc.getDetails().get(2), "EUR", 6350, 6800);
-        assertDetail(pjc.getDetails().get(3), "ARS", 3, 5);
+        assertDetail(pjc.getDetails().get(0), Quote.of("USD", 5660), Quote.of("USD", 5800));
+        assertDetail(pjc.getDetails().get(1), Quote.of("BRL", 1110), Quote.of("BRL", 1150));
+        assertDetail(pjc.getDetails().get(2), Quote.of("EUR", 6350), Quote.of("EUR", 6800));
+        assertDetail(pjc.getDetails().get(3), Quote.of("ARS", 3), Quote.of("ARS", 5));
 
         // cross rates (BRL•USD, USD•EUR, ARS•USD) and checks (USD CH) are ignored
         assertEquals("Asunción", asu.getBranch().getName());
         assertEquals(14, asu.getDetails().size());
-        assertDetail(asu.getDetails().get(0), "USD", 5660, 5780);
-        assertDetail(asu.getDetails().get(3), "ARS", 3, 3);
-        assertDetail(asu.getDetails().get(4), "CLP", 5, 8);
-        assertDetail(asu.getDetails().get(13), "PEN", 1600, 2000);
+        assertDetail(asu.getDetails().get(0), Quote.of("USD", 5660), Quote.of("USD", 5780));
+        assertDetail(asu.getDetails().get(3), Quote.of("ARS", "3.40"), Quote.of("ARS", "3.80"));
+        assertDetail(asu.getDetails().get(4), Quote.of("CLP", 5), Quote.of("CLP", 8));
+        assertDetail(asu.getDetails().get(13), Quote.of("PEN", 1600), Quote.of("PEN", 2000));
     }
 
     @Test
@@ -149,10 +150,9 @@ class NorteCambiosTest {
         }
     }
 
-    private static void assertDetail(QueryResponseDetail detail, String iso, long purchase, long sale) {
-        assertEquals(iso, detail.getIsoCode());
-        assertEquals(purchase, detail.getPurchasePrice());
-        assertEquals(sale, detail.getSalePrice());
+    private static void assertDetail(QueryResponseDetail detail, Quote purchase, Quote sale) {
+        assertEquals(purchase, detail.getPurchase());
+        assertEquals(sale, detail.getSale());
     }
 
     private String load(String name) throws IOException {

@@ -14,6 +14,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -58,19 +59,14 @@ public class Alberdi implements Gatherer {
                 if (iso != null)
                     qr.addDetail(
                             new QueryResponseDetail(
-                                    parse(exchange.getCompra()).longValue(),
-                                    parse(exchange.getVenta()).longValue(),
-                                    iso));
+                                    Quote.parseLocal(iso, exchange.getCompra()),
+                                    Quote.parseLocal(iso, exchange.getVenta())));
             });
 
             return qr;
         }).toList();
 
 
-    }
-
-    private BigDecimal parse(String number) {
-        return new BigDecimal(number.replace(".", "").replace(",", "."));
     }
 
     protected Map<String, List<ExchangeData>> getParsedData() {

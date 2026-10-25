@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -51,8 +52,8 @@ class BCPTest {
         QueryResponse first = result.get(0);
 
 
-        assertEquals(7028, getCurrency(first, "USD").getPurchasePrice());
-        assertEquals(89, getCurrency(first, "ARS").getPurchasePrice());
+        assertEquals(Quote.of("USD", "7028.72"), getCurrency(first, "USD").getPurchase());
+        assertEquals(Quote.of("ARS", "89.75"), getCurrency(first, "ARS").getPurchase());
 
     }
 

@@ -11,6 +11,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -49,17 +50,17 @@ class MercosurTest {
         List<QueryResponseDetail> exchanges = data.get(0).getDetails();
 
         QueryResponseDetail usd = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "USD")).findFirst().orElseThrow();
-        assertEquals(7380, usd.getPurchasePrice());
-        assertEquals(7440, usd.getSalePrice());
+        assertEquals(Quote.of("USD", 7380), usd.getPurchase());
+        assertEquals(Quote.of("USD", 7440), usd.getSale());
         QueryResponseDetail brl = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "BRL")).findFirst().orElseThrow();
-        assertEquals(1475, brl.getPurchasePrice());
-        assertEquals(1500, brl.getSalePrice());
+        assertEquals(Quote.of("BRL", 1475), brl.getPurchase());
+        assertEquals(Quote.of("BRL", 1500), brl.getSale());
         QueryResponseDetail eur = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "EUR")).findFirst().orElseThrow();
-        assertEquals(7550, eur.getPurchasePrice());
-        assertEquals(8210, eur.getSalePrice());
+        assertEquals(Quote.of("EUR", 7550), eur.getPurchase());
+        assertEquals(Quote.of("EUR", 8210), eur.getSale());
         QueryResponseDetail arg = exchanges.stream().filter(f -> Objects.equals(f.getIsoCode(), "ARS")).findFirst().orElseThrow();
-        assertEquals(7, arg.getPurchasePrice());
-        assertEquals(9, arg.getSalePrice());
+        assertEquals(Quote.of("ARS", 7), arg.getPurchase());
+        assertEquals(Quote.of("ARS", 9), arg.getSale());
 
     }
 

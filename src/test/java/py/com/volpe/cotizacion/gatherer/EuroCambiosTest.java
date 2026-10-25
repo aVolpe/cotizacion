@@ -11,6 +11,8 @@ import py.com.volpe.cotizacion.HTTPHelper;
 import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
+import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -67,6 +69,12 @@ class EuroCambiosTest {
         assertNotNull(result);
         assertEquals(3, result.size());
         result.forEach(System.out::println);
+
+        QueryResponseDetail ars = result.get(0).getDetails().stream()
+                .filter(d -> d.getIsoCode().equals("ARS"))
+                .findFirst().orElseThrow();
+        assertEquals(Quote.of("ARS", "4.20"), ars.getPurchase());
+        assertEquals(Quote.of("ARS", 5), ars.getSale());
     }
 
 }

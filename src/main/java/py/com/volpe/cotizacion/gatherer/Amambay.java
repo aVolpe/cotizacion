@@ -13,9 +13,12 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Arturo Volpe
@@ -28,6 +31,7 @@ public class Amambay implements Gatherer {
 
     private static final String URL_CHANGE = "https://www.bancobasa.com.py/";
     private static final String CODE = "AMAMBAY";
+    private static final Pattern AMOUNT = Pattern.compile("\\d[\\d.,]*");
 
     private final HTTPHelper httpHelper;
 
@@ -88,12 +92,12 @@ public class Amambay implements Gatherer {
             String[] parts = data.split("\\|");
             if (parts.length < 2) return Optional.empty();
 
-            long purchase = parseAmount(parts[0]);
-            long sale = parseAmount(parts[1]);
+            Quote purchase = parseAmount(iso, parts[0]);
+            Quote sale = parseAmount(iso, parts[1]);
 
-            if (purchase <= 0 || sale <= 0) return Optional.empty();
+            if (purchase.amount().signum() <= 0 || sale.amount().signum() <= 0) return Optional.empty();
 
-            return Optional.of(new QueryResponseDetail(purchase, sale, iso));
+            return Optional.of(new QueryResponseDetail(purchase, sale));
         } catch (Exception e) {
             log.warn("Error parsing an entry from Amambay page", e);
             return Optional.empty();
@@ -112,15 +116,15 @@ public class Amambay implements Gatherer {
         return null;
     }
 
-    private long parseAmount(String part) {
-        // extract digits from the part. Example: "Compra 6.940 " -> "6940"
+    private Quote parseAmount(String iso, String part) {
+        // extract the number from the part. Example: "Compra 6.940 " -> 6940, "Compra 3,45" -> 3.45
         try {
-            String digits = part.replaceAll("\\D", "");
-            if (digits.isBlank()) return 0L;
-            return Long.parseLong(digits);
+            Matcher number = AMOUNT.matcher(part);
+            if (!number.find()) return Quote.of(iso, 0);
+            return Quote.parseLocal(iso, number.group());
         } catch (Exception e) {
             log.warn("Can't parse amount from '{}'", part, e);
-            return 0L;
+            return Quote.of(iso, 0);
         }
     }
 

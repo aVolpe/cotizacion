@@ -13,6 +13,7 @@ import py.com.volpe.cotizacion.domain.Place;
 import py.com.volpe.cotizacion.domain.PlaceBranch;
 import py.com.volpe.cotizacion.domain.QueryResponse;
 import py.com.volpe.cotizacion.domain.QueryResponseDetail;
+import py.com.volpe.cotizacion.domain.Quote;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -70,18 +71,13 @@ public class BCP implements Gatherer {
         String currency = columns.get(1).text();
         String rate = columns.get(3).text();
 
-        return new QueryResponseDetail(parseAmount(rate), parseAmount(rate), currency);
+        // '7.028,72', the BCP rates have up to 4 decimals ('78,3148'), they are rounded to 2
+        Quote quote = Quote.parseLocal(currency, rate);
+        return new QueryResponseDetail(quote, quote);
     }
 
     @Override
     public String getCode() {
         return "BCP";
-    }
-
-
-    protected Long parseAmount(String amount) {
-        return Long.parseLong(amount.substring(0, amount.indexOf(','))
-                .replace(".", ""));
-
     }
 }
