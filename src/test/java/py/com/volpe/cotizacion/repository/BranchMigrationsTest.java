@@ -247,6 +247,26 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void uenoIsABankWithoutBranches() {
+        Place ueno = places.findByCode("UENO").orElseThrow();
+        assertThat(ueno.getName()).isEqualTo("ueno bank");
+        assertThat(ueno.getType()).isEqualTo(Place.Type.BANK);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE place_id = ?", Long.class, ueno.getId()))
+                .isZero();
+    }
+
+    @Test
+    void uenoMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> placesBefore = jdbc.queryForList("SELECT * FROM place ORDER BY id");
+        List<Map<String, Object>> branchesBefore = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V17__Ueno.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place ORDER BY id")).isEqualTo(placesBefore);
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(branchesBefore);
+    }
+
+    @Test
     void everyBranchHasARemoteCode() {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE remote_code IS NULL", Long.class))
                 .isZero();
