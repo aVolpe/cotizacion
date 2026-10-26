@@ -74,6 +74,17 @@ class BranchMigrationsTest {
     }
 
     @Test
+    void laMonedaBranchesHaveTheirLocationAndKeepTheirPhones() {
+        assertThat(branches.getByPlaceCodeAndActiveTrue("LAMONEDA"))
+                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getLatitude, PlaceBranch::getLongitude)
+                        .doesNotContainNull());
+        assertThat(branches.getByPlaceCodeAndActiveTrue("LAMONEDA"))
+                .filteredOn(b -> b.getRemoteCode().equals("casa_matriz"))
+                .singleElement()
+                .extracting(PlaceBranch::getPhoneNumber).isEqualTo("(061) 573 016");
+    }
+
+    @Test
     void familiarIsLoadedAsABankWithTheBranchesOfTheSite() {
         Place familiar = places.findByCode("FAMILIAR").orElseThrow();
         assertThat(familiar.getName()).isEqualTo("Banco Familiar");
@@ -247,12 +258,37 @@ class BranchMigrationsTest {
     }
 
     @Test
-    void uenoIsABankWithoutBranches() {
+    void uenoIsLoadedAsABankWithTheLocalesOfTheHelpCenter() {
         Place ueno = places.findByCode("UENO").orElseThrow();
         assertThat(ueno.getName()).isEqualTo("ueno bank");
         assertThat(ueno.getType()).isEqualTo(Place.Type.BANK);
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM place_branch WHERE place_id = ?", Long.class, ueno.getId()))
-                .isZero();
+        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
+                .hasSize(76)
+                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getSchedule, PlaceBranch::getLatitude,
+                        PlaceBranch::getLongitude).doesNotContainNull());
+        assertThat(activeRemoteCodes("UENO")).contains("asuncion-villa-morra", "ciudad-del-este-i",
+                "encarnacion-i", "pedro-juan-caballero", "ced-paraguari");
+    }
+
+    @Test
+    void uenoLocalesMarkedWithAnAsteriskHaveTheirOwnSchedule() {
+        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
+                .filteredOn(b -> b.getRemoteCode().equals("ced-plaza-norte"))
+                .extracting(PlaceBranch::getSchedule)
+                .containsExactly("Lunes a lunes de 09:00 a 01:00");
+        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
+                .filteredOn(b -> b.getRemoteCode().equals("asuncion-villa-morra"))
+                .extracting(PlaceBranch::getSchedule)
+                .containsExactly("Lunes a sábados de 08:00 a 18:00 y domingos de 08:00 a 17:00");
+    }
+
+    @Test
+    void uenoBranchesMigrationCanRunAgain() throws IOException {
+        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
+
+        jdbc.execute(new ClassPathResource("db/migration/V19__Ueno_branches.sql").getContentAsString(StandardCharsets.UTF_8));
+
+        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
     }
 
     @Test
