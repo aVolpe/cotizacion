@@ -258,48 +258,12 @@ class BranchMigrationsTest {
     }
 
     @Test
-    void uenoIsLoadedAsABankWithTheLocalesOfTheHelpCenter() {
-        Place ueno = places.findByCode("UENO").orElseThrow();
-        assertThat(ueno.getName()).isEqualTo("ueno bank");
-        assertThat(ueno.getType()).isEqualTo(Place.Type.BANK);
-        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
-                .hasSize(76)
-                .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getSchedule, PlaceBranch::getLatitude,
-                        PlaceBranch::getLongitude).doesNotContainNull());
-        assertThat(activeRemoteCodes("UENO")).contains("asuncion-villa-morra", "ciudad-del-este-i",
-                "encarnacion-i", "pedro-juan-caballero", "ced-paraguari");
-    }
-
-    @Test
-    void uenoLocalesMarkedWithAnAsteriskHaveTheirOwnSchedule() {
-        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
-                .filteredOn(b -> b.getRemoteCode().equals("ced-plaza-norte"))
-                .extracting(PlaceBranch::getSchedule)
-                .containsExactly("Lunes a lunes de 09:00 a 01:00");
-        assertThat(branches.getByPlaceCodeAndActiveTrue("UENO"))
-                .filteredOn(b -> b.getRemoteCode().equals("asuncion-villa-morra"))
-                .extracting(PlaceBranch::getSchedule)
-                .containsExactly("Lunes a sábados de 08:00 a 18:00 y domingos de 08:00 a 17:00");
-    }
-
-    @Test
-    void uenoBranchesMigrationCanRunAgain() throws IOException {
-        List<Map<String, Object>> before = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
-
-        jdbc.execute(new ClassPathResource("db/migration/V19__Ueno_branches.sql").getContentAsString(StandardCharsets.UTF_8));
-
-        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(before);
-    }
-
-    @Test
-    void uenoMigrationCanRunAgain() throws IOException {
-        List<Map<String, Object>> placesBefore = jdbc.queryForList("SELECT * FROM place ORDER BY id");
-        List<Map<String, Object>> branchesBefore = jdbc.queryForList("SELECT * FROM place_branch ORDER BY id");
-
-        jdbc.execute(new ClassPathResource("db/migration/V17__Ueno.sql").getContentAsString(StandardCharsets.UTF_8));
-
-        assertThat(jdbc.queryForList("SELECT * FROM place ORDER BY id")).isEqualTo(placesBefore);
-        assertThat(jdbc.queryForList("SELECT * FROM place_branch ORDER BY id")).isEqualTo(branchesBefore);
+    void uenoIsDeactivatedButKeepsItsPlaceAndBranches() {
+        assertThat(places.findByCode("UENO")).isPresent();
+        assertThat(activeRemoteCodes("UENO")).isEmpty();
+        assertThat(jdbc.queryForObject(
+                "SELECT count(*) FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'UENO'",
+                Long.class)).isEqualTo(76);
     }
 
     @Test
