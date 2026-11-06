@@ -15,3 +15,8 @@ spring:
   web:
     resources:
       static-locations: classpath:/public/
+
+# the base application.yml logs the web requests in debug, useful in development only
+logging:
+  level:
+    web: info
