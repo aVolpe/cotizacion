@@ -59,6 +59,9 @@ public class MasCambios implements Gatherer {
     private static final BigDecimal MAX_ARS_DEVIATION = new BigDecimal("0.50");
     /**
      * The id used by the site for each currency, the 3 is the guaraní (always 0).
+     * <p>
+     * The 5 is the EUR and it is ignored: the week of 2026-10-26 the main branch published it at 6790 / 7050 and the
+     * agencies at 7035–7350 / 7350–8200, with the rest of the market at 6155 / 6750.
      */
     private static final Map<String, String> CURRENCIES = new LinkedHashMap<>();
 
@@ -66,7 +69,6 @@ public class MasCambios implements Gatherer {
         CURRENCIES.put("1", "USD");
         CURRENCIES.put("2", "BRL");
         CURRENCIES.put("4", "ARS");
-        CURRENCIES.put("5", "EUR");
     }
 
     private final HTTPHelper helper;

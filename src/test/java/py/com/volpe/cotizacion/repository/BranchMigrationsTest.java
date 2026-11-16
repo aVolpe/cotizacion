@@ -57,11 +57,18 @@ class BranchMigrationsTest {
         assertThat(masCambios.getName()).isEqualTo("Más Cambios");
         assertThat(masCambios.getType()).isEqualTo(Place.Type.BUREAU);
         assertThat(activeRemoteCodes("MASCAMBIOS")).containsExactlyInAnyOrder("matriz", "sucursal1", "sucursal2",
-                "sucursal3", "sucursal4", "sucursal5", "sucursal6", "sucursal7", "sucursal8", "sucursal9", "sucursal10",
-                "sucursal11", "sucursal12", "sucursal13", "sucursal14");
+                "sucursal3", "sucursal5", "sucursal8", "sucursal10", "sucursal11", "sucursal12", "sucursal13");
         assertThat(branches.getByPlaceCodeAndActiveTrue("MASCAMBIOS"))
                 .allSatisfy(b -> assertThat(b).extracting(PlaceBranch::getLatitude, PlaceBranch::getLongitude)
                         .doesNotContainNull());
+    }
+
+    @Test
+    void masCambiosBranchesWithBrokenRatesAreDeactivatedButKeepTheirRows() {
+        assertThat(jdbc.queryForList(
+                "SELECT b.remote_code FROM place_branch b JOIN place p ON p.id = b.place_id WHERE p.code = 'MASCAMBIOS' AND NOT b.active",
+                String.class))
+                .containsExactlyInAnyOrder("sucursal4", "sucursal6", "sucursal7", "sucursal9", "sucursal14");
     }
 
     @Test

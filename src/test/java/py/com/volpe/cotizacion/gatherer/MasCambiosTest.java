@@ -36,25 +36,23 @@ class MasCambiosTest {
                 .withBranches("matriz")
                 .run();
 
-        // the 3 (guaraní, 0/0) and the unknown ids (18, 19) are ignored
+        // the 3 (guaraní, 0/0), the 5 (EUR) and the unknown ids (18, 19) are ignored
         List<QueryResponseDetail> details = result.get(0).getDetails();
-        assertEquals(4, details.size());
+        assertEquals(3, details.size());
         assertDetail(details.get(0), Quote.of("USD", 5850), Quote.of("USD", 5950));
         assertDetail(details.get(1), Quote.of("BRL", 1120), Quote.of("BRL", 1155));
         assertDetail(details.get(2), Quote.of("ARS", "3.6"), Quote.of("ARS", "3.85"));
-        assertDetail(details.get(3), Quote.of("EUR", 6790), Quote.of("EUR", 7050));
     }
 
     @Test
-    void ignoresTheUnknownCurrencies() {
+    void ignoresTheUnknownCurrenciesAndTheEuro() {
         tester().withTheBranch("sucursal1", "mascambios_asu.json")
                 .withBranches("sucursal1")
                 .query()
-                .shouldHaveOnlyCurrencies("USD", "BRL", "ARS", "EUR")
+                .shouldHaveOnlyCurrencies("USD", "BRL", "ARS")
                 .shouldQuote("sucursal1", "USD", "5.670", "5.770")
                 .shouldQuote("sucursal1", "BRL", "1.110", "1.170")
-                .shouldQuote("sucursal1", "ARS", "3,4", "3,9")
-                .shouldQuote("sucursal1", "EUR", "6.250", "6.550");
+                .shouldQuote("sucursal1", "ARS", "3,4", "3,9");
     }
 
     @Test
@@ -81,17 +79,16 @@ class MasCambiosTest {
 
     @Test
     void discardsTheRatesOfABranchThatDeviateFromTheMainBranch() {
-        // sucursal4 on 2026-10-25: only the EUR is within 10% of the main branch (6790 / 7050)
+        // sucursal4 on 2026-10-25 (USD, BRL and ARS) with a BRL within 10% of the main branch (1120 / 1155)
         tester().withTheBranch("matriz", "mascambios_matriz.json")
                 .withTheResponse("sucursal4", """
-                        {"cotizaciones":{"1":{"compra":"6950","venta":"7080"},"2":{"compra":"1300","venta":"1380"},
-                         "4":{"compra":"9","venta":"10"},"5":{"compra":"7050","venta":"7350"}},"fecha":"2026-10-25 20:18:06"}""")
+                        {"cotizaciones":{"1":{"compra":"6950","venta":"7080"},"2":{"compra":"1100","venta":"1130"},
+                         "4":{"compra":"9","venta":"10"}},"fecha":"2026-10-25 20:18:06"}""")
                 .withBranches("matriz", "sucursal4")
                 .query()
                 .shouldReturnBranches("matriz", "sucursal4")
-                .shouldQuote("sucursal4", "EUR", "7.050", "7.350")
+                .shouldQuote("sucursal4", "BRL", "1.100", "1.130")
                 .shouldNotQuote("sucursal4", "USD")
-                .shouldNotQuote("sucursal4", "BRL")
                 .shouldNotQuote("sucursal4", "ARS")
                 .shouldQuote("matriz", "USD", "5.850", "5.950");
     }
@@ -102,13 +99,10 @@ class MasCambiosTest {
         tester().withTheBranch("matriz", "mascambios_matriz.json")
                 .withTheResponse("sucursal6", """
                         {"cotizaciones":{"1":{"compra":"5976.74","venta":"7700"},"2":{"compra":"1165.35","venta":"1400"},
-                         "4":{"compra":"3.98","venta":"95"},"5":{"compra":"7035","venta":"7350"}},"fecha":"2026-10-25 20:18:06"}""")
+                         "4":{"compra":"3.98","venta":"95"}},"fecha":"2026-10-25 20:18:06"}""")
                 .withBranches("matriz", "sucursal6")
                 .query()
-                .shouldQuote("sucursal6", "EUR", "7.035", "7.350")
-                .shouldNotQuote("sucursal6", "USD")
-                .shouldNotQuote("sucursal6", "BRL")
-                .shouldNotQuote("sucursal6", "ARS");
+                .shouldReturnBranches("matriz");
     }
 
     @Test
